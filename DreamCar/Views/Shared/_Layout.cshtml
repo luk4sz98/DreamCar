@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content="Dreamcar is website where you can serach and find your dream car!">
+    <link rel="icon" type="image/svg+xml" sizes="150x150" href="/assets//img/default.svg">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alegreya:400,500&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,400i,700,700i">
+    <link rel="stylesheet" href="/assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="/assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/fonts/line-awesome.min.css">
+    <link rel="stylesheet" href="/assets/fonts/material-icons.min.css">
+    <link rel="stylesheet" href="/assets/fonts/fontawesome5-overrides.min.css">
+    <link rel="stylesheet" href="/assets/css/Features-Clean.css">
+    <link rel="stylesheet" href="/assets/css/Footer-Basic.css">
+    <link rel="stylesheet" href="/assets/css/Highlight-Clean.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
+    <link rel="stylesheet" href="/assets/css/Lightbox-Gallery.css">
+    <link rel="stylesheet" href="/assets/css/Login-Form-Clean.css">
+    <link rel="stylesheet" href="/assets/css/Registration-Form-with-Photo.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+
+<body style="font-family: Alegreya, serif;">
+    <a id="scroll-to-top" href="#"><i class="fa fa-arrow-up" style="font-size: 40px;color: var(--bs-gray-dark);"></i></a>
+    <nav class="navbar navbar-light navbar-expand-md" data-aos="fade-down" data-aos-duration="1200" data-aos-once="true" style="margin-bottom: 5px;">
+        <div class="container">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" id="brand"></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav d-xl-flex ms-auto">
+                    <li class="nav-item"><a class="nav-link active" id="search" href="#" style="font-size: 22px;">Samochody<i class="fa fa-search" style="font-size: 25px;margin-left: 8px;"></i></a></li>
+                </ul>
+                <ul class="navbar-nav d-xl-flex ms-auto">
+                    <li class="nav-item"><a asp-area="" asp-controller="Account" asp-action="LogIn" class="nav-link active" id="loginButton" style="font-size: 18px;">Zaloguj</a></li>
+                    <li class="nav-item"><a asp-area="" asp-controller="Account" asp-action="Registration" class="nav-link active btn" id="registrationButton" style="font-size: 18px;">Rejestracja</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    @RenderBody()
+    <footer data-aos="slide-right" data-aos-duration="1200" data-aos-delay="2200" data-aos-once="true" class="footer-basic">
+        <div class="social"></div>
+        <ul class="list-inline">
+            <li class="list-inline-item"><a asp-area="" asp-controller="Home" asp-action="Index">Strona główna</a></li>
+            <li class="list-inline-item"><a asp-area="" asp-controller="Account" asp-action="LogIn">Logowanie</a></li>
+            <li class="list-inline-item"><a asp-area="" asp-controller="Account" asp-action="Registration">Rejestracja</a></li>
+        </ul>
+        <p class="copyright">Dream Car © 2021</p>
+    </footer>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/js/bs-init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.4.8/swiper-bundle.min.js"></script>
+    <script src="/assets/js/Lightbox-Gallery.js"></script>
+    <script src="/assets/js/scrollToTop.js"></script>
+    <script src="/assets/js/Simple-Slider.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+
+</html>

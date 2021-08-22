@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Logowanie";
+}
+
+<section class="login-clean" style="background: rgb(255,255,255);">
+    <form class="shadow" data-aos="fade-down" data-aos-duration="800" data-aos-delay="800" data-aos-once="true" method="post" style="border-radius: 1rem;">
+        <h2 class="visually-hidden">Login Form</h2>
+        <div class="illustration"><i class="la la-sign-in" style="transform: rotate(180deg);color: var(--bs-dark);font-size: 75px;"></i></div>
+        <div class="mb-3"><input class="form-control" type="email" name="email" placeholder="Email" style="border-radius: 1rem;"></div>
+        <div class="mb-3"><input class="form-control" type="password" name="password" placeholder="Hasło" style="border-radius: 1rem;"></div>
+        <div class="mb-3"><button class="btn btn-primary d-block w-100" id="logInFormButton" type="submit" style="border-radius: 2rem;background: lightseagreen;">Zaloguj</button></div><a class="forgot" href="#">Nie pamiętasz hasła?</a>
+    </form>
+</section>
