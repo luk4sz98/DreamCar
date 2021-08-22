@@ -1,5 +1,8 @@
+using AutoMapper;
 using DreamCar.DAL.EF;
 using DreamCar.Model.DataModels;
+using DreamCar.Services.Services;
+using DreamCar.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SendGrid;
+
 
 namespace DreamCar
 {
@@ -26,11 +31,11 @@ namespace DreamCar
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(Startup));
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
-
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<Role>()
                 .AddRoleManager<RoleManager<Role>>()
@@ -38,6 +43,19 @@ namespace DreamCar
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddTransient(typeof(ILogger), typeof(Logger<Startup>));
             services.AddControllersWithViews();
+            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IAesOperation, AesOperation>();
+            services.Configure<AppSettings>(Configuration.GetSection(AppSettings.SectionName));
+            services.AddOptions();
+            
+            services.AddScoped((serviceProvider) =>
+            {
+                var config = serviceProvider.GetRequiredService<IConfiguration>();
+                return new SendGridClient(new AesOperation().Decrypt(
+                    config.GetSection(AppSettings.SectionName).GetValue<string>("Key"),
+                    config.GetSection(AppSettings.SectionName).GetValue<string>("ApiKey"))
+                );
+            }); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

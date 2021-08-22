@@ -2,14 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DreamCar.Services.Services
 {
-    public class AesOperation: IAesoperation
+    public class AesOperation: IAesOperation
     {
         public string Encrypt(string key, string plainText)
         {

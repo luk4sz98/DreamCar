@@ -35,10 +35,7 @@
                 <ul class="navbar-nav d-xl-flex ms-auto">
                     <li class="nav-item"><a class="nav-link active" id="search" href="#" style="font-size: 22px;">Samochody<i class="fa fa-search" style="font-size: 25px;margin-left: 8px;"></i></a></li>
                 </ul>
-                <ul class="navbar-nav d-xl-flex ms-auto">
-                    <li class="nav-item"><a asp-area="" asp-controller="Account" asp-action="LogIn" class="nav-link active" id="loginButton" style="font-size: 18px;">Zaloguj</a></li>
-                    <li class="nav-item"><a asp-area="" asp-controller="Account" asp-action="Registration" class="nav-link active btn" id="registrationButton" style="font-size: 18px;">Rejestracja</a></li>
-                </ul>
+                <partial name="_LoginPartial" />
             </div>
         </div>
     </nav>

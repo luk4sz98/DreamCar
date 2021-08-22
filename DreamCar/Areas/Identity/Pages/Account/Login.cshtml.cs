@@ -44,11 +44,13 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [EmailAddress]
+            [EmailAddress(ErrorMessage = "Nieprawidłowy adres email")]
+    
             public string Email { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
+            [StringLength(100, ErrorMessage = "Hasło musi mieć co najmniej {2} znaków", MinimumLength = 6)]
             public string Password { get; set; }
 
             [Display(Name = "Remember me?")]
@@ -99,7 +101,7 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Nieprawidłowe dane.");
                     return Page();
                 }
             }
