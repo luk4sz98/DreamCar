@@ -106,3 +106,27 @@
   color: rgba(0,0,0,1);
 }
 
+.icon-menu {
+    font-size: 30px;
+}
+
+.icon-menu:hover {
+    opacity:1;
+    color: black;
+}
+
+
+#menuButton {
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    outline: none !important;
+    background: white;
+    padding: 15px;
+    color: black;
+    font-size: 18px;
+}
+
+#menuButton:hover {
+   color: var(--bs-secondary);
+}

@@ -61,6 +61,11 @@
   text-decoration: none;
 }
 
+.login-clean form .forgot:hover {
+    opacity: 1;
+    color: rgba(0,0,0,1);
+}
+
 .login-clean form .forgot:hover, .login-clean form .forgot:active {
   opacity: 1;
   text-decoration: none;
