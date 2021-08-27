@@ -11,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SendGrid;
-using System;
 
 namespace DreamCar
 {
@@ -49,10 +48,7 @@ namespace DreamCar
             {
                 return new SendGridClient(AesOperation.GetEmailApiKey());
             });
-            services.AddHttpClient<ReCaptcha>(x =>
-            {
-                x.BaseAddress = new Uri("https://www.google.com/recaptcha/api/siteverify");
-            });
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

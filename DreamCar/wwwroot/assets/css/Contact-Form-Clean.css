@@ -14,7 +14,7 @@
   width: 90%;
   margin: 0 auto;
   background-color: #ffffff;
-  padding: 40px;
+  padding: 25px;
   border-radius: 4px;
   color: #505e6c;
   box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
@@ -56,18 +56,18 @@
 }
 
 .contact-clean form .btn {
-  padding: 16px 32px;
+  padding: 11px;
   border: none;
   background: none;
   box-shadow: none;
   text-shadow: none;
   opacity: 0.9;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 13px;
+  text-transform: none;
   letter-spacing: 0.4px;
   line-height: 1;
   outline: none !important;
+  font-size: 18px;
+  width: 150px;
 }
 
 .contact-clean form .btn:hover {

@@ -53,7 +53,6 @@ namespace DreamCar.Services.Services
               
                     textMail = textMail.Replace("{{ConfirmationLink}}", email.Body);
                     msg.HtmlContent = textMail;
-                    msg.Subject = "Potwierdzenie rejestracji konta";
                     msg.PlainTextContent = textMail;
                 } else
                 {
@@ -71,12 +70,6 @@ namespace DreamCar.Services.Services
                 Logger.LogError(ex, ex.Message);
                 throw;
             }
-        }
-
-        private class TemplateData
-        {
-            [JsonProperty("ConfirmationLink")]
-            public string ConfirmationLink { get; set; }
         }
     }
 }

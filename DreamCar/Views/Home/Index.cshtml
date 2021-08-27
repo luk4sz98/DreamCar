@@ -2,23 +2,33 @@
     ViewData["Title"] = "Strona główna";
 }
 
-
-<div class="carousel slide d-none d-md-block" data-bs-ride="carousel" data-bs-interval="8000" data-bs-pause="false" data-bs-wrap="false" data-bs-keyboard="false" data-aos="fade-up" data-aos-duration="800" data-aos-delay="500" data-aos-once="true" id="carousel-1">
-    @if (TempData["AccountRegistered"] != null)
+@{
+    if (TempData["AccountRegistered"] == null ? false : true)
     {
-        <div class="col-12 col-md-7 col-lg-4 ms-auto me-2 alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
             Konto utworzone pomyślnie, sprawdz swoją skrzynkę pocztową i <strong>potwierdź adres email:)</strong>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
-    @if (TempData["AccountConfirmed"] != null)
+    if (TempData["AccountConfirmed"] == null ? false : true)
     {
-        <div class="col-12 col-md-6 col-lg-3  ms-auto me-2 alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
             Adres email został potwierdzony.
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
+    if (TempData["MessageSent"] == null ? false : true)
+    {
+        <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
+            Wiadomość została wysłana pomyślnie!<br />
+            Odpowiemy tak szybko, jak to możliwe :)
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+}
+
+<div class="carousel slide d-none d-md-block" data-bs-ride="carousel" data-bs-interval="8000" data-bs-pause="false" data-bs-wrap="false" data-bs-keyboard="false" data-aos="fade-up" data-aos-duration="800" data-aos-delay="500" data-aos-once="true" id="carousel-1">
     <div class="carousel-inner">
         <div class="carousel-item active">
             <img class="w-100 d-block img-fluid" src="/assets/img/slider1.jpg" alt="Slide Image">

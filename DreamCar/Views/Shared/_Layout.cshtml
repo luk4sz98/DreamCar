@@ -54,18 +54,67 @@
     <footer data-aos="slide-right" data-aos-duration="1200" data-aos-delay="2200" data-aos-once="true" class="footer-basic">
         <div class="social"></div>
         <ul class="list-inline">
-            <li class="list-inline-item"><a asp-area="" asp-controller="Home" asp-action="Index">Strona główna</a></li>
+            <li class="list-inline-item">
+                <a class="d-none d-md-inline" asp-area="" asp-controller="Home" asp-action="Index">
+                    Strona główna
+                    <icon class="icon-home footer-icon"></icon>
+                </a>
+                <a asp-area="" asp-controller="Home" asp-action="Index">
+                    <icon class="icon-home footer-icon d-md-none"></icon>
+                </a>
+            </li>
             @if (SignInManager.IsSignedIn(User))
             {
-                <li class="list-inline-item"><a asp-controller="Home" asp-action="Index">Logowanie</a></li>
-                <li class="list-inline-item"><a asp-controller="Account" asp-action="Index">Rejestracja</a></li>
+                <li class="list-inline-item">
+                    <a class="d-none d-md-inline" asp-area="Identity" asp-page="/Account/Login">
+                        Logowanie
+                        <icon class="icon-login footer-icon"></icon>
+                    </a>
+                    <a asp-area="Identity" asp-page="/Account/Login">
+                        <icon class="icon-login footer-icon d-md-none"></icon>
+                    </a>
+                </li>
+                <li class="list-inline-item">
+                    <a class="d-none d-md-inline" asp-area="Identity" asp-page="/Account/Register">
+                        Rejestracja
+                        <icon class="icon-user-follow footer-icon"></icon>
+                    </a>
+                    <a asp-area="Identity" asp-page="/Account/Register">
+                        <icon class="icon-user-follow footer-icon d-md-none"></icon>
+                    </a>
+                </li>
             }
             else
             {
-                <li class="list-inline-item"><a asp-area="Identity" asp-page="/Account/Login">Logowanie</a></li>
-                <li class="list-inline-item"><a asp-area="Identity" asp-page="/Account/Register">Rejestracja</a></li>
+                <li class="list-inline-item">
+                    <a class="d-none d-md-inline" asp-area="Identity" asp-page="/Account/Login">
+                        Logowanie
+                        <icon class="icon-login footer-icon"></icon>
+                    </a>
+                    <a asp-area="Identity" asp-page="/Account/Login">
+                        <icon class="icon-login footer-icon d-md-none"></icon>
+                    </a>
+                </li>
+                <li class="list-inline-item">
+                    <a class="d-none d-md-inline" asp-area="Identity" asp-page="/Account/Register">
+                        Rejestracja
+                        <icon class="icon-user-follow footer-icon"></icon>
+                    </a>
+                    <a asp-area="Identity" asp-page="/Account/Register">
+                        <icon class="icon-user-follow footer-icon d-md-none"></icon>
+                    </a>
+                </li>
             }
-            <li class="list-inline-item"><a asp-controller="Contact" asp-action="SendRequest">Kontakt</a></li>
+            <li class="list-inline-item">
+                <a class="d-none d-md-inline" asp-controller="Contact" asp-action="SendRequest">
+                    Kontakt
+                    <icon class="icon-paper-plane footer-icon"></icon>
+                </a>
+                <a asp-controller="Contact" asp-action="SendRequest">
+                    <icon class="icon-paper-plane footer-icon d-md-none"></icon>
+                </a>
+
+            </li>
         </ul>
         <p class="copyright">Dream Car © 2021</p>
     </footer>

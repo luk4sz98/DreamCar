@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace DreamCar.Services.Services
 {
-    public class ReCaptcha: IReCaptcha
+    public class ReCaptcha: HttpClient, IReCaptcha
     { 
-        private readonly HttpClient _reCaptchaClient;
         private readonly ILogger _logger;
 
-        public ReCaptcha(HttpClient reCaptchaClient, ILogger logger)
+        public ReCaptcha(ILogger logger)
         {
-            _reCaptchaClient = reCaptchaClient;
+            BaseAddress = new Uri("https://www.google.com/recaptcha/api/siteverify");
             _logger = logger;
         }
 
@@ -22,8 +21,7 @@ namespace DreamCar.Services.Services
         {
             try
             {
-                var postTask = await _reCaptchaClient
-                    .PostAsync($"?secret={AesOperation.GetReCaptchaSecretKey()}&response={captcha}", new StringContent(""));
+                var postTask = await PostAsync($"?secret={AesOperation.GetReCaptchaSecretKey()}&response={captcha}", new StringContent(""));
                 var result = await postTask.Content.ReadAsStringAsync();
                 var resultObject = JObject.Parse(result);
                 dynamic success = resultObject["success"];

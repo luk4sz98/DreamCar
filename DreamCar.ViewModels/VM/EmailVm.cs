@@ -14,7 +14,7 @@ namespace DreamCar.ViewModels.VM
         [EmailAddress(ErrorMessage = "Podaj prawidłowy adres email.")]
         public string SenderEmail { get; set; }
         
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Podaj prawidłowy adres email.")]
         public string ResponseEmail { get; set; }
 
         [Required]

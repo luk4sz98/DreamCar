@@ -4,7 +4,6 @@ using DreamCar.ViewModels.VM;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -16,14 +15,17 @@ namespace DreamCar.Web.Controllers
         private readonly IEmailSender _emailSender;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly ILogger _logger;
         public ContactController(
             IEmailSender emailSender,
             UserManager<User> userManager,
-            SignInManager<User> signInManager)
+            SignInManager<User> signInManager,
+            ILogger logger)
         {
             _emailSender = emailSender;
             _userManager = userManager;
             _signInManager = signInManager;
+            _logger = logger;
         }
 
 
@@ -44,20 +46,20 @@ namespace DreamCar.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SendRequest(EmailVm email)
         {
-            if(ModelState.IsValid)
+            try
             {
                 email.Recipient = "dream.car.inzynier@gmail.com";
                 email.SenderEmail = "dream.car.inzynier@gmail.com";
                 await _emailSender.SendEmailAsync(email);
+                TempData["MessageSent"] = true;
                 return RedirectToAction("Index", "Home");
             }
-            else
+            catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 TempData["ErrorMailAlert"] = true;
                 return RedirectToAction("SendRequest");
             }
-
         }
-
     }
 }

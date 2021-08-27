@@ -119,7 +119,8 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
                         Body = $"{HtmlEncoder.Default.Encode(callbackUrl)}",
                         Recipient = Input.Email,
                         SenderEmail = "dream.car.inzynier@gmail.com",
-                        SenderName = "Dream Car"
+                        SenderName = "Dream Car",
+                        Subject = "Potwierdzenie rejestracji konta"
                     };
 
                     await _emailSender.SendEmailAsync(emailVm);

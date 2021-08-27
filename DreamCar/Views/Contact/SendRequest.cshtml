@@ -5,53 +5,65 @@
 
 @{ ViewData["Title"] = "Kontakt"; }
 
-
+@if (TempData["ErrorAlert"] != null)
+{
+    <div class="alertMessage alert alert-danger alert-dismissible fade show" role="alert">
+        Coś poszło nie tak, spróbuj ponownie
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 
 <section class="contact-clean" style="background: rgb(255,255,255);">
-    @if (TempData["ErrorAlert"] != null)
-    {
-        <div class="col-12 col-md-6 col-lg-3  ms-auto me-2 alert alert-danger alert-dismissible fade show" role="alert">
-            Coś poszło nie tak, spróbuj ponownie
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
     <form class="shadow" method="post" data-aos="fade-down" data-aos-duration="800" data-aos-delay="800" data-aos-once="true" style="border-radius: 2rem;">
         <h2 class="text-center">Napisz do nas</h2>
-        <div asp-validation-summary="All" class="text-danger"></div>
-        <div class="mb-3">
-            <select asp-for="Subject" class="form-select" style="border-radius: 1rem;">
-                <option selected>Wybierz temat</option>
-                <option>Reklama</option>
-                <option>Zapytanie</option>
-                <option>Współpraca</option>
-                <option>Inne</option>
-            </select>
-            <span asp-validation-for="Subject" class="text-danger"></span>
+        <div class="form-group">
+            <div class="mb-3">
+                <select asp-for="Subject" class="form-select" style="border-radius: 1rem;">
+                    <option selected>Wybierz temat</option>
+                    <option>Reklama</option>
+                    <option>Zapytanie</option>
+                    <option>Współpraca</option>
+                    <option>Inne</option>
+                </select>
+                <span asp-validation-for="Subject" class="text-danger"></span>
+            </div>
         </div>
-        <div class="mb-3">
-            @if (ViewBag.User != null)
-            {
-<input class="form-control" asp-for="SenderName" value="@ViewBag.User" disabled style="border-radius: 1rem;"> }
-else
-{
-<input class="form-control" placeholder="Podaj imie i nazwisko" asp-for="SenderName" style="border-radius: 1rem;">}
-            <span asp-validation-for="SenderName" class="text-danger"></span>
+        <div class="form-group">
+            <div class="mb-3">
+                @if (ViewBag.User != null)
+                {
+                    <input class="form-control" asp-for="SenderName" value="@ViewBag.User" disabled style="border-radius: 1rem;"> 
+                }
+                else
+                {
+                    <input class="form-control" placeholder="Podaj imie i nazwisko" asp-for="SenderName" style="border-radius: 1rem;">
+                    <span asp-validation-for="SenderName" class="text-danger"></span>
+                }
+            </div>
         </div>
-        <div class="mb-3">
-            @if (ViewBag.Email != null)
-            {
-<input asp-for="ResponseEmail" class="form-control" disabled value="@ViewBag.Email" style="border-radius: 1rem;"> }
-else
-{
-<input asp-for="ResponseEmail" class="form-control" placeholder="Email" style="border-radius: 1rem;">            }
-            <span asp-validation-for="SenderEmail" class="text-danger"></span>
+        <div class="form-group">
+            <div class="mb-3">
+                @if (ViewBag.Email != null)
+                {
+                    <input asp-for="ResponseEmail" class="form-control" disabled value="@ViewBag.Email" style="border-radius: 1rem;">
+                }
+                else
+                {
+                    <input asp-for="ResponseEmail" class="form-control" placeholder="Email" style="border-radius: 1rem;">
+                    <span asp-validation-for="ResponseEmail" class="text-danger"></span>
+                }     
+            </div>
         </div>
-        <div class="mb-3">
-            <textarea class="form-control" asp-for="Body" placeholder="Wiadomość" rows="14" style="border-radius: 1rem;"></textarea>
-            <span asp-validation-for="Body" class="text-danger"></span>
+        <div class="form-group">
+            <div class="mb-3">
+                <textarea class="form-control" asp-for="Body" placeholder="Wiadomość" rows="14" style="border-radius: 1rem;"></textarea>
+                <span asp-validation-for="Body" class="text-danger"></span>
+            </div>
         </div>
-        <div class="text-center mb-3">
-            <button class="btn" id="logInFormButton" type="submit" style="border-radius: 2rem;background: lightseagreen;">Wyslij</button>
+        <div class="form-group">
+            <div class="text-center mb-3">
+                <button class="btn btn-primary" type="submit" style="border-radius: 2rem;background: lightseagreen;">Wyslij</button>
+            </div>
         </div>
     </form>
 </section>
