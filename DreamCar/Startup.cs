@@ -1,20 +1,17 @@
-using AutoMapper;
 using DreamCar.DAL.EF;
 using DreamCar.Model.DataModels;
 using DreamCar.Services.Services;
 using DreamCar.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SendGrid;
-
+using System;
 
 namespace DreamCar
 {
@@ -31,6 +28,7 @@ namespace DreamCar
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            AesOperation.Initiate(Configuration);
             services.AddAutoMapper(typeof(Startup));
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
@@ -44,18 +42,17 @@ namespace DreamCar
             services.AddTransient(typeof(ILogger), typeof(Logger<Startup>));
             services.AddControllersWithViews();
             services.AddScoped<IEmailSender, EmailSender>();
-            services.AddScoped<IAesOperation, AesOperation>();
             services.Configure<AppSettings>(Configuration.GetSection(AppSettings.SectionName));
             services.AddOptions();
-            
+            services.AddScoped<IReCaptcha, ReCaptcha>();
             services.AddScoped((serviceProvider) =>
             {
-                var config = serviceProvider.GetRequiredService<IConfiguration>();
-                return new SendGridClient(new AesOperation().Decrypt(
-                    config.GetSection(AppSettings.SectionName).GetValue<string>("Key"),
-                    config.GetSection(AppSettings.SectionName).GetValue<string>("ApiKey"))
-                );
-            }); 
+                return new SendGridClient(AesOperation.GetEmailApiKey());
+            });
+            services.AddHttpClient<ReCaptcha>(x =>
+            {
+                x.BaseAddress = new Uri("https://www.google.com/recaptcha/api/siteverify");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

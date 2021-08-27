@@ -1,17 +1,31 @@
 ﻿@page
 @model RegisterModel
+
+@using DreamCar.Services.Services
+
 @{
     ViewData["Title"] = "Rejestracja";
 }
 
 <section class="login-clean" style="background: rgb(255,255,255);">
-    <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="shadow" data-aos="fade-down" data-aos-duration="800" data-aos-delay="800" data-aos-once="true" style="border-radius: 1rem;">
-        <div asp-validation-summary="All" class="text-danger"></div>
+    <form id="form" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="shadow" data-aos="fade-down" data-aos-duration="800" data-aos-delay="800" data-aos-once="true" style="border-radius: 1rem;">
         <div class="illustration">
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-person-plus" style="transform: rotate(0deg);color: var(--bs-dark);font-size: 75px;">
                 <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path>
                 <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"></path>
             </svg>
+        </div>
+        <div class="form-group">
+            <div class="mb-3">
+                <input asp-for="Input.FirstName" class="form-control" placeholder="Imie" style="border-radius: 1rem;">
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="mb-3">
+                <input asp-for="Input.LastName" class="form-control" placeholder="Nazwisko" style="border-radius: 1rem;">
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
         </div>
         <div class="form-group">
             <div class="mb-3">
@@ -31,13 +45,39 @@
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
         </div>
+        <div class="form-group">
+            <div class="mb-3">
+                <div id="recaptchaContainer" style="margin-left:5px; transform:scale(0.85);transform-origin:0 0">
+                    <div class="g-recaptcha" data-language="pl" data-sitekey="@AesOperation.GetReCaptchaSiteKey()"></div>
+                </div>
+                <span id="lblMessage" class="text-danger"></span>
+            </div>
+        </div>
         <div class="mb-3">
-            <button class="btn btn-primary d-block w-100" id="logInFormButton" type="submit" style="border-radius: 2rem;background: lightseagreen;">Zarejestruj</button>
+            <button class="btn btn-primary d-block w-100" id="logInFormButton" type="button" style="border-radius: 2rem;background: lightseagreen;">Zarejestruj</button>
         </div>
         <a class="forgot" asp-area="Identity" asp-page="/Account/Login">Masz już konto? Zaloguj się</a>
     </form>
 </section>
 
 @section Scripts {
+    <script>
+        jQuery('button[type="button"]').click(function (e) {
+            var message = 'Dokonaj walidacji reCaptcha';
+            if (typeof (grecaptcha) != 'undefined') {
+                var response = grecaptcha.getResponse();
+                if (response.length === 0) {
+                    message = 'Dokonaj walidacji reCaptcha'
+                    jQuery('#lblMessage').html(message);
+                }
+                else {
+                    message = ''
+                    jQuery('#lblMessage').html(message);
+                    $("#form").submit()
+                }
+            }            
+        });
+    </script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <partial name="_ValidationScriptsPartial" />
 }

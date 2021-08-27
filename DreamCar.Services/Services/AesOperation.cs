@@ -1,15 +1,41 @@
-﻿using DreamCar.Services.Interfaces;
+﻿using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace DreamCar.Services.Services
 {
-    public class AesOperation: IAesOperation
+    public static class AesOperation
     {
-        public string Encrypt(string key, string plainText)
+        private static IConfiguration _configuration;
+
+        public static void Initiate(IConfiguration configuration) => _configuration = configuration;
+        public static string GetEmailApiKey()
+        {
+            return Decrypt(
+                GetKey(), 
+                _configuration.GetSection(
+                    AppSettings.SectionName
+                 ).GetValue<string>("ApiKey")
+           );
+        }
+
+        public static string GetReCaptchaSiteKey()
+        {
+            return _configuration.GetValue<string>("ReCaptchaSiteKey");
+        }
+
+        public static string GetReCaptchaSecretKey()
+        {
+            return _configuration.GetValue<string>("ReCaptchaSecretKey");
+        }
+
+        private static string GetKey()
+        {
+            return _configuration.GetValue<string>("Key");
+        }
+        private static string Encrypt(string key, string plainText)
         {
             byte[] iv = new byte[16];
             byte[] array;
@@ -37,7 +63,7 @@ namespace DreamCar.Services.Services
 
             return Convert.ToBase64String(array);
         }
-        public string Decrypt(string key, string cipherText)
+        private static string Decrypt(string key, string cipherText)
         {
             byte[] iv = new byte[16];
             byte[] buffer = Convert.FromBase64String(cipherText);

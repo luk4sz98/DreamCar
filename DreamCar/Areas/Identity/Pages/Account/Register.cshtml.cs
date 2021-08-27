@@ -27,17 +27,20 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
         private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IReCaptcha _reCaptcha;
 
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IReCaptcha reCaptcha)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _reCaptcha = reCaptcha;
         }
 
         [BindProperty]
@@ -49,17 +52,32 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "Musisz podać imię")]
+            [StringLength(20, ErrorMessage = "Imię musi składać się co najmniej z {2} i maksymalnie {1} znaków.", MinimumLength = 3)]
+            [DataType(DataType.Text)]
+            [Display(Name = "First name")]
+            [RegularExpression(@"^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$", ErrorMessage = "Imie może zawierać wyłącznie litery")]
+            public string FirstName { get; set; }
+
+            [Required(ErrorMessage = "Musisz podać nazwisko")]
+            [StringLength(20, ErrorMessage = "Nazwisko musi składać się co najmniej z {2} i maksymalnie {1} znaków.", MinimumLength = 3)]
+            [DataType(DataType.Text)]
+            [Display(Name = "Last name")]
+            [RegularExpression(@"^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$", ErrorMessage = "Nazwisko może zawierać wyłącznie litery")]
+            public string LastName { get; set; }
+            
+            [Required(ErrorMessage = "Musisz podać adres email")]
+            [EmailAddress(ErrorMessage = "Podaj prawidłowy adres email")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Musisz podać hasło")]
             [StringLength(100, ErrorMessage = "Hasło musi składać się co najmniej z {2} i maksymalnie {1} znaków.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Hasło")]
             public string Password { get; set; }
 
+            [Required(ErrorMessage = "Musisz potwierdzić hasło")]
             [DataType(DataType.Password)]
             [Display(Name = "Potwierdź hasło")]
             [Compare("Password", ErrorMessage = "Musisz podać te same hasła")]
@@ -78,7 +96,10 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = Input.Email, Email = Input.Email, RegistrationDate = DateTime.Now };
+                if (!Request.Form.ContainsKey("g-recaptcha-response")) return Page();
+                var captcha = Request.Form["g-recaptcha-response"].ToString();
+                if (!await _reCaptcha.IsValid(captcha)) return Page();
+                var user = new User { FirstName = Input.FirstName, LastName = Input.LastName, UserName = Input.Email, Email = Input.Email, RegistrationDate = DateTime.Now };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
@@ -95,10 +116,10 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
 
                     var emailVm = new EmailVm()
                     {
-                        Body = $"Cześć! By potwierdźić rejestrację konta w naszym serwisie <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknij tutaj</a>.",
+                        Body = $"{HtmlEncoder.Default.Encode(callbackUrl)}",
                         Recipient = Input.Email,
-                        Subject = "Potwierdzenie rejestracji konta",
-                        Sender = "dream.car.inzynier@gmail.com"
+                        SenderEmail = "dream.car.inzynier@gmail.com",
+                        SenderName = "Dream Car"
                     };
 
                     await _emailSender.SendEmailAsync(emailVm);

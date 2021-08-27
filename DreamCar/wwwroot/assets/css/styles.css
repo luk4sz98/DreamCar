@@ -1,3 +1,20 @@
+body {
+    height: 100vh;
+}
+
+footer { 
+    min-height: 50px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    margin-top: auto;
+}
+
 #brand {
   background: url("../../assets/img/default.svg") center / auto no-repeat, #ffffff;
   border-style: none;
@@ -130,3 +147,4 @@
 #menuButton:hover {
    color: var(--bs-secondary);
 }
+
