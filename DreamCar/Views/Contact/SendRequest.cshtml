@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using DreamCar.Model.DataModels
+@using DreamCar.Services.Services
 @model DreamCar.ViewModels.VM.EmailVm
 @inject SignInManager<User> SignInManager
 
@@ -13,13 +14,14 @@
     </div>
 }
 
+
 <section class="contact-clean" style="background: rgb(255,255,255);">
-    <form class="shadow" method="post" data-aos="fade-down" data-aos-duration="800" data-aos-delay="800" data-aos-once="true" style="border-radius: 2rem;">
+    <form id="form" class="shadow" method="post" data-aos="fade-down" data-aos-duration="800" data-aos-delay="800" data-aos-once="true" style="border-radius: 2rem;">
         <h2 class="text-center">Napisz do nas</h2>
         <div class="form-group">
             <div class="mb-3">
                 <select asp-for="Subject" class="form-select" style="border-radius: 1rem;">
-                    <option selected>Wybierz temat</option>
+                    <option value="" disabled selected>Wybierz temat</option>
                     <option>Reklama</option>
                     <option>Zapytanie</option>
                     <option>Współpraca</option>
@@ -32,7 +34,7 @@
             <div class="mb-3">
                 @if (ViewBag.User != null)
                 {
-                    <input class="form-control" asp-for="SenderName" value="@ViewBag.User" disabled style="border-radius: 1rem;"> 
+                    <input class="form-control" placeholder="@ViewBag.User" disabled style="border-radius: 1rem;"> 
                 }
                 else
                 {
@@ -45,29 +47,40 @@
             <div class="mb-3">
                 @if (ViewBag.Email != null)
                 {
-                    <input asp-for="ResponseEmail" class="form-control" disabled value="@ViewBag.Email" style="border-radius: 1rem;">
+                    <input class="form-control" disabled placeholder="@ViewBag.Email" style="border-radius: 1rem;"> 
                 }
                 else
                 {
                     <input asp-for="ResponseEmail" class="form-control" placeholder="Email" style="border-radius: 1rem;">
                     <span asp-validation-for="ResponseEmail" class="text-danger"></span>
-                }     
+                }
             </div>
         </div>
         <div class="form-group">
             <div class="mb-3">
-                <textarea class="form-control" asp-for="Body" placeholder="Wiadomość" rows="14" style="border-radius: 1rem;"></textarea>
+                <textarea id="message" class="form-control" asp-for="Body" placeholder="Wiadomość" rows="14" style="border-radius: 1rem;"></textarea>
                 <span asp-validation-for="Body" class="text-danger"></span>
+            </div>
+        </div>
+        <div id="reCaptcha" class="form-group">
+            <div class="mb-3">
+                <div id="recaptchaContainer">
+                    <div class="g-recaptcha" data-callback="reCaptchaCallback" data-language="pl" data-sitekey="@AesOperationService.GetReCaptchaSiteKey()"></div>
+                </div>
+                <span id="lblMessage" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <div class="text-center mb-3">
-                <button class="btn btn-primary" type="submit" style="border-radius: 2rem;background: lightseagreen;">Wyslij</button>
+                <button class="btn btn-primary" type="button" style="border-radius: 2rem;background: lightseagreen;">Wyslij</button>
             </div>
         </div>
     </form>
 </section>
 
+
 @section Scripts {
+    <script src="~/assets/js/reCaptchaScript.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <partial name="_ValidationScriptsPartial" />
 }

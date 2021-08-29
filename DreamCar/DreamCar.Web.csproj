@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="wwwroot\assets\templates\emailTemplate.html">
+    <Content Update="wwwroot\assets\templates\emailConfirmationTemplate.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

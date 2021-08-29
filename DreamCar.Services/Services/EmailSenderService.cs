@@ -9,17 +9,15 @@ using SendGrid;
 using System;
 using System.Threading.Tasks;
 using SendGrid.Helpers.Mail;
-using Newtonsoft.Json;
-using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
 namespace DreamCar.Services.Services
 {
-    public class EmailSender : BaseService, IEmailSender
+    public class EmailSenderService : BaseService, IEmailSender
     {
         private readonly SendGridClient _client;
         private readonly IHostingEnvironment _hostingEnviroment;
-        public EmailSender(
+        public EmailSenderService(
             ApplicationDbContext dbContext,
             IMapper mapper,
             ILogger logger,
@@ -46,11 +44,7 @@ namespace DreamCar.Services.Services
 
                 if(email.Recipient != email.SenderEmail)
                 {
-                    string filePath = _hostingEnviroment.WebRootPath + @"\assets\templates\emailTemplate.html";
-                    StreamReader reader = new StreamReader(filePath);
-                    string textMail = reader.ReadToEnd();
-                    reader.Close();
-              
+                    var textMail = FileService.ReadFile(pathToFile: _hostingEnviroment.WebRootPath + @"\assets\templates\emailConfirmationTemplate.html");
                     textMail = textMail.Replace("{{ConfirmationLink}}", email.Body);
                     msg.HtmlContent = textMail;
                     msg.PlainTextContent = textMail;

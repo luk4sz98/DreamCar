@@ -27,7 +27,7 @@ namespace DreamCar
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            AesOperation.Initiate(Configuration);
+            AesOperationService.Initiate(Configuration);
             services.AddAutoMapper(typeof(Startup));
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
@@ -37,18 +37,20 @@ namespace DreamCar
                 .AddRoles<Role>()
                 .AddRoleManager<RoleManager<Role>>()
                 .AddUserManager<UserManager<User>>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddErrorDescriber<IdentityErrors>();
             services.AddTransient(typeof(ILogger), typeof(Logger<Startup>));
             services.AddControllersWithViews();
-            services.AddScoped<IEmailSender, EmailSender>();
-            services.Configure<AppSettings>(Configuration.GetSection(AppSettings.SectionName));
+            services.AddScoped<IEmailSender, EmailSenderService>();
+            services.Configure<AppSettingsService>(Configuration.GetSection(AppSettingsService.SectionName));
             services.AddOptions();
-            services.AddScoped<IReCaptcha, ReCaptcha>();
+            services.AddScoped<IReCaptcha, ReCaptchaService>();
             services.AddScoped((serviceProvider) =>
             {
-                return new SendGridClient(AesOperation.GetEmailApiKey());
+                return new SendGridClient(AesOperationService.GetEmailApiKey());
             });
             services.AddHttpClient();
+                
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

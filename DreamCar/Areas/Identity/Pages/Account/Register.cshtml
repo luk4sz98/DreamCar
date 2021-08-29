@@ -51,7 +51,7 @@
         <div id="reCaptcha" class="form-group">
             <div class="mb-3">
                 <div id="recaptchaContainer" style="margin-left:5px; transform:scale(0.85);transform-origin:0 0">
-                    <div class="g-recaptcha" data-language="pl" data-sitekey="@AesOperation.GetReCaptchaSiteKey()"></div>
+                    <div class="g-recaptcha" data-callback="reCaptchaCallback" data-language="pl" data-sitekey="@AesOperationService.GetReCaptchaSiteKey()"></div>
                 </div>
                 <span id="lblMessage" class="text-danger"></span>
             </div>
@@ -64,31 +64,7 @@
 </section>
 
 @section Scripts {
-    <script>
-        jQuery(document).ready(function () {
-            $("#reCaptcha").hide();
-        });
-
-        jQuery("#confirmPassword").focusin(function () {
-            $("#reCaptcha").show(500);
-        })
-
-        jQuery('button[type="button"]').click(function (e) {
-            var message = 'Dokonaj walidacji reCaptcha';
-            if (typeof (grecaptcha) != 'undefined') {
-                var response = grecaptcha.getResponse();
-                if (response.length === 0) {
-                    message = 'Dokonaj walidacji reCaptcha'
-                    jQuery('#lblMessage').html(message);
-                }
-                else {
-                    message = ''
-                    jQuery('#lblMessage').html(message);
-                    $("#form").submit()
-                }
-            }            
-        });
-    </script>
+    <script src="~/assets/js/reCaptchaScript.js"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <partial name="_ValidationScriptsPartial" />
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using DreamCar.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Security.Cryptography;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace DreamCar.Services.Services
 {
-    public static class AesOperation
+    public static class AesOperationService
     {
         private static IConfiguration _configuration;
 
@@ -16,7 +17,7 @@ namespace DreamCar.Services.Services
             return Decrypt(
                 GetKey(), 
                 _configuration.GetSection(
-                    AppSettings.SectionName
+                    AppSettingsService.SectionName
                  ).GetValue<string>("ApiKey")
            );
         }
@@ -47,18 +48,14 @@ namespace DreamCar.Services.Services
 
                 ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
 
-                using(MemoryStream memoryStream = new())
+                using MemoryStream memoryStream = new();
+                using CryptoStream cryptoStream = new(memoryStream, encryptor, CryptoStreamMode.Write);
+                using (StreamWriter streamWriter = new(cryptoStream))
                 {
-                    using (CryptoStream cryptoStream = new(memoryStream, encryptor, CryptoStreamMode.Write))
-                    {
-                        using (StreamWriter streamWriter = new(cryptoStream))
-                        {
-                            streamWriter.Write(plainText);
-                        }
-
-                        array = memoryStream.ToArray();
-                    }
+                    streamWriter.Write(plainText);
                 }
+
+                array = memoryStream.ToArray();
             }
 
             return Convert.ToBase64String(array);
@@ -68,23 +65,15 @@ namespace DreamCar.Services.Services
             byte[] iv = new byte[16];
             byte[] buffer = Convert.FromBase64String(cipherText);
 
-            using (Aes aes = Aes.Create())
-            {
-                aes.Key = Encoding.UTF8.GetBytes(key);
-                aes.IV = iv;
-                ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+            using Aes aes = Aes.Create();
+            aes.Key = Encoding.UTF8.GetBytes(key);
+            aes.IV = iv;
+            ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
 
-                using (MemoryStream memoryStream = new(buffer))
-                {
-                    using (CryptoStream cryptoStream = new(memoryStream, decryptor, CryptoStreamMode.Read))
-                    {
-                        using (StreamReader streamReader = new(cryptoStream))
-                        {
-                            return streamReader.ReadToEnd();
-                        }
-                    }
-                }
-            }
+            using MemoryStream memoryStream = new(buffer);
+            using CryptoStream cryptoStream = new(memoryStream, decryptor, CryptoStreamMode.Read);
+            using StreamReader streamReader = new(cryptoStream);
+            return streamReader.ReadToEnd();
         }
     }
 }
