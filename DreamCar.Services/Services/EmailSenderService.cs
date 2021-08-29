@@ -9,24 +9,20 @@ using SendGrid;
 using System;
 using System.Threading.Tasks;
 using SendGrid.Helpers.Mail;
-using Microsoft.AspNetCore.Hosting;
 
 namespace DreamCar.Services.Services
 {
     public class EmailSenderService : BaseService, IEmailSender
     {
         private readonly SendGridClient _client;
-        private readonly IHostingEnvironment _hostingEnviroment;
         public EmailSenderService(
             ApplicationDbContext dbContext,
             IMapper mapper,
             ILogger logger,
             UserManager<User> userManager,
-            IHostingEnvironment hostingEnvironment,
             SendGridClient sendGridClient) : base(dbContext, mapper, logger, userManager)
         {
             _client = sendGridClient;
-            _hostingEnviroment = hostingEnvironment;
         }
 
         public Task SendEmailAsync(EmailVm email)
@@ -44,17 +40,13 @@ namespace DreamCar.Services.Services
 
                 if(email.Recipient != email.SenderEmail)
                 {
-                    var textMail = FileService.ReadFile(pathToFile: _hostingEnviroment.WebRootPath + @"\assets\templates\emailConfirmationTemplate.html");
-                    textMail = textMail.Replace("{{ConfirmationLink}}", email.Body);
-                    msg.HtmlContent = textMail;
-                    msg.PlainTextContent = textMail;
-                } else
-                {
+                    msg.HtmlContent = email.Body;
+                    msg.PlainTextContent = email.Body;
+                } 
+                else
                     msg.HtmlContent = "<p>" + email.Body + "</p>" + "</br>" + "<p>" + "Wiadomość wysłana przez użytkownika " + email.SenderName + " (adres e-mail: " + email.ResponseEmail + ")" + "</p>"; 
-                }
 
                 msg.AddTo(new EmailAddress(email.Recipient));
-
                 msg.SetClickTracking(false, false);
 
                 return _client.SendEmailAsync(msg);

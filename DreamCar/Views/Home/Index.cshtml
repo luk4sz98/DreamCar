@@ -26,6 +26,14 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
+    if (TempData["ResetPassword"] == null ? false : true)
+    {
+        <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
+            Link resetujący hasło został wysłany!<br />
+            Sprawdź swoją skrzynkę pocztową
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 }
 
 <div class="carousel slide d-none d-md-block" data-bs-ride="carousel" data-bs-interval="8000" data-bs-pause="false" data-bs-wrap="false" data-bs-keyboard="false" data-aos="fade-up" data-aos-duration="800" data-aos-delay="500" data-aos-once="true" id="carousel-1">

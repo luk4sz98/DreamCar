@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DreamCar.Web.Controllers
@@ -67,11 +66,7 @@ namespace DreamCar.Web.Controllers
                 if(_signInManager.IsSignedIn(User))
                 {
                     var user = await _userManager.GetUserAsync(User);
-                    var userCredentials = new StringBuilder();
-                    userCredentials.Append(user.FirstName);
-                    userCredentials.Append(' ');
-                    userCredentials.Append(user.LastName);
-                    email.SenderName = userCredentials.ToString();
+                    email.SenderName = $"{user.FirstName} {user.LastName}";
                     email.ResponseEmail = user.Email;
                 }
 

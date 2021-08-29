@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using DreamCar.ViewModels.VM;
 using Microsoft.Extensions.Options;
 using DreamCar.Services.Services;
+using Microsoft.AspNetCore.Hosting;
 
 namespace DreamCar.Web.Areas.Identity.Pages.Account
 {
@@ -28,19 +29,22 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IReCaptcha _reCaptcha;
+        private readonly IWebHostEnvironment _hostingEnviroment;
 
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IReCaptcha reCaptcha)
+            IReCaptcha reCaptcha,
+            IWebHostEnvironment hostEnvironment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
             _reCaptcha = reCaptcha;
+            _hostingEnviroment = hostEnvironment;
         }
 
         [BindProperty]
@@ -114,9 +118,12 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = user.Id, code, returnUrl },
                         protocol: Request.Scheme);
 
+                    var emailBody = FileService.ReadFile(pathToFile: _hostingEnviroment.WebRootPath + @"\assets\templates\emailConfirmationTemplate.html");
+                    emailBody = emailBody.Replace("{{ConfirmationLink}}", HtmlEncoder.Default.Encode(callbackUrl));
+
                     var emailVm = new EmailVm()
                     {
-                        Body = $"{HtmlEncoder.Default.Encode(callbackUrl)}",
+                        Body = emailBody,
                         Recipient = Input.Email,
                         SenderEmail = "dream.car.inzynier@gmail.com",
                         SenderName = "Dream Car",

@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using DreamCar.Services.Interfaces;
+using DreamCar.ViewModels.VM;
+using DreamCar.Services.Services;
+using Microsoft.AspNetCore.Hosting;
 
 namespace DreamCar.Web.Areas.Identity.Pages.Account
 {
@@ -17,11 +20,16 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
     {
         private readonly UserManager<User> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly IWebHostEnvironment _hostingEnviroment;
 
-        public ForgotPasswordModel(UserManager<User> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(
+            UserManager<User> userManager,
+            IEmailSender emailSender,
+            IWebHostEnvironment hostingEnviroment)
         {
             _userManager = userManager;
             _emailSender = emailSender;
+            _hostingEnviroment = hostingEnviroment;
         }
 
         [BindProperty]
@@ -53,12 +61,23 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                //await _emailSender.SendEmailAsync(
-                //    Input.Email,
-                //    "Reset Password",
-                //    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                return RedirectToPage("./ForgotPasswordConfirmation");
+                var emailBody = FileService.ReadFile(pathToFile: _hostingEnviroment.WebRootPath + @"\assets\templates\emailPasswordResetTemplate.html");
+                emailBody = emailBody.Replace("{{ResetLink}}", HtmlEncoder.Default.Encode(callbackUrl));
+
+                var emailVm = new EmailVm()
+                {
+                    Body = emailBody,
+                    Recipient = Input.Email,
+                    SenderEmail = "dream.car.inzynier@gmail.com",
+                    SenderName = "Dream Car",
+                    Subject = "Resetowanie hasła"
+                };
+
+                await _emailSender.SendEmailAsync(emailVm);
+
+                TempData["ResetPassword"] = true;
+                return RedirectToPage("/Index");
             }
             else
             {
