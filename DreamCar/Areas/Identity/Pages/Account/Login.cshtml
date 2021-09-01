@@ -5,6 +5,17 @@
     ViewData["Title"] = "Logowanie";
 }
 
+
+@{
+    if (TempData["PasswordReset"] == null ? false : true)
+    {
+        <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
+            Hasło zostało zresetowane pomyślnie!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+}
+
 <section class="login-clean" style="background: rgb(255,255,255);">
     <form id="account" method="post" class="shadow" data-aos="fade-down" data-aos-duration="800" data-aos-delay="800" data-aos-once="true" style="border-radius: 1rem;">
         <h2 class="visually-hidden">Login Form</h2>

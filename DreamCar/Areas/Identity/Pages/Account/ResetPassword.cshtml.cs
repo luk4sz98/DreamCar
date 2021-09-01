@@ -28,20 +28,21 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "Podaj swój adres email")]
+            [EmailAddress(ErrorMessage = "Podaj prawidłowy adres email")]
             public string Email { get; set; }
 
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Musisz podać hasło")]
+            [StringLength(100, ErrorMessage = "Hasło musi składać się co najmniej z {2} i maksymalnie {1} znaków.", MinimumLength = 6)]
             [DataType(DataType.Password)]
+            [Display(Name = "Hasło")]
             public string Password { get; set; }
 
+            [Required(ErrorMessage = "Musisz potwierdzić hasło")]
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Potwierdź hasło")]
+            [Compare("Password", ErrorMessage = "Musisz podać te same hasła")]
             public string ConfirmPassword { get; set; }
-
             public string Code { get; set; }
         }
 
@@ -78,7 +79,8 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
             if (result.Succeeded)
             {
-                return RedirectToPage("./ResetPasswordConfirmation");
+                TempData["PasswordReset"] = true;
+                return RedirectToPage("./Login");
             }
 
             foreach (var error in result.Errors)
