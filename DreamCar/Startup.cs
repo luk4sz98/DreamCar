@@ -40,7 +40,8 @@ namespace DreamCar
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddErrorDescriber<IdentityErrors>();
             services.AddTransient(typeof(ILogger), typeof(Logger<Startup>));
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddRazorRuntimeCompilation();
             services.AddScoped<IEmailSender, EmailSenderService>();
             services.Configure<AppSettingsService>(Configuration.GetSection(AppSettingsService.SectionName));
             services.AddOptions();

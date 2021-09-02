@@ -156,6 +156,30 @@ footer {
    color: var(--bs-secondary);
 }
 
+#addAdvertButton {
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    outline: none !important;
+    background-color: lightseagreen;
+    padding: 14px;
+    color: #ffffff;
+    font-size: 17px;
+    border-radius: 2rem;
+    opacity: 1;
+}
+
+#addAdvertButton .icon-plus {
+    margin-top: 20px;
+    line-height: 25px;
+    margin-left: 5px;
+    font-size: 18px;
+}
+
+#addAdvertButton:hover {
+    opacity: 0.9;
+}
+
 .footer-icon {
     margin-left: 5px;
     margin-right: 5px;
