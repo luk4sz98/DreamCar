@@ -22,7 +22,7 @@ namespace DreamCar.Model.DataModels
         public virtual IEnumerable<AdvertThread> AdvertThreads { get; set; }
         public virtual IEnumerable<FollowAdvert> FollowAdverts { get; set; }
         public virtual Car Car { get; set; }
-        public virtual Client Client { get; set; }
+        public virtual User User { get; set; }
 
     }
 }

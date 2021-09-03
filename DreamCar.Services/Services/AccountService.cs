@@ -28,7 +28,7 @@ namespace DreamCar.Services.Services
         {
             try
             {
-                var userEntity = await DbContext.Users.OfType<Client>().FirstOrDefaultAsync(user => user.Id == userId);
+                var userEntity = await DbContext.Users.OfType<User>().FirstOrDefaultAsync(user => user.Id == userId);
                 if (userEntity == null)
                     throw new ArgumentNullException($"Nie ma użytkownika z tym id - {userId}");
                 var contactDetailVm = Mapper.Map<ContactDetailsVm>(userEntity);

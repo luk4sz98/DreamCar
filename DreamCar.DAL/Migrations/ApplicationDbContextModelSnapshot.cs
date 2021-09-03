@@ -292,8 +292,14 @@ namespace DreamCar.DAL.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -347,6 +353,9 @@ namespace DreamCar.DAL.Migrations
 
                     b.Property<int>("UserType")
                         .HasColumnType("int");
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -468,22 +477,6 @@ namespace DreamCar.DAL.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("DreamCar.Model.DataModels.Client", b =>
-                {
-                    b.HasBaseType("DreamCar.Model.DataModels.User");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ZipCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue(1);
-                });
-
             modelBuilder.Entity("DreamCar.Model.DataModels.Advert", b =>
                 {
                     b.HasOne("DreamCar.Model.DataModels.Car", "Car")
@@ -492,7 +485,7 @@ namespace DreamCar.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DreamCar.Model.DataModels.Client", "Client")
+                    b.HasOne("DreamCar.Model.DataModels.User", "User")
                         .WithMany("Adverts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -500,7 +493,7 @@ namespace DreamCar.DAL.Migrations
 
                     b.Navigation("Car");
 
-                    b.Navigation("Client");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DreamCar.Model.DataModels.AdvertThread", b =>
@@ -541,7 +534,7 @@ namespace DreamCar.DAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DreamCar.Model.DataModels.Client", "Client")
+                    b.HasOne("DreamCar.Model.DataModels.User", "User")
                         .WithMany("FollowAdverts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -549,7 +542,7 @@ namespace DreamCar.DAL.Migrations
 
                     b.Navigation("Advert");
 
-                    b.Navigation("Client");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DreamCar.Model.DataModels.Image", b =>
@@ -571,7 +564,7 @@ namespace DreamCar.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DreamCar.Model.DataModels.Client", "Client")
+                    b.HasOne("DreamCar.Model.DataModels.User", "User")
                         .WithMany("Messages")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -579,7 +572,7 @@ namespace DreamCar.DAL.Migrations
 
                     b.Navigation("AdvertThread");
 
-                    b.Navigation("Client");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -659,7 +652,7 @@ namespace DreamCar.DAL.Migrations
                     b.Navigation("CarEquipment");
                 });
 
-            modelBuilder.Entity("DreamCar.Model.DataModels.Client", b =>
+            modelBuilder.Entity("DreamCar.Model.DataModels.User", b =>
                 {
                     b.Navigation("Adverts");
 

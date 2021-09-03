@@ -14,7 +14,7 @@ namespace DreamCar.Web.Configuration.Profiles
                 .ForMember(dest => dest.UserName, y => y.MapFrom(src => src.Email))
                 .ForMember(dest => dest.RegistrationDate, y => y.MapFrom(src => DateTime.Now));
 
-            CreateMap<Client, ContactDetailsVm>();
+            CreateMap<User, ContactDetailsVm>();
         }
     }
 }

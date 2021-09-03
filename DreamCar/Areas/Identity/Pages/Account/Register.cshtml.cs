@@ -103,14 +103,14 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
                 if (!Request.Form.ContainsKey("g-recaptcha-response")) return Page();
                 var captcha = Request.Form["g-recaptcha-response"].ToString();
                 if (!await _reCaptcha.IsValid(captcha)) return Page();
-                var user = new Client { FirstName = Input.FirstName, LastName = Input.LastName, UserName = Input.Email, Email = Input.Email, RegistrationDate = DateTime.Now };
+                var user = new User { FirstName = Input.FirstName, LastName = Input.LastName, UserName = Input.Email, Email = Input.Email, RegistrationDate = DateTime.Now };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                    //By default, user has Client role.
-                    await _userManager.AddToRoleAsync(user, "Client");
+                    //By default, new user has User role.
+                    await _userManager.AddToRoleAsync(user, "User");
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DreamCar.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Client, User")]
+    [Authorize(Roles = "Admin, Mod, User")]
     public class AccountController : BaseController
     {
         private readonly UserManager<User> _userManager;

@@ -11,7 +11,6 @@ namespace DreamCar.DAL.EF
         public virtual DbSet<AdvertThread> AdvertThreads { get; set; }
         public virtual DbSet<Car> Cars { get; set; }
         public virtual DbSet<CarEquipment> CarEquipments { get; set; }
-        public virtual DbSet<Client> Clients { get; set; }
         public virtual DbSet<FollowAdvert> FollowAdverts { get; set; }
         public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
@@ -32,8 +31,7 @@ namespace DreamCar.DAL.EF
             modelBuilder.Entity<User>()
                 .ToTable("AspNetUsers")
                 .HasDiscriminator<int>("UserType")
-                .HasValue<User>((int)RoleType.User)
-                .HasValue<Client>((int)RoleType.Client);
+                .HasValue<User>((int)RoleType.User);
 
             modelBuilder.Entity<FollowAdvert>()
                 .HasKey(fa => new { fa.UserId, fa.AdvertId });
@@ -56,7 +54,7 @@ namespace DreamCar.DAL.EF
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Advert>()
-                .HasOne(ad => ad.Client)
+                .HasOne(ad => ad.User)
                 .WithMany(cl => cl.Adverts)
                 .HasForeignKey(ad => ad.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -84,7 +82,7 @@ namespace DreamCar.DAL.EF
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<FollowAdvert>()
-                .HasOne(fa => fa.Client)
+                .HasOne(fa => fa.User)
                 .WithMany(cl => cl.FollowAdverts)
                 .HasForeignKey(fa => fa.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
@@ -96,7 +94,7 @@ namespace DreamCar.DAL.EF
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Message>()
-                .HasOne(mg => mg.Client)
+                .HasOne(mg => mg.User)
                 .WithMany(cl => cl.Messages)
                 .HasForeignKey(mg => mg.UserId)
                 .OnDelete(DeleteBehavior.Restrict);

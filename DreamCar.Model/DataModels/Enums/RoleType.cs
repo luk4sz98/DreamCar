@@ -9,7 +9,6 @@ namespace DreamCar.Model.DataModels.Enums
     public enum RoleType
     {
         User,
-        Client,
         Mod,
         Admin
     }

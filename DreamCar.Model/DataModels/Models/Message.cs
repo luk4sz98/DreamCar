@@ -13,6 +13,6 @@ namespace DreamCar.Model.DataModels
         public string Description { get; set; }
         public DateTime PostDate { get; set; }
         public virtual AdvertThread AdvertThread { get; set; }
-        public virtual Client Client { get; set; }
+        public virtual User User { get; set; }
     }
 }
