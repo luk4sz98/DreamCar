@@ -12,7 +12,7 @@ using SendGrid.Helpers.Mail;
 
 namespace DreamCar.Services.Services
 {
-    public class EmailSenderService : BaseService, IEmailSender
+    public class EmailSenderService : BaseService, IEmailSenderService
     {
         private readonly SendGridClient _client;
         public EmailSenderService(

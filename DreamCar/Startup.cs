@@ -42,10 +42,11 @@ namespace DreamCar
             services.AddTransient(typeof(ILogger), typeof(Logger<Startup>));
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
-            services.AddScoped<IEmailSender, EmailSenderService>();
+            services.AddScoped<IEmailSenderService, EmailSenderService>();
+            services.AddScoped<IAccountService, AccountService>();
             services.Configure<AppSettingsService>(Configuration.GetSection(AppSettingsService.SectionName));
             services.AddOptions();
-            services.AddScoped<IReCaptcha, ReCaptchaService>();
+            services.AddScoped<IReCaptchaService, ReCaptchaService>();
             services.AddScoped((serviceProvider) =>
             {
                 return new SendGridClient(AesOperationService.GetEmailApiKey());

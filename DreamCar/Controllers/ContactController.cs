@@ -1,4 +1,5 @@
-﻿using DreamCar.Model.DataModels;
+﻿using AutoMapper;
+using DreamCar.Model.DataModels;
 using DreamCar.Services.Interfaces;
 using DreamCar.ViewModels.VM;
 using Microsoft.AspNetCore.Authorization;
@@ -10,24 +11,24 @@ using System.Threading.Tasks;
 
 namespace DreamCar.Web.Controllers
 {
-    public class ContactController : Controller
+    public class ContactController : BaseController
     {
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailSenderService _emailSender;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly ILogger _logger;
-        private readonly IReCaptcha _reCaptcha;
+        private readonly IReCaptchaService _reCaptcha;
         public ContactController(
-            IEmailSender emailSender,
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
-            ILogger logger,
-            IReCaptcha reCaptcha)
+                IEmailSenderService emailSender,
+                UserManager<User> userManager,
+                SignInManager<User> signInManager,
+                IReCaptchaService reCaptcha,
+                ILogger logger,
+                IMapper mapper
+            ) : base(logger, mapper)
         {
             _emailSender = emailSender;
             _userManager = userManager;
             _signInManager = signInManager;
-            _logger = logger;
             _reCaptcha = reCaptcha;
         }
 
@@ -78,7 +79,7 @@ namespace DreamCar.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                Logger.LogError(ex, ex.Message);
                 TempData["ErrorMailAlert"] = true;
                 return RedirectToAction("SendRequest");
             }

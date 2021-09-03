@@ -27,16 +27,16 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
-        private readonly IReCaptcha _reCaptcha;
+        private readonly IEmailSenderService _emailSender;
+        private readonly IReCaptchaService _reCaptcha;
         private readonly IWebHostEnvironment _hostingEnviroment;
 
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender,
-            IReCaptcha reCaptcha,
+            IEmailSenderService emailSender,
+            IReCaptchaService reCaptcha,
             IWebHostEnvironment hostEnvironment)
         {
             _userManager = userManager;
@@ -103,7 +103,7 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
                 if (!Request.Form.ContainsKey("g-recaptcha-response")) return Page();
                 var captcha = Request.Form["g-recaptcha-response"].ToString();
                 if (!await _reCaptcha.IsValid(captcha)) return Page();
-                var user = new User { FirstName = Input.FirstName, LastName = Input.LastName, UserName = Input.Email, Email = Input.Email, RegistrationDate = DateTime.Now };
+                var user = new Client { FirstName = Input.FirstName, LastName = Input.LastName, UserName = Input.Email, Email = Input.Email, RegistrationDate = DateTime.Now };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)

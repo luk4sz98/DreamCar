@@ -10,6 +10,7 @@ namespace DreamCar.Model.DataModels.Enums
     {
         User,
         Client,
+        Mod,
         Admin
     }
 }

@@ -2,7 +2,7 @@
 
 namespace DreamCar.Services.Interfaces
 {
-    public interface IReCaptcha
+    public interface IReCaptchaService
     {
         Task<bool> IsValid(string captcha);
     }

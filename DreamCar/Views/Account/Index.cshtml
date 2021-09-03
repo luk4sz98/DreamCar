@@ -1,5 +1,115 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{ ViewData["Title"] = "Konto"; }
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 accountColumn" data-aos="fade-left" data-aos-duration="800" data-aos-delay="800" data-aos-once="true">
+                <div class="text-center">
+                    <icon class="fas fa-user-cog extend"></icon>
+                    <h2 class="extend">Dane kontaktowe</h2>
+                    <div class="contactContent mt-3">
+                        <h5>Możesz przypisać lub zmienić swoje dane</h5>
+                        @using (Html.BeginForm("SaveNewContactData", "Account", FormMethod.Post))
+                        {
+                            <div class="formContact">
+                                <div class="text-danger"></div>
+                                <div class="form-group">
+                                    <div class="mb-3">
+                                        <input class="form-control" placeholder="Kraj" style="border-radius: 1rem;">
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="mb-3">
+                                        <input class="form-control" placeholder="Kod pocztowy" style="border-radius: 1rem;">
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="mb-3">
+                                        <input class="form-control" placeholder="Miasto" style="border-radius: 1rem;">
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="mb-3">
+                                        <input class="form-control" placeholder="Telefon" style="border-radius: 1rem;">
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="mb-3">
+                                        <button class="btn btn-primary contactButton" type="submit">Zapisz</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 accountColumn">
+                <div class="text-center">
+                    <icon class="fas fa-user-cog mok"></icon>
+                    <h2>Dane kontaktowe</h2>
+                    <div class="dataContactForm">
+                        orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                        <input id="confirmPassword" class="form-control" placeholder="Potwierdź hasło" style="border-radius: 1rem;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 accountColumn">
+                <div class="text-center">
+                    <icon class="fas fa-user-cog mok"></icon>
+                    <h2>Dane kontaktowe</h2>
+                    <div class="dataContactForm">
+                        orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                        <input id="confirmPassword" class="form-control" placeholder="Potwierdź hasło" style="border-radius: 1rem;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 accountColumn">
+                <div class="text-center">
+                    <icon class="fas fa-user-cog mok"></icon>
+                    <h2>Dane kontaktowe</h2>
+                    <div class="dataContactForm">
+                        orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                        <input id="confirmPassword" class="form-control" placeholder="Potwierdź hasło" style="border-radius: 1rem;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 accountColumn">
+                <div class="text-center">
+                    <icon class="fas fa-user-cog mok"></icon>
+                    <h2>Dane kontaktowe</h2>
+                    <div class="dataContactForm">
+                        orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                        <input id="confirmPassword" class="form-control" placeholder="Potwierdź hasło" style="border-radius: 1rem;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".contactContent").hide()
+        })
+        $(".extend").on("click", function () {
+            $(".contactContent").slideToggle(500)
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DreamCar.Services.Interfaces
 {
-    public interface IEmailSender
+    public interface IEmailSenderService
     {
         Task SendEmailAsync(EmailVm email);
     }

@@ -19,12 +19,12 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
     public class ForgotPasswordModel : PageModel
     {
         private readonly UserManager<User> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailSenderService _emailSender;
         private readonly IWebHostEnvironment _hostingEnviroment;
 
         public ForgotPasswordModel(
             UserManager<User> userManager,
-            IEmailSender emailSender,
+            IEmailSenderService emailSender,
             IWebHostEnvironment hostingEnviroment)
         {
             _userManager = userManager;

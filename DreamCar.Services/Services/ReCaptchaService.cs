@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DreamCar.Services.Services
 {
-    public class ReCaptchaService: HttpClient, IReCaptcha
+    public class ReCaptchaService: HttpClient, IReCaptchaService
     { 
         private readonly ILogger _logger;
 
