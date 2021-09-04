@@ -41,9 +41,29 @@ namespace DreamCar.Services.Services
             }
         }
 
-        public Task SaveContactDetails(ContactDetailsVm contactDetailsVm)
+        public async Task<bool> SaveContactDetails(ContactDetailsVm contactDetailsVm)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var userEnity = await DbContext.Users.FirstOrDefaultAsync(user => user.Id == contactDetailsVm.UserId);
+                
+                if (userEnity == null)
+                    throw new ArgumentNullException($"Nie ma użytkownika z tym id - {contactDetailsVm.UserId}");
+
+                userEnity.Country = contactDetailsVm.Country;
+                userEnity.City = contactDetailsVm.City;
+                userEnity.PhoneNumber = contactDetailsVm.PhoneNumber;
+                userEnity.ZipCode = contactDetailsVm.ZipCode;
+
+                
+                await DbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return false;
+            }
         }
     }
 }

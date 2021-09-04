@@ -246,7 +246,10 @@ footer {
   outline: none;
   color: inherit;
   text-indent: 8px;
-  height: 42px;
+}
+
+.accountColumn label {
+   text-indent: 8px;
 }
 
 .accountColumn .formContact {
