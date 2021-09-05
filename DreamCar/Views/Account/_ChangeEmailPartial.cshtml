@@ -1,0 +1,37 @@
+﻿@using DreamCar.Services.Services
+@model ChangeEmailVm
+
+<div class="col-12 accountColumn">
+    <div class="text-center">
+        <icon class="headerIcon fas fa-envelope extendEmailContent" style="margin-left: 10px;"></icon>
+        <h2 class="extendEmailContent">Zmiana adresu e-mail</h2>
+        <div class="changeEmailContent mt-3" style="display: none;">
+            <h5>Możesz zmienić adres email</h5>
+            <form id="form" asp-action="ChangeEmail" asp-controller="Account" method="post">
+                <div class="formContact">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <input asp-for="UserId" type="hidden" value="@ViewBag.userId" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-floating mb-3">
+                            <input id="newEmail" asp-for="NewEmail" placeholder="Nowy adres email" class="form-control" style="border-radius: 1rem;" />
+                            <label for="newEmail">Nowy adres email <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+                            <span asp-validation-for="NewEmail" class="text-danger"></span>
+                        </div>
+                    </div>                  
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <button class="btn btn-primary contactButton" type="submit">Ustaw nowy email</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

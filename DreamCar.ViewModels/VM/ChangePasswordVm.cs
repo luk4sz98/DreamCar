@@ -7,7 +7,7 @@ namespace DreamCar.ViewModels.VM
         [Required]
         public int UserId { get; set; }
 
-        [Required(ErrorMessage = "Musisz podać swoje obence hasło")]
+        [Required(ErrorMessage = "Musisz podać swoje obecne hasło")]
         [StringLength(100, ErrorMessage = "Hasło musi składać się co najmniej z {2} i maksymalnie {1} znaków.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Obecne hasło")]

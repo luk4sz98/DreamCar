@@ -22,6 +22,41 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
+
+    if (TempData["EmailChanged"] == null ? false : true)
+    {
+        @if ((bool)TempData["EmailChanged"])
+        {
+            <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
+                Link potwierdzający zmianę email, został wysłany. Sprawdzą swoją <strong>skrzynkę pocztową</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        else
+        {
+            <div class="alertMessage alert alert-danger alert-dismissible fade show" role="alert">
+                Błąd: @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    }
+    if (TempData["EmailChangedConfirm"] == null ? false : true)
+    {
+        @if ((bool)TempData["EmailChangedConfirm"])
+        {
+            <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
+                Zmiana adresu email, przebiegła pomyślnie
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        else
+        {
+            <div class="alertMessage alert alert-danger alert-dismissible fade show" role="alert">
+                Błąd: @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    }
 }
 
 <section>
@@ -31,6 +66,12 @@
         </div>
         <div class="row" data-aos="fade-right" data-aos-duration="800" data-aos-delay="1200" data-aos-once="true">
             <partial name="_ChangePasswordPartial" />
+        </div>
+        <div class="row" data-aos="fade-left" data-aos-duration="800" data-aos-delay="1600" data-aos-once="true">
+            <partial name="_ChangeEmailPartial" />
+        </div>
+        <div class="row" data-aos="fade-right" data-aos-duration="800" data-aos-delay="2000" data-aos-once="true">
+
         </div>
     </div>
 </section>
@@ -52,6 +93,12 @@
             $(".changePasswordContent").slideToggle(500)
             $('html,body').animate({
                 scrollTop: $(".changePasswordContent").offset().top
+            }, 'slow');
+        });
+        $(".extendEmailContent").on("click", function () {
+            $(".changeEmailContent").slideToggle(500)
+            $('html,body').animate({
+                scrollTop: $(".changeEmailContent").offset().top
             }, 'slow');
         });
 

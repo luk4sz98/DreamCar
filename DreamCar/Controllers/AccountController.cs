@@ -88,5 +88,49 @@ namespace DreamCar.Web.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeEmail(ChangeEmailVm changeEmailVm)
+        {
+            if (!ModelState.IsValid)
+                return RedirectToAction("Index");
+
+            var result = await _accountService.ChangeEmailAsync(changeEmailVm);
+            if (result.Item1)
+            {
+                TempData["EmailChanged"] = true;
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, result.Item2);
+                TempData["EmailChanged"] = false;
+                TempData["ErrorMessage"] = result.Item2;
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmailChange(string userId, string email, string code)
+        {
+            if (userId == null || email == null || code == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var result = await _accountService.ConfirmChangeEmailAsync(userId, email, code);
+            if (result.Item1)
+            {
+                TempData["EmailChangedConfirm"] = true;
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, result.Item2);
+                TempData["EmailChangedConfirm"] = false;
+                TempData["ErrorMessage"] = result.Item2;
+                return RedirectToAction("Index");
+            }
+        }
     }
 }

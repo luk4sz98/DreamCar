@@ -39,6 +39,9 @@
     <Content Update="wwwroot\assets\templates\emailConfirmationTemplate.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\assets\templates\emailChangeConfirmationTemplate.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\assets\templates\emailPasswordResetTemplate.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -9,5 +9,7 @@ namespace DreamCar.Services.Interfaces
         Task<bool> SaveContactDetails(ContactDetailsVm contactDetailsVm);
 
         Task<(bool, string)> ChangePassword(ChangePasswordVm changePasswordVm);
+        Task<(bool, string)> ChangeEmailAsync(ChangeEmailVm changeEmailVm);
+        Task<(bool, string)> ConfirmChangeEmailAsync(string userId, string email, string code);
     }
 }
