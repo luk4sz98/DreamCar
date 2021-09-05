@@ -1,80 +1,36 @@
 ﻿@{ ViewData["Title"] = "Konto"; }
 
 @{
-    if (TempData["SaveContactData"] != null)
+    if (TempData["SaveContactData"] == null ? false : (bool)TempData["SaveContactData"])
     {
-        if ((bool)TempData["SaveContactData"])
-        {
-            <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
-                Dane zostały zapisane pomyślnie
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        }
-        else
-        {
-            <div class="alertMessage alert alert-danger alert-dismissible fade show" role="alert">
-                Coś poszło nie tak, spróbuj ponownie
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        }
+        <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
+            Dane zostały zapisane pomyślnie
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    if (TempData["ChangePassword"] == null ? false : (bool)TempData["ChangePassword"])
+    {
+        <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
+            Hasło zostało zmienione pomyślnie
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    if (TempData["ErrorChangePassword"] == null ? false : true)
+    {
+        <div class="alertMessage alert alert-danger alert-dismissible fade show" role="alert">
+            Coś poszło nie tak, upewnij się, że podałeś <strong>prawidłowe</strong> aktualne hasło.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     }
 }
 
 <section>
     <div class="container">
-        <div class="row">
+        <div class="row" data-aos="fade-left" data-aos-duration="800" data-aos-delay="800" data-aos-once="true">
             <partial name="_ContactDetailsPartial" model="@ViewBag.contactDetails" />
         </div>
-        <div class="row">
-            <div class="col-12 accountColumn">
-                <div class="text-center">
-                    <icon class="fas fa-user-cog mok"></icon>
-                    <h2>Dane kontaktowe</h2>
-                    <div class="dataContactForm">
-                        orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                        <input id="confirmPassword" class="form-control" placeholder="Potwierdź hasło" style="border-radius: 1rem;">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 accountColumn">
-                <div class="text-center">
-                    <icon class="fas fa-user-cog mok"></icon>
-                    <h2>Dane kontaktowe</h2>
-                    <div class="dataContactForm">
-                        orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                        <input id="confirmPassword" class="form-control" placeholder="Potwierdź hasło" style="border-radius: 1rem;">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 accountColumn">
-                <div class="text-center">
-                    <icon class="fas fa-user-cog mok"></icon>
-                    <h2>Dane kontaktowe</h2>
-                    <div class="dataContactForm">
-                        orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                        <input id="confirmPassword" class="form-control" placeholder="Potwierdź hasło" style="border-radius: 1rem;">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 accountColumn">
-                <div class="text-center">
-                    <icon class="fas fa-user-cog mok"></icon>
-                    <h2>Dane kontaktowe</h2>
-                    <div class="dataContactForm">
-                        orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                        <input id="confirmPassword" class="form-control" placeholder="Potwierdź hasło" style="border-radius: 1rem;">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-
+        <div class="row" data-aos="fade-right" data-aos-duration="800" data-aos-delay="1200" data-aos-once="true">
+            <partial name="_ChangePasswordPartial" />
         </div>
     </div>
 </section>
@@ -82,11 +38,25 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $(".contactContent").hide()
+            $("#phoneNumber").mask('(99) 999-999-999')
+            $("#zipCode").mask('99-999')
         })
+
         $(".extend").on("click", function () {
             $(".contactContent").slideToggle(500)
+            $('html,body').animate({
+                scrollTop: $(".contactContent").offset().top
+            }, 'slow');
         });
+        $(".extendPasswordContent").on("click", function () {
+            $(".changePasswordContent").slideToggle(500)
+            $('html,body').animate({
+                scrollTop: $(".changePasswordContent").offset().top
+            }, 'slow');
+        });
+
     </script>
+    <script src="~/assets/js/reCaptchaScript.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <partial name="_ValidationScriptsPartial" />
 }

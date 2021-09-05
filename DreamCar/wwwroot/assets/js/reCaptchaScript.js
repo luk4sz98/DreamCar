@@ -10,6 +10,10 @@ jQuery("#message").focusin(function () {
     $("#reCaptcha").show(500);
 })
 
+jQuery("#confirmNewPassword").focusin(function () {
+    $("#reCaptcha").show(500);
+})
+
 function reCaptchaCallback() {
     var response = grecaptcha.getResponse();
     if (response.length !== 0) {

@@ -52,7 +52,6 @@ namespace DreamCar
                 return new SendGridClient(AesOperationService.GetEmailApiKey());
             });
             services.AddHttpClient();
-                
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

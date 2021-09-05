@@ -15,28 +15,35 @@ namespace DreamCar.Web.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly IAccountService _accountService;
+        private readonly IReCaptchaService _reCaptcha;
 
         public AccountController(
                 UserManager<User> userManager,
                 IAccountService accountService,
                 ILogger logger,
-                IMapper mapper
+                IMapper mapper,
+                IReCaptchaService reCaptcha
             ) : base(logger, mapper)
         {
             _userManager = userManager;
             _accountService = accountService;
+            _reCaptcha = reCaptcha;
         }
 
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
             ViewBag.contactDetails = await _accountService.GetAccountDetails(user.Id);
+            ViewBag.userId = user.Id;
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> SaveNewContactData(ContactDetailsVm contactDetailsVm)
         {
+            if (!ModelState.IsValid)
+                return RedirectToAction("Index");
+
             var result = await _accountService.SaveContactDetails(contactDetailsVm);
             if (result)
             {
@@ -45,7 +52,39 @@ namespace DreamCar.Web.Controllers
             }
             else
             {
-                TempData["SaveContactData"] = false;
+                TempData["ErrorAlert"] = true;
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordVm changePasswordVm)
+        {
+            if (!ModelState.IsValid)
+                return RedirectToAction("Index");
+
+            if (!Request.Form.ContainsKey("g-recaptcha-response"))
+            {
+                TempData["ErrorAlert"] = true;
+                return RedirectToAction("Index");
+            }
+            var captcha = Request.Form["g-recaptcha-response"].ToString();
+            if (!await _reCaptcha.IsValid(captcha))
+            {
+                TempData["ErrorAlert"] = true;
+                return RedirectToAction("Index");
+            }
+
+            var result = await _accountService.ChangePassword(changePasswordVm);
+            if (result.Item1)
+            {
+                TempData["ChangePassword"] = true;
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, result.Item2);
+                TempData["ErrorChangePassword"] = true;
                 return RedirectToAction("Index");
             }
         }

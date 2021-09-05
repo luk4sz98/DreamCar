@@ -1,4 +1,5 @@
-﻿namespace DreamCar.Services.Services
+﻿
+namespace DreamCar.Services.Services
 {
     public class AppSettingsService
     {

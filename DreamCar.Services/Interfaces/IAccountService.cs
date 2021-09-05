@@ -7,5 +7,7 @@ namespace DreamCar.Services.Interfaces
     {
         Task<ContactDetailsVm> GetAccountDetails(int userId);
         Task<bool> SaveContactDetails(ContactDetailsVm contactDetailsVm);
+
+        Task<(bool, string)> ChangePassword(ChangePasswordVm changePasswordVm);
     }
 }
