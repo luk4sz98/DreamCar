@@ -57,6 +57,23 @@
             </div>
         }
     }
+    if (TempData["DownloadPersonalData"] == null ? false : true)
+    {
+        @if ((bool)TempData["DownloadPersonalData"])
+        {
+            <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
+                Zmiana adresu email, przebiegła pomyślnie
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        else
+        {
+            <div class="alertMessage alert alert-danger alert-dismissible fade show" role="alert">
+                Błąd: @TempData["ErrorDownloadPersonalData"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    }
 }
 
 <section>
@@ -71,7 +88,7 @@
             <partial name="_ChangeEmailPartial" />
         </div>
         <div class="row" data-aos="fade-right" data-aos-duration="800" data-aos-delay="2000" data-aos-once="true">
-
+            <partial name="_DownloadDeletePersonalDataPartial" />
         </div>
     </div>
 </section>
@@ -99,6 +116,12 @@
             $(".changeEmailContent").slideToggle(500)
             $('html,body').animate({
                 scrollTop: $(".changeEmailContent").offset().top
+            }, 'slow');
+        });
+        $(".extendAccountContent").on("click", function () {
+            $(".accountContent").slideToggle(500)
+            $('html,body').animate({
+                scrollTop: $(".accountContent").offset().top
             }, 'slow');
         });
 

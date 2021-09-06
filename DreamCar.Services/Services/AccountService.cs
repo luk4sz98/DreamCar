@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -24,7 +26,7 @@ namespace DreamCar.Services.Services
         private readonly IUrlHelper _url;
         private readonly IWebHostEnvironment _hostingEnviroment;
         private readonly IEmailSenderService _emailSender;
-        private readonly HttpRequest _request;
+        private readonly IHttpContextAccessor _httpContext;
         public AccountService(
                 ApplicationDbContext dbContext,
                 IMapper mapper,
@@ -41,7 +43,7 @@ namespace DreamCar.Services.Services
             _url = url;
             _hostingEnviroment = hostEnvironment;
             _emailSender = emailSender;
-            _request = httpContextAccessor.HttpContext.Request;
+            _httpContext = httpContextAccessor;
         }
 
         public async Task<(bool, string)> ChangePassword(ChangePasswordVm changePasswordVm)
@@ -127,13 +129,16 @@ namespace DreamCar.Services.Services
                 if (user.Email == changeEmailVm.NewEmail)
                     return (false, "Adres email jest taki sam jak dotychczasowy");
 
+                if (!await UserManager.CheckPasswordAsync(user, changeEmailVm.CurrentPassword))
+                    return (false, "Niepoprawne hasło, spróbuj ponownie");
+
                 var code = await UserManager.GenerateChangeEmailTokenAsync(user, changeEmailVm.NewEmail);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 var callbackUrl = _url.Action(
                     action: "ConfirmEmailChange",
                     controller: "Account",
                     values: new { userId = user.Id, email = changeEmailVm.NewEmail, code = code },
-                    protocol: _request.Scheme);
+                    protocol: _httpContext.HttpContext.Request.Scheme);
                 
                 var emailBody = FileService.ReadFile(pathToFile: _hostingEnviroment.WebRootPath + @"\assets\templates\emailChangeConfirmationTemplate.html");
                 emailBody = emailBody.Replace("{{ConfirmationLink}}", HtmlEncoder.Default.Encode(callbackUrl));
@@ -181,6 +186,46 @@ namespace DreamCar.Services.Services
             {
                 Logger.LogError(ex, ex.Message);
                 return (false, ex.Message);
+            }
+        }
+
+        public async Task<(Dictionary<string, string>, string)> GetPersonalDataAsync(DownloadDeletePersonalDataVm downloadDeletePersonalDataVm)
+        {
+            try
+            {
+                var user = await DbContext.Users.OfType<User>().FirstOrDefaultAsync(user => user.Id == downloadDeletePersonalDataVm.UserId);
+                if (user == null)
+                    throw new ArgumentNullException($"Nie ma użytkownika z tym id - {downloadDeletePersonalDataVm.UserId}");
+
+
+                if (!await UserManager.CheckPasswordAsync(user, downloadDeletePersonalDataVm.Password))
+                    return (null, "Niepoprawne hasło, spróbuj ponownie");
+
+                var personalData = new Dictionary<string, string>();
+                var personalDataProps = typeof(User).GetProperties().Where(
+                                prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
+
+                foreach (var p in personalDataProps)
+                {
+                    personalData.Add(
+                        p.GetCustomAttributes(typeof(DisplayAttribute), true).Cast<DisplayAttribute>().Single().Name,
+                        p.GetValue(user)?.ToString() ?? "null"
+                    );
+                }
+
+                var logins = await UserManager.GetLoginsAsync(user);
+                foreach (var l in logins)
+                {
+                    personalData.Add($"{l.LoginProvider} external login provider key", l.ProviderKey);
+                }
+
+                return (personalData, string.Empty);
+               
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return (null, ex.Message);
             }
         }
     }

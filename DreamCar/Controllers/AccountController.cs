@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using DreamCar.Services.Interfaces;
 using System.Threading.Tasks;
 using DreamCar.ViewModels.VM;
+using DreamCar.Services.Services.Export;
 
 namespace DreamCar.Web.Controllers
 {
@@ -131,6 +132,29 @@ namespace DreamCar.Web.Controllers
                 TempData["ErrorMessage"] = result.Item2;
                 return RedirectToAction("Index");
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DownloadPersonalData(DownloadDeletePersonalDataVm personalDataVm)
+        {
+            if (!ModelState.IsValid)
+                return RedirectToAction("Index");
+            var result = await _accountService.GetPersonalDataAsync(personalDataVm);
+            
+            if (result.Item1 == null)
+            {
+                TempData["DownloadPersonalData"] = false;
+                TempData["ErrorDownloadPersonalData"] = result.Item2;
+                return RedirectToAction("Index");
+            }
+
+            return new ExportToCsv(result.Item1, "PersonalData.csv");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAccount(DownloadDeletePersonalDataVm personalDataVm)
+        {
+            return RedirectToAction("Index");
         }
     }
 }

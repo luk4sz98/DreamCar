@@ -1,4 +1,5 @@
 ﻿using DreamCar.ViewModels.VM;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DreamCar.Services.Interfaces
@@ -11,5 +12,7 @@ namespace DreamCar.Services.Interfaces
         Task<(bool, string)> ChangePassword(ChangePasswordVm changePasswordVm);
         Task<(bool, string)> ChangeEmailAsync(ChangeEmailVm changeEmailVm);
         Task<(bool, string)> ConfirmChangeEmailAsync(string userId, string email, string code);
+
+        Task<(Dictionary<string, string>, string)> GetPersonalDataAsync(DownloadDeletePersonalDataVm downloadDeletePersonalDataVm);
     }
 }

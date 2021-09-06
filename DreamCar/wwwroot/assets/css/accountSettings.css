@@ -38,6 +38,14 @@
     font-size: 20px;
 }
 
+.accountColumn .deleteButton {
+    border-radius: 2rem;
+    padding: 5px;
+    width: 180px;
+    font-size: 20px;
+    margin-left: 20px;
+}
+
 .accountColumn .contactButton:hover {
     opacity: 0.9;
 }
@@ -64,3 +72,18 @@
     padding: 20px;
     color: #505e6c;
 }
+
+@media (max-width:500px) {
+    .accountColumn .deleteButton {
+        font-size: 15px;
+        width: 50%;
+        margin: 0 auto;
+        margin-top: 15px;
+    }
+    .accountColumn .contactButton {
+        font-size: 15px;
+        width: 50%;
+        margin: 0 auto;
+    }
+}
+

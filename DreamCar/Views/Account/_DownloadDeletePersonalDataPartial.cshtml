@@ -1,0 +1,34 @@
+﻿@model DownloadDeletePersonalDataVm
+
+<div class="col-12 accountColumn">
+    <div class="text-center">
+        <icon class="headerIcon fas fa-user-cog extendAccountContent" style="margin-left: 10px;"></icon>
+        <h2 class="extendAccountContent">Konto</h2>
+        <div class="accountContent mt-3" style="display: none;">
+            <h5>Twoje konto zawiera dane, które nam podałeś. Możesz je pobrać lub skasować</h5>
+            <h6><strong>Skasowanie danych jest równoznaczne z usunięciem konta, tej operacji nie można cofnąć</strong></h6>           
+            <form id="form" asp-controller="Account" method="post">
+                <div class="formContact">
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <input asp-for="UserId" type="hidden" value="@ViewBag.userId" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-floating mb-3">
+                            <input id="Obecne hasło" asp-for="Password" placeholder="Obecne hasło" class="form-control" style="border-radius: 1rem;" />
+                            <label for="newEmail">Obecne hasło <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <button class="btn btn-primary contactButton" type="submit" asp-action="DownloadPersonalData">Pobierz dane</button>
+                            <button class="btn btn-danger deleteButton" type="submit" formaction="DeleteAccount">Usuń konto</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
