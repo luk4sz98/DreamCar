@@ -46,7 +46,7 @@ namespace DreamCar.Services.Services
             _httpContext = httpContextAccessor;
         }
 
-        public async Task<(bool, string)> ChangePassword(ChangePasswordVm changePasswordVm)
+        public async Task<(bool, string)> ChangePasswordAsync(ChangePasswordVm changePasswordVm)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace DreamCar.Services.Services
             }
         }
 
-        public async Task<ContactDetailsVm> GetAccountDetails(int userId)
+        public async Task<ContactDetailsVm> GetAccountDetailsAsync(int userId)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace DreamCar.Services.Services
             }
         }
 
-        public async Task<bool> SaveContactDetails(ContactDetailsVm contactDetailsVm)
+        public async Task<bool> SaveContactDetailsAsync(ContactDetailsVm contactDetailsVm)
         {
             try
             {
@@ -226,6 +226,32 @@ namespace DreamCar.Services.Services
             {
                 Logger.LogError(ex, ex.Message);
                 return (null, ex.Message);
+            }
+        }
+
+        public async Task<(bool, string)> DeleteAccountAsync(DownloadDeletePersonalDataVm personalDataVm)
+        {
+            try
+            {
+                var user = await DbContext.Users.OfType<User>().FirstOrDefaultAsync(user => user.Id == personalDataVm.UserId);
+                if (user == null)
+                    throw new ArgumentNullException($"Nie ma użytkownika z tym id - {personalDataVm.UserId}");
+                
+                if (!await UserManager.CheckPasswordAsync(user, personalDataVm.Password))
+                    throw new ArgumentException("Niepoprawne hasło, spróbuj ponownie");
+
+                var result = await UserManager.DeleteAsync(user);
+                if (!result.Succeeded)
+                    throw new InvalidOperationException("Wystapił błąd podczas próby skasowania konta, spróbuj ponownie");
+
+                await _signInManager.SignOutAsync();
+                Logger.LogInformation($"Użytkownik z id {personalDataVm.UserId} usunął swoje konto");
+                return (true, string.Empty);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return (false, ex.Message);
             }
         }
     }

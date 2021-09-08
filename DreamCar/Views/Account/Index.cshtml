@@ -74,7 +74,31 @@
             </div>
         }
     }
+
+    if (TempData["DeletedAccountFailedMessage"] == null ? false : true)
+    {
+        <div class="alertMessage alert alert-danger alert-dismissible fade show" role="alert">
+            Błąd: @TempData["DeletedAccountFailedMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 }
+
+<!--Delete Modal Confirmation -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="deleteConfirmationModalLabel"><strong>Czy na pewno chcesz usunąć konto?</strong></h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer d-flex justify-content-center align-items-center">
+                <button type="button" class="btn btn-primary cancelButton me-2" data-bs-dismiss="modal">Anuluj</button>
+                <button id="deleteConfirmButton" type="submit" class="btn btn-danger deleteButtonModal ms-2">Usuń konto</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <section>
     <div class="container">
@@ -125,6 +149,30 @@
             }, 'slow');
         });
 
+        $("#deleteButton").click(function () {
+            if ($('#formDeleteAccount').valid()) {
+                $('#deleteConfirmationModal').modal('show');
+            }
+        });
+
+        $("#deleteConfirmButton").click(function () {
+            var viewModel = {
+                UserId: $('#userId').val(),
+                Password: $('#currentPasswordDeleteDownload').val()
+            };
+            $.ajax({
+                url: '@Url.Action("DeleteAccount", "Account")',
+                data: { UserId: viewModel.UserId, Password: viewModel.Password },
+                type: 'POST',
+                success: function (response) {
+                    window.location.href = response.redirectToUrl
+                    $("#deleteConfirmationModal").modal('hide');
+                },
+                error: function () {
+                    $("#deleteConfirmationModal").modal('hide');
+                }
+            });
+        });
     </script>
     <script src="~/assets/js/reCaptchaScript.js"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>

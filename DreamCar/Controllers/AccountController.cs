@@ -34,7 +34,7 @@ namespace DreamCar.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-            ViewBag.contactDetails = await _accountService.GetAccountDetails(user.Id);
+            ViewBag.contactDetails = await _accountService.GetAccountDetailsAsync(user.Id);
             ViewBag.userId = user.Id;
             return View();
         }
@@ -45,7 +45,7 @@ namespace DreamCar.Web.Controllers
             if (!ModelState.IsValid)
                 return RedirectToAction("Index");
 
-            var result = await _accountService.SaveContactDetails(contactDetailsVm);
+            var result = await _accountService.SaveContactDetailsAsync(contactDetailsVm);
             if (result)
             {
                 TempData["SaveContactData"] = true;
@@ -76,7 +76,7 @@ namespace DreamCar.Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            var result = await _accountService.ChangePassword(changePasswordVm);
+            var result = await _accountService.ChangePasswordAsync(changePasswordVm);
             if (result.Item1)
             {
                 TempData["ChangePassword"] = true;
@@ -140,7 +140,7 @@ namespace DreamCar.Web.Controllers
             if (!ModelState.IsValid)
                 return RedirectToAction("Index");
             var result = await _accountService.GetPersonalDataAsync(personalDataVm);
-            
+
             if (result.Item1 == null)
             {
                 TempData["DownloadPersonalData"] = false;
@@ -154,7 +154,19 @@ namespace DreamCar.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteAccount(DownloadDeletePersonalDataVm personalDataVm)
         {
-            return RedirectToAction("Index");
+            if (!ModelState.IsValid)
+                return RedirectToAction("Index");
+            var result = await _accountService.DeleteAccountAsync(personalDataVm);
+
+            if (result.Item1)
+            {
+                TempData["DeletedAccountSuccess"] = true;
+                return Json(new { redirectToUrl = Url.Action("Index", "Home") });
+            }
+
+            ModelState.AddModelError(string.Empty, result.Item2);
+            TempData["DeletedAccountFailedMessage"] = result.Item2;
+            return Json(new { redirectToUrl = Url.Action("Index", "Account") });
         }
     }
 }

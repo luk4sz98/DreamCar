@@ -44,6 +44,28 @@
     width: 180px;
     font-size: 20px;
     margin-left: 20px;
+    outline: none !important;
+    border: none;
+}
+
+.modal .cancelButton {
+    border-radius: 2rem;
+    background: lightseagreen;
+    border: none;
+    padding: 4px;
+    outline: none !important;
+    width: 140px;
+    font-size: 17px;
+}
+
+.modal .deleteButtonModal {
+    border-radius: 2rem;
+    padding: 4px;
+    width: 140px;
+    font-size: 17px;
+    margin-left: 20px;
+    outline: none !important;
+    border: none;
 }
 
 .accountColumn .contactButton:hover {
