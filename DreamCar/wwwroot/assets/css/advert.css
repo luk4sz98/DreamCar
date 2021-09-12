@@ -1,0 +1,103 @@
+﻿.advertSection {
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+    padding: 15px;
+    border-radius: 1rem;
+    background: #ffffff;
+    color: #343434;
+    max-width: 1000px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.advertSection .checkbox:checked {
+    border: none !important;
+    outline: none !important;
+}
+
+
+.advertSection .form-control {
+    background: #f7f9fc;
+    border: none;
+    border-bottom: 1px solid #dfe7f1;
+    box-shadow: none;
+    outline: none;
+    color: inherit;
+    text-indent: 8px;
+}
+
+.advertSection .form-select {
+    background: #f7f9fc;
+    border: none;
+    border-bottom: 1px solid #dfe7f1;
+    box-shadow: none;
+    outline: none;
+    color: #343434;
+    text-indent: 4px;
+    height: 58px;
+}
+
+.advertSection .form-select:hover {
+    cursor: pointer;
+}
+
+.advertSection .form-select select option:hover {
+    cursor: pointer;
+}
+
+
+.advertSection label {
+    text-indent: 8px;
+}
+
+#firstRegistration:hover {
+    cursor: pointer;
+}
+
+#arrowDown {
+    margin-top: 15px;
+    opacity: 0.5;
+}
+
+#arrowDown:hover {
+    cursor: pointer;
+    opacity: 1;
+}
+
+.advertSection .goToButton {
+    border-radius: 2rem;
+    background: lightseagreen;
+    border: none;
+    padding: 5px;
+    box-shadow: none;
+    text-shadow: none;
+    outline: none !important;
+    text-transform: none;
+    width: 180px;
+    font-size: 20px;
+}
+
+.advertSection .tab {
+    display: none;
+}
+
+/* Make circles that indicate the steps of the form: */
+.advertSection .step {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbbbbb;
+  border: none;
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5;
+}
+
+/* Mark the active step: */
+.advertSection .step.active {
+  opacity: 1;
+}
+
+/* Mark the steps that are finished and valid: */
+.advertSection .step.finish {
+  background-color: #04AA6D;
+}

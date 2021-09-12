@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace DreamCar.Services.Services.Export
 {
-    public class ExportToCsv : FileResult
+    public class ExportToCsvService : FileResult
     {
         private readonly Dictionary<string, string> _dataToCsvFile;
-        public ExportToCsv(Dictionary<string, string> dataToCsv, string fileDownloadName) : base("text/csv")
+        public ExportToCsvService(Dictionary<string, string> dataToCsv, string fileDownloadName) : base("text/csv")
         {
             _dataToCsvFile = dataToCsv;
             FileDownloadName = fileDownloadName;

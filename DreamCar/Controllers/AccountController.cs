@@ -148,7 +148,7 @@ namespace DreamCar.Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            return new ExportToCsv(result.Item1, "PersonalData.csv");
+            return new ExportToCsvService(result.Item1, "PersonalData.csv");
         }
 
         [HttpPost]

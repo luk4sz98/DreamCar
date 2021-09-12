@@ -1,0 +1,55 @@
+﻿@model CarVm
+@using DreamCar.Model.DataModels.Enums
+
+
+<section class="additionalEquipment">
+    <h4 class="text-center">Podstawowe informacje</h4>
+    <div class="input-group">
+        <div class="form-floating col-12 col-md-4 col-lg-3 mb-3 me-3">
+            <select id="gearboxList" asp-for="Gearbox" asp-items="Html.GetEnumSelectList<GearboxType>()" class="form-select" style="border-radius: 1rem;">
+                <option value="" disabled selected>Wybierz typ skrzynii</option>
+            </select>
+            <label for="gearboxList" class="form-label">Rodzaj skrzynii biegów <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+            <span asp-validation-for="Gearbox" class="text-danger"></span>
+        </div>
+        <div class="form-floating col-12 col-md-4 col-lg-3 mb-3 me-3">
+            <input id="version" asp-for="Version" placeholder="Wersja" class="form-control" style="border-radius: 1rem;" />
+            <label for="version">Wersja <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+            <span asp-validation-for="Version" class="text-danger"></span>
+        </div>
+        <div class="form-floating col-12 col-md-4 col-lg-3 mb-3 me-3">
+            <input id="generation" asp-for="Generation" placeholder="Generacja" class="form-control" style="border-radius: 1rem;" />
+            <label for="generation">Generacja <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+            <span asp-validation-for="Generation" class="text-danger"></span>
+        </div>
+        <div class="form-floating col-12 col-md-4 col-lg-3 mb-3 me-3">
+            <select id="bodyTypeList" asp-for="BodyType" asp-items="Html.GetEnumSelectList<BodyType>()" class="form-select" style="border-radius: 1rem;">
+                <option value="" disabled selected>Wybierz segment pojazdu</option>
+            </select>
+            <label for="bodyTypeList" class="form-label">Segment <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+            <span asp-validation-for="BodyType" class="text-danger"></span>
+        </div>
+        <div class="form-floating col-12 col-md-4 col-lg-3 mb-3 me-3">
+            <input id="color" asp-for="Color" placeholder="Kolor" class="form-control" style="border-radius: 1rem;" />
+            <label for="color">Kolor <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+            <span asp-validation-for="Color" class="text-danger"></span>
+        </div>
+        <div class="form-floating col-12 col-md-4 col-lg-3 mb-3 me-3">
+            <select id="colorTypeList" asp-for="ColorType" asp-items="Html.GetEnumSelectList<ColorType>()" class="form-select" style="border-radius: 1rem;">
+                <option value="" disabled selected>Wybierz rodzaj lakieru</option>
+            </select>
+            <label for="colorTypeList" class="form-label">Typ lakieru <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+            <span asp-validation-for="ColorType" class="text-danger"></span>
+        </div>
+        <div class="form-floating col-12 col-md-4 col-lg-3 mb-3 me-3">
+            <input id="mileage" asp-for="Mileage" placeholder="Przebieg" class="form-control" style="border-radius: 1rem;" />
+            <label for="mileage">Przebieg [km] <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+            <span asp-validation-for="Mileage" class="text-danger"></span>
+        </div>
+        <div class="form-floating col-12 col-md-4 col-lg-3 mb-3 me-3">
+            <input id="VIN" asp-for="VIN" placeholder="Numer VIN" class="form-control" style="border-radius: 1rem;" />
+            <label for="VIN">Numer VIN <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+            <span asp-validation-for="VIN" class="text-danger"></span>
+        </div>
+    </div>
+</section>
