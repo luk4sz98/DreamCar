@@ -14,6 +14,29 @@
     outline: none !important;
 }
 
+@media (min-width: 1200px) {
+    .advertSection .form-floating {
+        width: 300px;
+    }
+}
+
+@media (min-width: 1100px) and (max-width: 1199px) {
+    .advertSection .form-floating {
+        width: 450px;
+    }
+}
+
+@media (min-width: 1000px) and (max-width: 1099px) {
+    .advertSection .form-floating {
+        width: 405px;
+    }
+}
+
+@media (min-width: 800px) and (max-width: 999px) {
+    .advertSection .form-floating {
+        width: 315px;
+    }
+}
 
 .advertSection .form-control {
     background: #f7f9fc;
@@ -74,30 +97,68 @@
     text-transform: none;
     width: 180px;
     font-size: 20px;
+    opacity: 0.8;
+}
+
+.advertSection .backButton {
+    border-radius: 2rem;
+    background: DarkGray;
+    border: none;
+    padding: 5px;
+    box-shadow: none;
+    text-shadow: none;
+    outline: none !important;
+    text-transform: none;
+    width: 180px;
+    font-size: 20px;
+    opacity: 0.8;
+}
+
+.advertSection .backButton:hover {
+    opacity: 1;
+}
+
+.advertSection .goToButton:hover {
+    opacity: 1;
 }
 
 .advertSection .tab {
     display: none;
 }
 
-/* Make circles that indicate the steps of the form: */
 .advertSection .step {
-  height: 15px;
-  width: 15px;
-  margin: 0 2px;
+  height: 50px;
+  width: 50px;
   background-color: #bbbbbb;
   border: none;
   border-radius: 50%;
-  display: inline-block;
   opacity: 0.5;
+  font-size: 30px;
+  color: white;
 }
 
-/* Mark the active step: */
+.advertSection .step:hover {
+    cursor: pointer;
+}
+
 .advertSection .step.active {
   opacity: 1;
+  font-weight: bold;
 }
 
-/* Mark the steps that are finished and valid: */
 .advertSection .step.finish {
   background-color: #04AA6D;
+}
+
+@media (max-width: 768px) {
+    .advertSection .goToButton {
+        width: 120px;
+        font-size: 15px;
+    }
+
+    .advertSection .step {
+        height: 30px;
+        width: 30px;
+        font-size: 20px;
+    }
 }

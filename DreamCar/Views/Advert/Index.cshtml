@@ -2,6 +2,16 @@
     ViewData["Title"] = "Dodawanie ogłoszenia";
 }
 
+<div class="modal fade" id="errorMessageModal" tabindex="-1" aria-labelledby="errorMessageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 1rem;">
+            <div class="modal-footer d-flex justify-content-center align-items-center bg-warning" style="border-radius: 1rem;">
+                <h5><strong>Wypełnij pola oznaczone gwiazdką by przejść dalej</strong></h5>
+            </div>
+        </div>
+    </div>
+</div>
+
 <section class="pt-2">
     <div class="advertSection">
         <div class="container">
@@ -32,7 +42,6 @@
                     <div class="tab">
                         <partial name="_BasicCarInformationPartial" />
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="tab">
@@ -49,23 +58,45 @@
                         <partial name="_AdditionalCarEquipmentPartial" />
                     </div>
                 </div>
-                <div class="d-flex justify-content-between align-items-center">
-                    <button id="prevBtn" type="button" class="btn btn-primary goToButton" onclick="nextPrev(-1)">
+                <div class="float-start">
+                    <button id="prevBtn" type="button" class="btn btn-primary backButton" onclick="nextPrev(-1)">
                         Powrót
                     </button>
-                    <button id="nextBtn" type="button" class="btn btn-primary goToButton" onclick="nextPrev(1)">
+                </div>
+                <div class="float-end">
+                    <button id="nextBtn" type="button" class="btn btn-primary goToButton" onclick="checkFields()">
                         Przejdź dalej
                     </button>
                 </div>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+
+                <div class="d-flex justify-content-around align-items-center mt-5">
+                    <div class="step">
+                        <div class="d-flex justify-content-center align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" title="Podstawowe informacje" data-bs-animation="true">
+                            1
+                        </div>
+                    </div>
+                    <icon class="icon-arrow-right" style="font-size: 18px;"></icon>
+                    <div class="step">
+                        <div class="d-flex justify-content-center align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" title="Zdjęcia" data-bs-animation="true">
+                            2
+                        </div>
+                    </div>
+                    <icon class="icon-arrow-right" style="font-size: 18px;"></icon>
+                    <div class="step">
+                        <div class="d-flex justify-content-center align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" title="Coś" data-bs-animation="true">
+                            3
+                        </div>
+                    </div>
+                    <icon class="icon-arrow-right" style="font-size: 18px;"></icon>
+                    <div class="step">
+                        <div class="d-flex justify-content-center align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" title="Podsumowanie" data-bs-animation="true">
+                            4
+                        </div>
                     </div>
                 </div>
-                <div style="text-align:center;margin-top:40px;">
-                    <span class="step"></span>
-                    <span class="step"></span>
-                    <span class="step"></span>
-                    <span class="step"></span>
+                <div class="progress my-3">
+                    <div class="progress-bar bg-secondary" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                    </div>
                 </div>
             </form>
         </div>
@@ -75,13 +106,28 @@
 @section Scripts {
     <script>
         var currentTab = 0;
-        $(document).ready(function () {       
+        $(document).ready(function () {
             showTab(currentTab);
         })
-        
+
+        function checkFields() {
+            var required = $('input,textarea,select').filter('[required]:visible');
+            var allRequired = true;
+            required.each(function () {
+                if ($(this).val() === '' || $(this).children("option:selected").val() === '' ) {
+                    allRequired = false;
+                }
+            })
+            if (!allRequired) {
+                $('#errorMessageModal').modal('show');
+            }
+            else {
+                nextPrev(1)
+            }
+        }
+
         function showTab(n) {
             var x = $(".tab")
-            
 
             $(x[n]).slideToggle(500)
             $('html,body').animate({
@@ -95,9 +141,9 @@
             }
 
             if (n == (x.length - 1)) {
-                document.getElementById("nextBtn").innerHTML = "Dodaj ogłoszenie";
+                $("#nextBtn").text("Dodaj ogłoszenie")
             } else {
-                document.getElementById("nextBtn").innerHTML = "Przejdź dalej";
+                $("#nextBtn").text("Przejdź dalej");
             }
 
             fixStepIndicator(n)
@@ -106,21 +152,20 @@
         function nextPrev(n) {
             var x = $(".tab")
 
-            if (n == -1 && currentTab == 4) {
-                currentTab = currentTab - 1;
-                $(x[currentTab]).slideToggle()
-            }
-
-            if (currentTab < $(x).length - 1) {
-                $(x[currentTab]).slideToggle(500)               
-            }
-
             currentTab = currentTab + n;
-
+            console.log(currentTab)
             if (currentTab >= x.length) {
                 $("#addAdvertForm").submit()
-                return
+                return;
             }
+
+            if (n == 1) {
+                $(x[currentTab - 1]).slideToggle(500)
+            }
+            else {
+                $(x[currentTab + 1]).slideToggle(500)
+            }
+
             showTab(currentTab);
         }
 
