@@ -14,6 +14,7 @@ namespace DreamCar.DAL.EF
         public virtual DbSet<FollowAdvert> FollowAdverts { get; set; }
         public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
+        public virtual DbSet<Equipment> Equipment { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 

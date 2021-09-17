@@ -13,6 +13,9 @@ namespace DreamCar.Model.DataModels
         public string Localization { get; set; }
         public int Visited { get; set; }
         public string Description { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? ClosedAt { get; set; }
+        public bool IsActive { get; set; }
 
         [ForeignKey("Car")]
         public int CarId { get; set; }

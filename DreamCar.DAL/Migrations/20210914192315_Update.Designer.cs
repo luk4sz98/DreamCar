@@ -4,14 +4,16 @@ using DreamCar.DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DreamCar.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210914192315_Update")]
+    partial class Update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,17 +30,8 @@ namespace DreamCar.DAL.Migrations
                     b.Property<int>("CarId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ClosedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Localization")
                         .HasColumnType("nvarchar(max)");
@@ -119,7 +112,7 @@ namespace DreamCar.DAL.Migrations
                     b.Property<bool>("FirstOwner")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("FirstRegistration")
+                    b.Property<DateTime>("FirstRegistration")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Fuel")
@@ -157,9 +150,6 @@ namespace DreamCar.DAL.Migrations
 
                     b.Property<bool>("RegisterdInPoland")
                         .HasColumnType("bit");
-
-                    b.Property<string>("RegistrationNumber")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte>("Seats")
                         .HasColumnType("tinyint");
@@ -250,7 +240,7 @@ namespace DreamCar.DAL.Migrations
                     b.Property<int>("AdvertThreadId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Content")
+                    b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("PostDate")

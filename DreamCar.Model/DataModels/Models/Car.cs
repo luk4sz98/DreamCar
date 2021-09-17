@@ -25,7 +25,8 @@ namespace DreamCar.Model.DataModels
         public byte Seats { get; set; }
         public string OriginCountry { get; set; }
         public bool IsImported { get; set; }
-        public DateTime FirstRegistration { get; set; }
+        public DateTime? FirstRegistration { get; set; }
+        public string RegistrationNumber { get; set; }
         public bool RegisterdInPoland { get; set; }
         public bool FirstOwner { get; set; }
         public bool ASOServiced { get; set; }
@@ -41,7 +42,6 @@ namespace DreamCar.Model.DataModels
         public BodyType Body { get; set; }
         public DriveType Drive { get; set; }
         #endregion
-
 
         public virtual Advert Advert { get; set; }
         public virtual IEnumerable<CarEquipment> CarEquipment { get; set; }

@@ -1,0 +1,111 @@
+﻿@model AddAdvertVm
+
+@{
+    ViewData["Title"] = "Dodawanie ogłoszenia";
+}
+
+@{
+    if (ViewBag.ErrorList == null ? false : true)
+    {
+        <div class="alertMessage alert alert-danger alert-dismissible fade show" role="alert">
+            @foreach(var error in ViewBag.ErrorList)
+            {
+                <p>@error</p>
+            }
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+}
+
+
+<div class="modal fade" id="errorMessageModal" tabindex="-1" aria-labelledby="errorMessageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-warning" style="border-radius: 1rem;">
+            <div class="modal-footer d-flex justify-content-center align-items-center bg-warning" style="border-radius: 1rem;">
+                <h5><strong>Wypełnij pola oznaczone gwiazdką by przejść dalej</strong></h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="pt-2">
+    <div class="advertSection">
+        <div class="container">
+            <div class="row">
+                <div id="infoAlert" class="alert alert-info alert-dismissible fade show" role="alert">
+                    <h5>Zanim zaczniesz</h5>
+                    Upewnij się, że masz dane pod ręką, usprawni to proces dodawania ogłoszenia :)
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <hr />
+                    <div class="d-flex justify-content-start align-items-center mb-3">
+                        <icon class="icon-speedometer" style="font-size: 25px;"></icon>
+                        <span style="margin-left: 10px;">Aktualny <strong>przebieg pojazdu</strong>, znajdziesz go na desce rozdzielczej</span>
+                    </div>
+                    <div class="d-flex justify-content-start align-items-center mb-3">
+                        <icon class="icon-doc" style="font-size: 25px;"></icon>
+                        <span style="margin-left: 10px;"><strong>Dowód rejestracyjny pojazdu</strong>, zawiera komplet informacji o pojeździe</span>
+                    </div>
+                    <div class="d-flex justify-content-start align-items-center">
+                        <icon class="icon-camera" style="font-size: 25px;"></icon>
+                        <span style="margin-left: 10px;"><strong>Dobre zdjęcia pojazdu</strong>, porządnie wykonane zdjęcia, zwiększają atrakcyjność ogłoszenia. Akceptowany format: <strong>jpg, png</strong></span>
+                    </div>
+                </div>
+            </div>
+            <form id="addAdvertForm" asp-action="AddNewAdvert" asp-controller="Advert" method="post" enctype="multipart/form-data">
+                <h4 class="text-center">Formularz składa się z 3 etapów, wypełnij wszystkie wymagane pola</h4>
+                <hr />
+                <div class="row">
+                    <div class="tab">
+                        <partial name="_BasicCarInformationPartial" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="tab">
+                        <partial name="_AdditionalCarEquipmentPartial" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="tab">
+                        <partial name="_CarImagesUploadPartial" />
+                    </div>
+                </div>
+                <div class="float-start">
+                    <button id="prevBtn" type="button" class="btn btn-primary backButton" onclick="nextPrev(-1)">
+                        Powrót
+                    </button>
+                </div>
+                <div class="float-end">
+                    <button id="nextBtn" type="button" class="btn btn-primary goToButton" onclick="checkFields()">
+                        Przejdź dalej
+                    </button>
+                </div>
+                <div class="d-flex justify-content-around align-items-center" style="margin-top: 80px;">
+                    <div class="step" data-bs-toggle="tooltip" data-bs-placement="top" title="Podstawowe informacje" data-bs-animation="true">
+                        1
+                    </div>
+                    <icon class="icon-arrow-right" style="font-size: 18px;"></icon>
+                    <div class="step" data-bs-toggle="tooltip" data-bs-placement="top" title="Dodatkowe wyposażenie" data-bs-animation="true">
+                        2
+                    </div>
+                    <icon class="icon-arrow-right" style="font-size: 18px;"></icon>
+                    <div class="step" data-bs-toggle="tooltip" data-bs-placement="top" title="Zdjęcia" data-bs-animation="true">
+                        3
+                    </div>
+                    <icon class="icon-arrow-right" style="font-size: 18px;"></icon>
+                    <div class="step" data-bs-toggle="tooltip" data-bs-placement="top" title="Dodatkowe informacje" data-bs-animation="true">
+                        4
+                    </div>
+                </div>
+                <div class="progress mt-4 mb-5">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/assets/js/addNewAdvert.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+}

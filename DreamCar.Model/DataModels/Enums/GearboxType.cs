@@ -12,6 +12,6 @@ namespace DreamCar.Model.DataModels.Enums
         SemiAutomatic,
 
         [Display(Name = "Automatyczna")]
-        Autmatic
+        Automatic
     }
 }

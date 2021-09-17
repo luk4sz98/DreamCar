@@ -1,21 +1,19 @@
-﻿@model CarVm
-@using DreamCar.Model.DataModels.Enums
-
+﻿@model List<CheckedEquVm>
 
 <section class="additionalEquipment">
-    <h4 class="text-center">Podstawowe informacje</h4>
-    <div class="input-group">
-        <div class="form-floating col-12 col-md-4 col-lg-3 mb-3 me-3">
-            <select id="gearboxList" required asp-for="Gearbox" asp-items="Html.GetEnumSelectList<GearboxType>()" class="form-select" style="border-radius: 1rem;">
-                <option value="" disabled selected>Wybierz typ skrzynii</option>
-            </select>
-            <label for="gearboxList" class="form-label">Rodzaj skrzynii biegów <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
-            <span asp-validation-for="Gearbox" class="text-danger"></span>
-        </div>
-        <div class="form-floating col-12 col-md-4 col-lg-3 mb-3 me-3">
-            <input id="version" required asp-for="Version" placeholder="Wersja" class="form-control" style="border-radius: 1rem;" />
-            <label for="version">Wersja <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
-            <span asp-validation-for="Version" class="text-danger"></span>
-        </div>
+    <div class="text-center">
+        <h4>Wyposażenie</h4>
+        <h5>Zaznacz co posiada Twój samochód</h5>
+    </div>
+    <div class="input-group d-flex justify-content-center align-items-center">
+        @{
+            for (int i = 0; i < ViewBag.EquipmentList.Count; i++)
+            {
+                <div class="d-flex justify-content-center align-items-center">
+                    <input type="checkbox" name="Checked" value="@ViewBag.EquipmentList[i].Id" class="btn-check shadow-none" id="btn-check-outlined @i" autocomplete="off">
+                    <label class="btn btn-outline-primary mb-3 check shadow-none" for="btn-check-outlined @i" style="border-radius:1rem; width:250px; margin-left: 25px;">@ViewBag.EquipmentList[i].Description</label>
+                </div>
+            }
+        }
     </div>
 </section>
