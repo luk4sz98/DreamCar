@@ -60,9 +60,7 @@ namespace DreamCar.Web.Controllers
                     errors.Add(error.ErrorMessage);
                 }
                 return  RedirectToAction("AddNewAdvert", errors);
-            }
-                
-           
+            }                        
             
             foreach (var equId in equipments.Checked)
             {

@@ -19,8 +19,10 @@ function checkFields() {
     //    $(x[currentTab - 1]).addClass("finish");
     //    nextPrev(1)
     //}
-    nextPrev(1)
-    $(x[currentTab - 1]).addClass("finish");
+    if (!$('#fileUpload-error').is(":visible")) {
+        nextPrev(1)
+        $(x[currentTab - 1]).addClass("finish");
+    }
 }
 
 function showTab(n) {
@@ -50,7 +52,7 @@ function nextPrev(n) {
     var x = $(".tab")
 
     currentTab = currentTab + n;
-    console.log(currentTab)
+
     if (currentTab >= x.length) {
         $("#addAdvertForm").submit()
         return;

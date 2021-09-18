@@ -7,7 +7,7 @@ namespace DreamCar.ViewModels.Validators
 {
     public class MinimumFileSizeValidator : ValidationAttribute, IClientModelValidator
     {
-        private readonly string _errorMessage = "Zdjęcie nie może być mniejsze niż {1} MB";
+        private readonly string _errorMessage = "Jedno z wybranych zdjęć jest mniejsze niż {1} MB";
 
         /// <summary>
         /// Minimum file size in MB
@@ -60,7 +60,9 @@ namespace DreamCar.ViewModels.Validators
         public void AddValidation(ClientModelValidationContext context)
         {
             var errorMessage = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
+            MergeAttribute(context.Attributes, "data-val", "true");
             MergeAttribute(context.Attributes, "data-val-minimumfilesize", errorMessage);
+            MergeAttribute(context.Attributes, "data-val-minimumfilesize-minimumSize", MinimumFileSize.ToString());
         }
 
         private static bool MergeAttribute(

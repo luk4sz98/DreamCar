@@ -7,7 +7,7 @@ namespace DreamCar.ViewModels.Validators
 {
     public class MaximumFileSizeValidator : ValidationAttribute, IClientModelValidator
     {
-        private readonly string _errorMessage = "Zdjęcie nie może byc większe niż {1} MB";
+        private readonly string _errorMessage = "Jedno z wybranych zdjęć jest większe niż {1} MB";
 
         /// <summary>
         /// Maximum file size in MB
@@ -24,7 +24,9 @@ namespace DreamCar.ViewModels.Validators
         public void AddValidation(ClientModelValidationContext context)
         {
             var errorMessage = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
+            MergeAttribute(context.Attributes, "data-val", "true");
             MergeAttribute(context.Attributes, "data-val-maximumfilesize", errorMessage);
+            MergeAttribute(context.Attributes, "data-val-maximumfilesize-maximumSize", MaximumFileSize.ToString());
         }
 
         public override bool IsValid(
@@ -66,9 +68,9 @@ namespace DreamCar.ViewModels.Validators
         }
 
         private static bool MergeAttribute(
-        IDictionary<string, string> attributes,
-        string key,
-        string value)
+            IDictionary<string, string> attributes,
+            string key,
+            string value)
         {
             if (attributes.ContainsKey(key))
             {

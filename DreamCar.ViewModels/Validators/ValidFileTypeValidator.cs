@@ -13,7 +13,7 @@ namespace DreamCar.ViewModels.Validators
         /// <summary>
         /// Valid file extentions
         /// </summary>
-        public string[] ValidFileTypes { get; private set; }
+        public IEnumerable<string> ValidFileTypes { get; private set; }
 
         /// <param name="validFileTypes">Valid file extentions(without the dot)</param>
         public ValidFileTypeValidator(
@@ -43,26 +43,28 @@ namespace DreamCar.ViewModels.Validators
             {
                 var validFileTypeFound = false;
 
-                foreach (var validFileType in ValidFileTypes)
+                foreach (var file in files)
                 {
-                    foreach (var file in files)
+                    var fileNameParts = file.FileName.Split('.');
+                    foreach (var validFileType in ValidFileTypes)
                     {
-                        var fileNameParts = file.FileName.Split('.');
                         if (fileNameParts[^1] == validFileType)
                         {
                             validFileTypeFound = true;
+                            break;
                         }
                         else
                         {
                             validFileTypeFound = false;
-                            break;
                         }
                     }
+                    if (!validFileTypeFound)
+                        break;
                 }
 
                 if (!validFileTypeFound)
                 {
-                    ErrorMessage = String.Format(_errorMessage, "{0}", String.Concat(ValidFileTypes));
+                    ErrorMessage = string.Format(_errorMessage, "{0}", string.Join(",", ValidFileTypes));
                     return false;
                 }
             }
@@ -71,13 +73,14 @@ namespace DreamCar.ViewModels.Validators
 
         public override string FormatErrorMessage(string name)
         {
-            return String.Format(_errorMessage, name, String.Concat(ValidFileTypes, ","));
+            return string.Format(_errorMessage, name, string.Join(",", ValidFileTypes));
         }
 
         public void AddValidation(ClientModelValidationContext context)
         {
             var errorMessage = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
             MergeAttribute(context.Attributes, "data-val-validfiletype", errorMessage);
+            MergeAttribute(context.Attributes, "data-val-validfiletype-validTypes", string.Join(",", ValidFileTypes));
         }
 
         private static bool MergeAttribute(
