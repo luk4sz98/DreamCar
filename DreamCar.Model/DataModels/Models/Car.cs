@@ -25,17 +25,19 @@ namespace DreamCar.Model.DataModels
         public byte Seats { get; set; }
         public string OriginCountry { get; set; }
         public bool IsImported { get; set; }
+        public string GuaranteePeriod { get; set; }
         public DateTime? FirstRegistration { get; set; }
         public string RegistrationNumber { get; set; }
         public bool RegisterdInPoland { get; set; }
         public bool FirstOwner { get; set; }
         public bool ASOServiced { get; set; }
         public bool AccidentFree { get; set; }
-        public decimal Price { get; set; }
         public short EngineCapacity { get; set; }
         public short Power { get; set; }
         public bool IsDamaged { get; set; }
         public bool IsRighthandDrive { get; set; }
+        public bool DPF { get; set; }
+        public ushort CO2Emission { get; set; }
         public FuelType Fuel { get; set; }
         public GearboxType Gearbox { get; set; }
         public ColorType ColorType { get; set; }

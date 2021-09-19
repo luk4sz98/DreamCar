@@ -9,6 +9,16 @@
     margin: 0 auto;
 }
 
+.carSection {
+    background: #ffffff;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-radius: 1rem;
+    color: #343434;
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+    padding: 15px;
+}
+
 .advertSection .checkbox:checked {
     border: none !important;
     outline: none !important;
@@ -16,19 +26,19 @@
 
 @media (min-width: 1200px) {
     .advertSection .form-floating {
-        width: 300px;
+        min-width: 300px;
     }
 }
 
 @media (min-width: 1100px) and (max-width: 1199px) {
     .advertSection .form-floating {
-        width: 450px;
+        min-width: 450px;
     }
 }
 
 @media (min-width: 1000px) and (max-width: 1099px) {
     .advertSection .form-floating {
-        width: 405px;
+        min-width: 405px;
     }
 }
 
@@ -67,9 +77,12 @@
     cursor: pointer;
 }
 
-
 .advertSection label {
     text-indent: 8px;
+}
+
+.carSection .labelInput {
+    text-indent: 24px;
 }
 
 #firstRegistration:hover {

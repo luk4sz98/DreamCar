@@ -9,7 +9,29 @@ namespace DreamCar.ViewModels.VM
         public bool IsImported { get; set; }
         public bool IsDamaged { get; set; }
         public bool IsRightHandDrive { get; set; }
+        public bool RegisterdInPoland { get; set; }
+        public bool FirstOwner { get; set; }
+        public bool ASOServiced { get; set; }
+        public bool AccidentFree { get; set; }
+        public bool DPF { get; set; }       
+       
+        public byte Seats { get; set; }
+        public string OriginCountry { get; set; }
+        public string DayGuaranteePeriod { get; set; }
+
+        [RegularExpression(@"^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$", ErrorMessage = "Miesiąc może zawierac wyłącznie litery")]
+        public string MonthGuaranteePeriod { get; set; }
+        public string YearGuaranteePeriod { get; set; }
+        public DriveType DriveType { get; set; }
         
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "To pole może zawierać jedynie cyfry")]
+        [StringLength(6, ErrorMessage = "To pole może zawierać co najmniej {2} oraz maksymalnie {1} cyfr", MinimumLength = 4)]
+        public string GuaranteePeriodMileage { get; set; }
+
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "Nieprawidłowy znak, dozwolone jedynie cyfry")]
+        [StringLength(maximumLength: 4, ErrorMessage = "To poleże może zawierać co najmniej {2} oraz maksymalnie {1} cyfr", MinimumLength = 2)]
+        public string CO2Emission { get; set; }
+
         [Required(ErrorMessage = "Podanie numeru VIN pojazdu jest obowiązkowe")]
         [DataType(DataType.Text)]
         [StringLength(maximumLength: 17, ErrorMessage = "Numer VIN musi zawierać 17 znaków", MinimumLength = 17)]

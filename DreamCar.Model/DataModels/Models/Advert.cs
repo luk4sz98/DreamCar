@@ -16,6 +16,10 @@ namespace DreamCar.Model.DataModels
         public DateTime CreatedAt { get; set; }
         public DateTime? ClosedAt { get; set; }
         public bool IsActive { get; set; }
+        public decimal Price { get; set; }
+        public bool ToNegotiate { get; set; }
+        public bool Netto { get; set; }
+        public bool VAT { get; set; }
 
         [ForeignKey("Car")]
         public int CarId { get; set; }
