@@ -14,7 +14,6 @@ namespace DreamCar.Web.Controllers
     public class ContactController : BaseController
     {
         private readonly IEmailSenderService _emailSender;
-        private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IReCaptchaService _reCaptcha;
         public ContactController(
@@ -24,10 +23,9 @@ namespace DreamCar.Web.Controllers
                 IReCaptchaService reCaptcha,
                 ILogger logger,
                 IMapper mapper
-            ) : base(logger, mapper)
+            ) : base(logger, mapper, userManager)
         {
             _emailSender = emailSender;
-            _userManager = userManager;
             _signInManager = signInManager;
             _reCaptcha = reCaptcha;
         }
@@ -38,7 +36,7 @@ namespace DreamCar.Web.Controllers
         public IActionResult SendRequest()
         {
             if(_signInManager.IsSignedIn(User)) {
-                var user = _userManager.GetUserAsync(User).Result;
+                var user = UserManager.GetUserAsync(User).Result;
                 ViewBag.Email = user.Email;
                 ViewBag.User = $"{user.FirstName} {user.LastName}";
                 return View();
@@ -66,7 +64,7 @@ namespace DreamCar.Web.Controllers
 
                 if(_signInManager.IsSignedIn(User))
                 {
-                    var user = await _userManager.GetUserAsync(User);
+                    var user = await UserManager.GetUserAsync(User);
                     email.SenderName = $"{user.FirstName} {user.LastName}";
                     email.ResponseEmail = user.Email;
                 }

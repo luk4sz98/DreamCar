@@ -14,7 +14,6 @@ namespace DreamCar.Web.Controllers
     [Authorize(Roles = "Admin, Mod, User")]
     public class AccountController : BaseController
     {
-        private readonly UserManager<User> _userManager;
         private readonly IAccountService _accountService;
         private readonly IReCaptchaService _reCaptcha;
 
@@ -24,16 +23,15 @@ namespace DreamCar.Web.Controllers
                 ILogger logger,
                 IMapper mapper,
                 IReCaptchaService reCaptcha
-            ) : base(logger, mapper)
+            ) : base(logger, mapper, userManager)
         {
-            _userManager = userManager;
             _accountService = accountService;
             _reCaptcha = reCaptcha;
         }
 
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await UserManager.GetUserAsync(User);
             ViewBag.contactDetails = await _accountService.GetAccountDetailsAsync(user.Id);
             ViewBag.userId = user.Id;
             return View();

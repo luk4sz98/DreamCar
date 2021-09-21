@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using DreamCar.Model.DataModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -8,10 +10,12 @@ namespace DreamCar.Web.Controllers
     {
         protected readonly ILogger Logger;
         protected readonly IMapper Mapper;
-        public BaseController(ILogger logger, IMapper mapper)
+        protected readonly UserManager<User> UserManager;
+        public BaseController(ILogger logger, IMapper mapper, UserManager<User> userManager)
         {
             Logger = logger;
             Mapper = mapper;
+            UserManager = userManager;
         }
     }
 }

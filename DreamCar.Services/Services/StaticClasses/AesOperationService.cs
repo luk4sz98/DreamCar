@@ -21,6 +21,11 @@ namespace DreamCar.Services.Services
            );
         }
 
+        public static string GetGoogleMapsApiKey()
+        {
+            return Decrypt(GetKey(), _configuration.GetValue<string>("MapApiKey"));
+        }
+
         public static string GetReCaptchaSiteKey()
         {
             return _configuration.GetValue<string>("ReCaptchaSiteKey");

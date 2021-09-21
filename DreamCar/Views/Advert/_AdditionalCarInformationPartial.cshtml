@@ -14,11 +14,11 @@
                     <select id="driveTypeList" asp-for="DriveType" asp-items="Html.GetEnumSelectList<DriveType>()" class="form-select" style="border-radius: 1rem;">
                         <option value="" disabled selected>Napęd</option>
                     </select>
-                    <label for="driveTypeList" class="form-label labelInput">Napęd</label>
+                    <label for="driveTypeList" class="form-label">Napęd</label>
                 </div>
                 <div class="form-floating col-12 col-lg-4 mx-auto">
                     <input id="co2" asp-for="CO2Emission" placeholder="Marka" class="form-control" style="border-radius: 1rem;" />
-                    <label class="labelInput" for="co2">Emisja CO2</label>
+                    <label class="form-label" for="co2">Emisja CO2</label>
                     <span asp-validation-for="CO2Emission" class="text-danger"></span>
                 </div>
                 <div class="col-12 col-lg-4 mt-2">
@@ -32,7 +32,7 @@
                     <select id="seatsNumberList" asp-for="Seats" asp-items="@ViewBag.SeatsNumber" class="form-select" style="border-radius: 1rem;">
                         <option value="" disabled selected>Ilość miejsc</option>
                     </select>
-                    <label for="seatsNumberList" class="form-label labelInput">Liczba miejsc</label>
+                    <label for="seatsNumberList" class="form-label">Liczba miejsc</label>
                 </div>
             </div>
             <div class="row carSection">
@@ -41,7 +41,7 @@
                     <select id="countriesList" asp-for="OriginCountry" asp-items="@ViewBag.Countries" class="form-select" style="border-radius: 1rem;">
                         <option value="" disabled selected>Kraj pochodzenia</option>
                     </select>
-                    <label for="countriesList" class="form-label labelInput">Kraj pochodzenia</label>
+                    <label for="countriesList" class="form-label">Kraj pochodzenia</label>
                 </div>
                 <div class="col-12 col-lg-4 my-2">
                     <input type="checkbox" asp-for="IsImported" class="btn-check shadow-none" id="imported" />
@@ -79,37 +79,28 @@
                     <select id="daysList" asp-for="DayGuaranteePeriod" asp-items="@ViewBag.Days" class="form-select" style="border-radius: 1rem;">
                         <option value="" disabled selected>Dzień</option>
                     </select>
-                    <label for="daysList" class="form-label labelInput">Dzień</label>
+                    <label for="daysList" class="form-label">Dzień</label>
                 </div>
                 <div class="form-floating col-12 col-lg-4 my-2">
                     <select id="monthsList" asp-for="MonthGuaranteePeriod" asp-items="@ViewBag.Months" class="form-select" style="border-radius: 1rem;">
                         <option value="" disabled selected>Miesiąc</option>
                     </select>
-                    <label for="monthsList" class="form-label labelInput">Miesiąc</label>
+                    <label for="monthsList" class="form-label">Miesiąc</label>
                     <span asp-validation-for="CO2Emission" class="text-danger"></span>
                 </div>
                 <div class="form-floating col-12 col-lg-4 my-2">
                     <select id="yearsList" asp-for="YearGuaranteePeriod" asp-items="@ViewBag.Years" class="form-select" style="border-radius: 1rem;">
                         <option value="" disabled selected>Rok</option>
                     </select>
-                    <label for="yearsList" class="form-label labelInput">Rok</label>
+                    <label for="yearsList" class="form-label">Rok</label>
                 </div>
                 <h5 class="text-center mt-3">...lub przebiegu</h5>
                 <div class="form-floating col-12">
                     <input id="guranteeMileage" asp-for="GuaranteePeriodMileage" placeholder="Przebieg gwarancyjny" class="form-control" style="border-radius: 1rem;" />
-                    <label class="labelInput" for="guranteeMileage">Przebieg [km]</label>
+                    <label class="form-label" for="guranteeMileage">Przebieg [km]</label>
                     <span asp-validation-for="GuaranteePeriodMileage" class="text-danger"></span>
                 </div>
             </div>
         </div>
-        @*@{
-            for (int i = 0; i < ViewBag.EquipmentList.Count; i++)
-            {
-                <div class="d-flex justify-content-center align-items-center">
-                    <input type="checkbox" name="Checked" value="@ViewBag.EquipmentList[i].Id" class="btn-check shadow-none" id="btn-check-outlined @i" autocomplete="off">
-                    <label class="btn btn-outline-primary mb-3 check shadow-none" for="btn-check-outlined @i" style="border-radius:1rem; width:250px; margin-left: 25px;">@ViewBag.EquipmentList[i].Description</label>
-                </div>
-            }
-        }*@
     </div>
 </section>

@@ -102,12 +102,9 @@ namespace DreamCar.Services.Services
                 if (userEnity == null)
                     throw new ArgumentNullException($"Nie ma użytkownika z tym id - {contactDetailsVm.UserId}");
 
-                userEnity.Country = contactDetailsVm.Country;
-                userEnity.City = contactDetailsVm.City;
+                userEnity.Address = contactDetailsVm.Address;
                 userEnity.PhoneNumber = contactDetailsVm.PhoneNumber;
-                userEnity.ZipCode = contactDetailsVm.ZipCode;
-
-                
+           
                 await DbContext.SaveChangesAsync();
                 return true;
             }

@@ -1,4 +1,6 @@
-﻿@{ ViewData["Title"] = "Konto"; }
+﻿@using DreamCar.Services.Services
+
+@{ ViewData["Title"] = "Konto"; }
 
 @{
     if (TempData["SaveContactData"] == null ? false : (bool)TempData["SaveContactData"])
@@ -122,6 +124,7 @@
         $(document).ready(function () {
             $("#phoneNumber").mask('(99) 999-999-999')
             $("#zipCode").mask('99-999')
+            $('#price').mask("#,##0.00", { reverse: true });
         })
 
         $(".extend").on("click", function () {
@@ -177,4 +180,6 @@
     <script src="~/assets/js/reCaptchaScript.js"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <partial name="_ValidationScriptsPartial" />
+    <script src="https://maps.googleapis.com/maps/api/js?key=@AesOperationService.GetGoogleMapsApiKey()&language=pl&region=PL&callback=initAutocomplete&libraries=places&v=weekly" async></script>
+    <script src="~/assets/js/googleSearchBox.js"></script>
 }

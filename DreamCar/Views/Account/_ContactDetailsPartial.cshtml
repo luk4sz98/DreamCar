@@ -18,49 +18,17 @@
                     <div class="form-group">
                         <div class="form-floating mb-3">
                             @{
-                                if (String.IsNullOrEmpty(ViewBag.contactDetails.Country))
+                                if (String.IsNullOrEmpty(ViewBag.contactDetails.Address))
                                 {
-                                    <input id="inputCountryField" asp-for="Country" placeholder="Kraj" class="form-control"  style="border-radius: 1rem;">
+                                    <input id="localization" asp-for="Address" class="form-control" placeholder="Miasto" style="border-radius: 1rem;">
                                 }
                                 else
                                 {
-                                    <input id="inputCountryField" asp-for="Country" class="form-control" value="@ViewBag.contactDetails.Country" style="border-radius: 1rem;">
+                                    <input id="localization" asp-for="Address" class="form-control" value="@ViewBag.contactDetails.Address" style="border-radius: 1rem;">
                                 }
-                                <label for="inputCountryField">Kraj</label>
+                                <label for="localization">Adres</label>
                             }
-                            <span asp-validation-for="Country" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-floating mb-3">
-                            @{
-                                if (String.IsNullOrEmpty(ViewBag.contactDetails.ZipCode))
-                                {
-                                    <input id="zipCode" asp-for="ZipCode" class="form-control" data-mask="99-999" placeholder="Kod pocztowy" style="border-radius: 1rem;">
-                                }
-                                else
-                                {
-                                    <input id="zipCode" asp-for="ZipCode" class="form-control" data-mask="99-999" value="@ViewBag.contactDetails.ZipCode" style="border-radius: 1rem;">
-                                }
-                                <label for="inputZipCodeField">Kod pocztowy</label>
-                            }
-                            <span asp-validation-for="ZipCode" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-floating mb-3">
-                            @{
-                                if (String.IsNullOrEmpty(ViewBag.contactDetails.City))
-                                {
-                                    <input asp-for="City" class="form-control" placeholder="Miasto" style="border-radius: 1rem;">
-                                }
-                                else
-                                {
-                                    <input asp-for="City" class="form-control" value="@ViewBag.contactDetails.City" style="border-radius: 1rem;">
-                                }
-                                <label for="inputCityField">Miasto</label>
-                            }
-                            <span asp-validation-for="City" class="text-danger"></span>
+                            <span asp-validation-for="Address" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="form-group">

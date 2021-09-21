@@ -1,4 +1,5 @@
 ﻿@model AddAdvertVm
+@using DreamCar.Services.Services
 
 @{
     ViewData["Title"] = "Dodawanie ogłoszenia";
@@ -16,7 +17,6 @@
         </div>
     }
 }
-
 
 <div class="modal fade" id="errorMessageModal" tabindex="-1" aria-labelledby="errorMessageModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -74,6 +74,11 @@
                         <partial name="_AdditionalCarInformationPartial" />
                     </div>
                 </div>
+                <div class="row">
+                    <div class="tab">
+                        <partial name="_AdvertInformationPartial" />
+                    </div>
+                </div>
                 <div class="float-start">
                     <button id="prevBtn" type="button" class="btn btn-primary backButton" onclick="nextPrev(-1)">
                         Powrót
@@ -88,14 +93,17 @@
                     <div class="step" data-bs-toggle="tooltip" data-bs-placement="top" title="Podstawowe informacje" data-bs-animation="true">
                         1
                     </div>
-                    <div class="step" data-bs-toggle="tooltip" data-bs-placement="top" title="Dodatkowe wyposażenie" data-bs-animation="true">
+                    <div class="step" data-bs-toggle="tooltip" data-bs-placement="top" title="Wyposażenie" data-bs-animation="true">
                         2
                     </div>
                     <div class="step" data-bs-toggle="tooltip" data-bs-placement="top" title="Zdjęcia" data-bs-animation="true">
                         3
-                    </div>                 
+                    </div>
                     <div class="step" data-bs-toggle="tooltip" data-bs-placement="top" title="Dodatkowe informacje" data-bs-animation="true">
                         4
+                    </div>
+                    <div class="step" data-bs-toggle="tooltip" data-bs-placement="top" title="Ogłoszenie" data-bs-animation="true">
+                        5
                     </div>
                 </div>
                 <div class="progress mt-4 mb-5">
@@ -111,4 +119,12 @@
     <partial name="_ValidationScriptsPartial" />
     <script src="~/assets/js/addNewAdvert.js"></script>
     <script src="~/assets/js/imageUploadValidation.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#price').mask("#,##0.00", { reverse: true });
+            $("#phoneNumber").mask('(99) 999-999-999')
+        })
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=@AesOperationService.GetGoogleMapsApiKey()&language=pl&region=PL&callback=initAutocomplete&libraries=places&v=weekly" async></script>
+    <script src="~/assets/js/googleSearchBox.js"></script>
 }

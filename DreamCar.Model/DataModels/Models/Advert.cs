@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DreamCar.Model.DataModels.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,6 +18,7 @@ namespace DreamCar.Model.DataModels
         public DateTime? ClosedAt { get; set; }
         public bool IsActive { get; set; }
         public decimal Price { get; set; }
+        public Currency Currency { get; set; }
         public bool ToNegotiate { get; set; }
         public bool Netto { get; set; }
         public bool VAT { get; set; }

@@ -19,9 +19,7 @@ namespace DreamCar.Web.Configuration.Profiles
             
             CreateMap<ContactDetailsVm, User>()
                 .ForMember(dest => dest.Id, y => y.MapFrom(src => src.UserId))
-                .ForMember(dest => dest.City, y => y.MapFrom(src => src.City))
-                .ForMember(dest => dest.Country, y => y.MapFrom(src => src.Country))
-                .ForMember(dest => dest.ZipCode, y => y.MapFrom(src => src.ZipCode));
+                .ForMember(dest => dest.Address, y => y.MapFrom(src => src.Address));
 
             CreateMap<Equipment, EquipmentVm>();
 

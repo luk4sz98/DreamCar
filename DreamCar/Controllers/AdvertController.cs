@@ -5,8 +5,10 @@ using DreamCar.Services.Interfaces;
 using DreamCar.ViewModels.VM;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -42,8 +44,9 @@ namespace DreamCar.Web.Controllers
             ILogger logger,
             IMapper mapper,
             IEquipmentService equipmentService,
-            ApplicationDbContext applicationDbContext
-        ) : base(logger, mapper)
+            ApplicationDbContext applicationDbContext,
+            UserManager<User> userManager
+        ) : base(logger, mapper, userManager)
         {
             _equipmentService = equipmentService;
             _applicationDbContext = applicationDbContext;
@@ -66,7 +69,8 @@ namespace DreamCar.Web.Controllers
             ViewBag.Months = _months;
             ViewBag.Days = new SelectList(Enumerable.Range(1, 31));
             ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Now.Year, (DateTime.Now.Year + 10) - DateTime.Now.Year));
-
+            ViewBag.User = await UserManager.GetUserAsync(User);
+                       
             return View();
         }
 

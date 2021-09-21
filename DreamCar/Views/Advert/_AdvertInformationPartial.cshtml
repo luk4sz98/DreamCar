@@ -1,0 +1,90 @@
+﻿@model AdvertVm
+@using DreamCar.Model.DataModels.Enums
+
+<section class="additionalEquipment">
+    <div class="text-center">
+        <h4>Informacje o ogłoszeniu</h4>
+    </div>
+    <div class="input-group mt-2">
+        <div class="container g-0">
+            <div class="row carSection">
+                <h5 class="text-center">Dane ogłoszenia</h5>
+                <div class="form-floating col-12 mb-2">
+                    <input data-bs-toggle="tooltip" data-bs-placement="right" title="To tekst, który razem z marką i modelem pojazdu tworzy tytuł ogłoszenia." data-bs-animation="true" id="title" asp-for="Title" placeholder="Tytuł" class="form-control" style="border-radius: 1rem;" />
+                    <label class="form-label" for="title">Tytuł ogłoszenia</label>
+                    <span class="text-danger" asp-validation-for="Title"></span>
+                </div>
+                <div class="form-floating col-12 mb-2">
+                    <textarea data-bs-toggle="tooltip" data-bs-placement="right" title="Tworząc opis pojazdu zwróć uwagę na najważniejsze informacje dotyczące Twojego pojazdu, jego stanu i historii użytkowania." data-bs-animation="true" asp-for="Description" maxlength="4096" id="description" rows="14" placeholder="Opis" class="form-control" style="min-height: 140px; height: 140px; border-radius: 1rem; resize: vertical;"></textarea>
+                    <label class="form-label" for="description">Opis</label>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row carSection">
+                <h5 class="text-center">Informacje o cenie</h5>
+                <div class="form-floating col-12 col-lg-3 mb-2">
+                    <input required id="price" asp-for="Price" placeholder="Cena" class="form-control" style="border-radius: 1rem;" />
+                    <label class="form-label" for="price">Cena <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+                    <span class="text-danger" asp-validation-for="Price"></span>
+                </div>
+                <div id="currencyDiv" class="form-floating col-12 col-lg-2">
+                    <select id="currency" asp-for="Currency" asp-items="@Html.GetEnumSelectList<Currency>()" class="form-select" style="border-radius: 1rem;">
+                    </select>
+                    <label for="currency" class="form-label labelInput">Waluta</label>
+                    <span asp-validation-for="Currency" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-lg-3 my-2">
+                    <input type="checkbox" asp-for="Netto" class="btn-check shadow-none" id="netto" />
+                    <label data-bs-toggle="tooltip" data-bs-placement="top" title="Cena zostanie automatycznie przeliczona i wyświetlona z uwzględnieniem podatku VAT (+23%)" data-bs-animation="true" class="btn btn-outline-primary check shadow-none w-100" for="netto" style="border-radius:1rem;">Cena netto</label>
+                </div>
+                <div class="col-12 col-lg-2 my-2">
+                    <input type="checkbox" asp-for="VAT" class="btn-check shadow-none" id="vat" />
+                    <label data-bs-toggle="tooltip" data-bs-placement="top" title="Jeśli dopuszczasz możliwość wystawienia faktury VAT, zaznacz tę opcję." data-bs-animation="true" class="btn btn-outline-primary check shadow-none w-100" for="vat" style="border-radius:1rem;">Faktura VAT</label>
+                </div>
+                <div class="col-12 col-lg-2 my-2">
+                    <input type="checkbox" asp-for="ToNegotiate" class="btn-check shadow-none" id="ToNegotiate" />
+                    <label data-bs-toggle="tooltip" data-bs-placement="top" title="Jeśli dopuszczasz możliwość negocjacji ceny, zaznacz tę opcję." data-bs-animation="true" class="btn btn-outline-primary check shadow-none w-100" for="ToNegotiate" style="border-radius:1rem;">Do negocjacji</label>
+                </div>
+            </div>
+            <div class="row carSection">
+                <h5 class="text-center">
+                    Dane kontaktowe
+                </h5>
+                <div class="form-floating col-12 col-lg-4 mb-2">
+                    @{
+                        if (String.IsNullOrEmpty(ViewBag.User.Address))
+                        {
+                            <input data-bs-toggle="tooltip" data-bs-placement="left" title="Wprowadź miasto lub kod pocztowy, bez obaw, będzie to przybliżona lokalizacja." data-bs-animation="true" required id="localization" asp-for="Localization" placeholder="city" class="form-control" style="border-radius: 1rem;" />
+                        }
+                        else
+                        {
+                            <input value="@ViewBag.User.Address" data-bs-toggle="tooltip" data-bs-placement="left" title="Wprowadź miasto lub kod pocztowy, bez obaw, będzie to przybliżona lokalizacja." data-bs-animation="true" required id="localization" asp-for="Localization" placeholder="city" class="form-control" style="border-radius: 1rem;" />
+                        }
+                        <label class="form-label" for="localization">Lokalizacja <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+                        <span class="text-danger" asp-validation-for="Localization"></span>
+                    }
+                </div>
+
+                <div class="form-floating col-12 col-lg-4 mb-2">
+                    <input value="@ViewBag.User.Email" data-bs-toggle="tooltip" data-bs-placement="top" title="Podaj adres email, pod którym będą się mogli z Tobą skontaktować użytkownicy." data-bs-animation="true" required id="email" asp-for="Email" placeholder="email" class="form-control" style="border-radius: 1rem;" />
+                    <label class="form-label" for="email">Email <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+                    <span class="text-danger" asp-validation-for="Email"></span>
+                </div>
+                <div class="form-floating col-12 col-lg-4 mb-2">
+                    @{
+                        if (String.IsNullOrEmpty(ViewBag.User.PhoneNumber))
+                        {
+                            <input data-bs-toggle="tooltip" data-bs-placement="right" title="Jeśli dopuszczasz możliwość kontaktu poprzez nr telefonu, wprowadź go." data-bs-animation="true" id="phoneNumber" asp-for="PhoneNumber" placeholder="Nr telefonu" class="form-control" style="border-radius: 1rem;" />
+                        }
+                        else
+                        {
+                            <input value="@ViewBag.User.PhoneNumber" data-bs-toggle="tooltip" data-bs-placement="right" title="Jeśli dopuszczasz możliwość kontaktu poprzez nr telefonu, wprowadź go." data-bs-animation="true" id="phoneNumber" asp-for="PhoneNumber" placeholder="Nr telefonu" class="form-control" style="border-radius: 1rem;" />
+                        }
+                    }
+                    <label class="form-label" for="phoneNumber">Nr telefonu</label>
+                    <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

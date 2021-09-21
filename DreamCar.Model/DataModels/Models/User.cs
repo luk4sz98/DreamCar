@@ -20,16 +20,8 @@ namespace DreamCar.Model.DataModels
         public DateTime RegistrationDate { get; set; }
 
         [PersonalData]
-        [Display(Name = "Kraj")]
-        public string Country { get; set; }
-
-        [PersonalData]
         [Display(Name = "Miasto")]
-        public string City { get; set; }
-
-        [PersonalData]
-        [Display(Name = "Kod pocztowy")]
-        public string ZipCode { get; set; }
+        public string Address { get; set; }
 
         [Display(Name = "Nr telefonu")]
         public override string PhoneNumber { get => base.PhoneNumber; set => base.PhoneNumber = value; }
