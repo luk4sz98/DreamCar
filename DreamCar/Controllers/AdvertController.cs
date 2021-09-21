@@ -23,6 +23,7 @@ namespace DreamCar.Web.Controllers
     {
         private readonly IEquipmentService _equipmentService;
         private readonly ApplicationDbContext _applicationDbContext;
+        private readonly IAdvertService _advertService;
 
         private readonly SelectList _countries = new(new string[] {
             "Austria", "Belgia", "Białoruś", "Bułgaria",
@@ -39,17 +40,18 @@ namespace DreamCar.Web.Controllers
 
         private readonly SelectList _months = new(CultureInfo.GetCultureInfo("pl-Pl").DateTimeFormat.MonthNames);
 
-
         public AdvertController(
             ILogger logger,
             IMapper mapper,
             IEquipmentService equipmentService,
             ApplicationDbContext applicationDbContext,
-            UserManager<User> userManager
+            UserManager<User> userManager,
+            IAdvertService advertService
         ) : base(logger, mapper, userManager)
         {
             _equipmentService = equipmentService;
             _applicationDbContext = applicationDbContext;
+            _advertService = advertService;
         }
 
         [HttpGet]
@@ -76,9 +78,8 @@ namespace DreamCar.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddNewAdvert(CarVm car, CheckedEquVm equipments, ImageVm images)
+        public async Task<IActionResult> AddNewAdvert(CarVm car, CheckedEquVm equipments, ImageVm images, AdvertVm advert)
         {
-            var carEquu = new List<CarEquipmentVm>();
             if (!ModelState.IsValid)
             {
                 var errors = new List<string>();
@@ -86,16 +87,23 @@ namespace DreamCar.Web.Controllers
                 {
                     errors.Add(error.ErrorMessage);
                 }
+                TempData["AdvertAdded"] = false;
                 return  RedirectToAction("AddNewAdvert", errors);
-            }                        
-            
-            foreach (var equId in equipments.Checked)
-            {
-                carEquu.Add(new CarEquipmentVm { CarId = 3, EquipmentId = equId });
             }
-           
-            //var advertvm = new AddAdvertVm { Car = car };
-            return RedirectToAction("Index");
+            
+            var addAdvertVm = new AddAdvertVm { Car = car, Equipments = equipments, Images = images, Advert = advert };
+
+            var result = await _advertService.AddNewAdvertAsync(addAdvertVm);
+
+            if(result.Item1)
+            {
+                TempData["AdvertAdded"] = true;
+                return RedirectToAction("Index", "Home"); //temporary
+            }
+
+            ModelState.AddModelError(string.Empty, result.Item2);
+            TempData["AdvertAdded"] = false;
+            return RedirectToAction("AddNewAdvert");
         }
     }
 }

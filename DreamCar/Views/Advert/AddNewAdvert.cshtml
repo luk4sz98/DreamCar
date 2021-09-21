@@ -16,6 +16,13 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
+    if (TempData["AdvertAdded"] == null ? false : true)
+    {
+        <div class="alertMessage alert alert-danger alert-dismissible fade show" role="alert">
+            Wystąpił błąd podczas dodawania ogłoszenia :( Spróbuj ponownie.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 }
 
 <div class="modal fade" id="errorMessageModal" tabindex="-1" aria-labelledby="errorMessageModalLabel" aria-hidden="true">

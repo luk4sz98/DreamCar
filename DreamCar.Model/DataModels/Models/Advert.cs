@@ -20,7 +20,7 @@ namespace DreamCar.Model.DataModels
         public decimal Price { get; set; }
         public Currency Currency { get; set; }
         public bool ToNegotiate { get; set; }
-        public bool Netto { get; set; }
+        public bool Brutto { get; set; }
         public bool VAT { get; set; }
 
         [ForeignKey("Car")]

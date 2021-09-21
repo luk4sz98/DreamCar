@@ -36,7 +36,7 @@ namespace DreamCar.ViewModels.VM
         public string PhoneNumber { get; set; }
         public Currency Currency { get; set; }
         public bool VAT { get; set; }
-        public bool Netto { get; set; }
+        public bool Brutto { get; set; }
         public bool ToNegotiate { get; set; }
     }
 }

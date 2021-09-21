@@ -2,7 +2,7 @@
 using DreamCar.Model.DataModels;
 using DreamCar.ViewModels.VM;
 using System;
-
+using System.Globalization;
 
 namespace DreamCar.Web.Configuration.Profiles
 {
@@ -23,8 +23,23 @@ namespace DreamCar.Web.Configuration.Profiles
 
             CreateMap<Equipment, EquipmentVm>();
 
-            CreateMap<CarVm, Car>();
+            CreateMap<CarVm, Car>()
+                .ForMember(dest => dest.GuaranteePeriod, y => y.MapFrom(
+                    src => (string.IsNullOrEmpty(src.DayGuaranteePeriod)   ||
+                            string.IsNullOrEmpty(src.MonthGuaranteePeriod) ||
+                            string.IsNullOrEmpty(src.YearGuaranteePeriod)) 
+                            ? $"{src.DayGuaranteePeriod}-{src.MonthGuaranteePeriod}-{src.YearGuaranteePeriod}" : src.GuaranteePeriodMileage))
+                .ForMember(dest => dest.CO2Emission, y => y.MapFrom (src => Convert.ToUInt16(src.CO2Emission)))
+                .ForMember(dest => dest.Power, y => y.MapFrom(src => Convert.ToUInt16(src.Power)))
+                .ForMember(dest => dest.EngineCapacity, y => y.MapFrom(src => Convert.ToUInt16(src.EngineCapacity)))
+                .ForMember(dest => dest.Mileage, y => y.MapFrom(src => Convert.ToInt32(src.Mileage)));
+            
             CreateMap<Car, CarVm>();
+
+            CreateMap<AdvertVm, Advert>()
+                .ForMember(dest => dest.Price, y => y.MapFrom(
+                    src => src.ToNegotiate ? Decimal.Multiply(Convert.ToDecimal(src.Price, CultureInfo.InvariantCulture), (decimal)1.23) : 
+                    Convert.ToDecimal(src.Price, CultureInfo.InvariantCulture)));
         }
     }
 }

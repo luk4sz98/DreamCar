@@ -3,6 +3,14 @@
 }
 
 @{
+    if (TempData["AdvertAdded"] == null ? false : true)
+    {
+        <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
+           Ogłoszenie zostało dodane pomyślnie, ma status oczekujące dopóki jeden z moderatorów je zaakceptuje
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     if (TempData["AccountRegistered"] == null ? false : true)
     {
         <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">

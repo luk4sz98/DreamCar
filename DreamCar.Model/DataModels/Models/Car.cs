@@ -32,12 +32,13 @@ namespace DreamCar.Model.DataModels
         public bool FirstOwner { get; set; }
         public bool ASOServiced { get; set; }
         public bool AccidentFree { get; set; }
-        public short EngineCapacity { get; set; }
-        public short Power { get; set; }
+        public ushort EngineCapacity { get; set; }
+        public ushort Power { get; set; }
         public bool IsDamaged { get; set; }
         public bool IsRighthandDrive { get; set; }
         public bool DPF { get; set; }
         public ushort CO2Emission { get; set; }
+        public string Generation { get; set; }
         public FuelType Fuel { get; set; }
         public GearboxType Gearbox { get; set; }
         public ColorType ColorType { get; set; }

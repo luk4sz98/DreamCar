@@ -12,16 +12,14 @@ function checkFields() {
             allRequired = false;
         }
     })
-    //if (!allRequired) {
-    //    $('#errorMessageModal').modal('show');
-    //}
-    //else {
-    //    $(x[currentTab - 1]).addClass("finish");
-    //    nextPrev(1)
-    //}
-    if (!$('#fileUpload-error').is(":visible")) {
-        nextPrev(1)
-        $(x[currentTab - 1]).addClass("finish");
+    if (!allRequired) {
+        $('#errorMessageModal').modal('show');
+    }
+    else {
+        if (!$('#fileUpload-error').is(":visible")) {
+            nextPrev(1)
+            $(x[currentTab - 1]).addClass("finish");
+        }
     }
 }
 

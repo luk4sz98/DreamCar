@@ -364,4 +364,5 @@ FodyWeavers.xsd
 
 # configs
 appsettings.json
+appsettings.Development.json
 web.config

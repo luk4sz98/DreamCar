@@ -7,7 +7,6 @@ namespace DreamCar.Model.DataModels
     {
         [Key]
         public int Id { get; set; }
-
         public int AdvertThreadId { get; set; }
         public int UserId { get; set; }
         public string Content { get; set; }

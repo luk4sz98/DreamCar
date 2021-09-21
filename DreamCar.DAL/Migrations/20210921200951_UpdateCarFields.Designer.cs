@@ -4,14 +4,16 @@ using DreamCar.DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DreamCar.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210921200951_UpdateCarFields")]
+    partial class UpdateCarFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,9 +26,6 @@ namespace DreamCar.DAL.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Brutto")
-                        .HasColumnType("bit");
 
                     b.Property<int>("CarId")
                         .HasColumnType("int");
@@ -48,6 +47,9 @@ namespace DreamCar.DAL.Migrations
 
                     b.Property<string>("Localization")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Netto")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -148,9 +150,6 @@ namespace DreamCar.DAL.Migrations
 
                     b.Property<int>("Gearbox")
                         .HasColumnType("int");
-
-                    b.Property<string>("Generation")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GuaranteePeriod")
                         .HasColumnType("nvarchar(max)");

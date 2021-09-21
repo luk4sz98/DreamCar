@@ -50,6 +50,8 @@ namespace DreamCar
             services.AddScoped<IEmailSenderService, EmailSenderService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IEquipmentService, EquipmentService>();
+            services.AddScoped<IAdvertService, AdvertService>();
+            services.AddScoped<IImageService, ImageService>();
             services.Configure<AppSettingsService>(Configuration.GetSection(AppSettingsService.SectionName));
             services.AddOptions();
             services.AddScoped<IReCaptchaService, ReCaptchaService>();

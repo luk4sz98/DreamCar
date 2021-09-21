@@ -1,5 +1,4 @@
-﻿
-namespace DreamCar.Model.DataModels
+﻿namespace DreamCar.Model.DataModels
 {
     public class CarEquipment
     {
