@@ -15,65 +15,65 @@
                     <span asp-validation-for="ProductionYear" class="text-danger"></span>
                 </div>
                 <div class="form-floating col-12 col-md-6  col-lg-4 mb-3">
-                    <input id="brandCar" required asp-for="Brand" placeholder="Marka" class="form-control" style="border-radius: 1rem;" />
-                    <label class="form-label" for="brandCar">Marka <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
-                    <span asp-validation-for="Brand" class="text-danger"></span>
+                    <input disabled id="brandCar" required asp-for="Brand" placeholder="Marka" class="form-control" style="border-radius: 1rem;" />
+                    <label id="brandCarLabel" class="form-label disabled" for="brandCar">Marka <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+                    <span id="brandErrorMsg" asp-validation-for="Brand" class="text-danger"></span>
                 </div>
                 <div class="form-floating col-12 col-md-6 col-lg-4 mb-3">
-                    <input id="modelCar" required asp-for="Model" placeholder="Model" class="form-control" style="border-radius: 1rem;" />
-                    <label class="form-label" for="modelCar">Model <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+                    <input disabled id="modelCar" required asp-for="Model" placeholder="Model" class="form-control" style="border-radius: 1rem;" />
+                    <label id="modelCarLabel" class="form-label disabled" for="modelCar">Model <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
                     <span asp-validation-for="Model" class="text-danger"></span>
                 </div>
                 <div class="form-floating col-12 col-md-6 col-lg-4 mb-3">
-                    <select id="fuelTypeList" required asp-for="FuelType" asp-items="Html.GetEnumSelectList<FuelType>()" class="form-select" style="border-radius: 1rem;">
+                    <select disabled id="fuelTypeList" required asp-for="FuelType" asp-items="Html.GetEnumSelectList<FuelType>()" class="form-select" style="border-radius: 1rem;">
                         <option value="" disabled selected>Wybierz typ paliwa</option>
                     </select>
                     <label for="fuelTypeList" class="form-label">Rodzaj paliwa <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
                     <span asp-validation-for="FuelType" class="text-danger"></span>
                 </div>
                 <div class="form-floating col-12 col-md-6 col-lg-4 mb-3">
-                    <input id="power" required asp-for="Power" placeholder="Numer VIN" class="form-control" style="border-radius: 1rem;" />
-                    <label class="form-label" for="power">Moc [KM] <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+                    <input disabled id="power" required asp-for="Power" placeholder="Numer VIN" class="form-control" style="border-radius: 1rem;" />
+                    <label id="powerLabel" class="form-label disabled" for="power">Moc [KM] <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
                     <span asp-validation-for="Power" class="text-danger"></span>
                 </div>
                 <div class="form-floating col-12 col-md-6 col-lg-4 mb-3">
-                    <input id="EngineCapacity" required asp-for="EngineCapacity" placeholder="Numer VIN" class="form-control" style="border-radius: 1rem;" />
-                    <label  class="form-label" for="EngineCapacity">Pojemność silnika [cm<sup>3</sup>] <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+                    <input disabled id="engineCapacity" required asp-for="EngineCapacity" placeholder="Numer VIN" class="form-control" style="border-radius: 1rem;" />
+                    <label id="engineCapacityLabel" class="form-label disabled" for="engineCapacity">Pojemność silnika [cm<sup>3</sup>] <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
                     <span asp-validation-for="EngineCapacity" class="text-danger"></span>
                 </div>
-                <div class="form-floating col-12 col-md-6 col-lg-4 mb-3">
-                    <select id="doorsList" required asp-for="Doors" class="form-select" style="border-radius: 1rem;">
+                <div class="form-floating col-12 col-md-6 col-lg-3 mb-3">
+                    <select disabled id="doorsList" required asp-for="Doors" class="form-select" style="border-radius: 1rem;">
                         <option value="" disabled selected>Wybierz ilość drzwi</option>
                         <option>2</option>
                         <option>3</option>
                         <option>4</option>
                         <option>5</option>
                     </select>
-                    <label for="doorsList" class="form-label">Ilość drzwi <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+                    <label for="doorsList" class="form-label disabled">Ilość drzwi <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
                     <span asp-validation-for="Doors" class="text-danger"></span>
                 </div>
-                <div class="form-floating col-12 col-md-6 col-lg-4 mb-3">
-                    <select id="gearboxList" required asp-for="Gearbox" asp-items="Html.GetEnumSelectList<GearboxType>()" class="form-select" style="border-radius: 1rem;">
-                        <option value="" disabled selected>Wybierz typ skrzynii</option>
+                <div disabled class="form-floating col-12 col-md-6 col-lg-3 mb-3">
+                    <select disabled id="gearboxList" required asp-for="Gearbox" asp-items="Html.GetEnumSelectList<GearboxType>()" class="form-select" style="border-radius: 1rem;">
+                        <option value="" disabled class="disabled" selected>Wybierz typ skrzynii</option>
                     </select>
-                    <label for="gearboxList" class="form-label">Rodzaj skrzynii biegów <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+                    <label for="gearboxList" class="form-label disabled">Rodzaj skrzynii biegów <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
                     <span asp-validation-for="Gearbox" class="text-danger"></span>
                 </div>
-                <div class="form-floating col-12 col-md-6 col-lg-4 mb-3">
-                    <input id="version" required asp-for="Version" placeholder="Wersja" class="form-control" style="border-radius: 1rem;" />
-                    <label class="form-label" for="version">Wersja <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+                <div class="form-floating col-12 col-md-6 col-lg-3 mb-3">
+                    <input disabled id="version" required asp-for="Version" placeholder="Wersja" class="form-control" style="border-radius: 1rem;" />
+                    <label id="versionLabel" class="form-label disabled" for="version">Wersja <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
                     <span asp-validation-for="Version" class="text-danger"></span>
                 </div>
-                <div class="form-floating col-12 col-md-6 col-lg-4 mb-3">
-                    <input id="generation" required asp-for="Generation" placeholder="Generacja" class="form-control" style="border-radius: 1rem;" />
-                    <label class="form-label" for="generation">Generacja <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+                <div class="form-floating col-12 col-md-6 col-lg-3 mb-3">
+                    <input disabled id="generation" required asp-for="Generation" placeholder="Generacja" class="form-control" style="border-radius: 1rem;" />
+                    <label id="generationLabel" class="form-label disabled" for="generation">Generacja <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
                     <span asp-validation-for="Generation" class="text-danger"></span>
                 </div>
-                <div class="form-floating col-12 col-md-6 col-lg-4 mb-3">
+                <div class="form-floating col-12 col-md-6 col-lg-12 mb-3">
                     <select id="bodyTypeList" required asp-for="BodyType" asp-items="Html.GetEnumSelectList<BodyType>()" class="form-select" style="border-radius: 1rem;">
-                        <option value="" disabled selected>Wybierz segment pojazdu</option>
+                        <option value="" disabled selected>Wybierz typ nadwozia pojazdu</option>
                     </select>
-                    <label for="bodyTypeList" class="form-label">Segment <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+                    <label for="bodyTypeList" class="form-label">Rodzaj nadwozia <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
                     <span asp-validation-for="BodyType" class="text-danger"></span>
                 </div>
                 <div class="form-floating col-12 col-md-6 col-lg-4 mb-3">
@@ -98,12 +98,12 @@
                     <label class="form-label" for="VIN">Numer VIN <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
                     <span asp-validation-for="VIN" class="text-danger"></span>
                 </div>
-                <div class="form-floating col-12 col-md-6 col-lg-6 mb-3">
+                <div class="form-floating col-12 col-md-6 col-lg-4 mb-3">
                     <input id="registrationNumber" asp-for="RegistrationNumber" placeholder="Nr rejestracyjny" class="form-control" style="border-radius: 1rem;" />
                     <label class="form-label" for="registrationNumber">Numer rejestracyjny</label>
                     <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
                 </div>
-                <div class="form-floating col-12 col-md-12 col-lg-6 mb-3">
+                <div class="form-floating col-12 col-md-12 col-lg-4 mb-3">
                     <input id="firstRegistration" asp-for="FirstRegistration" placeholder="12.12.2021" class="form-control" style="border-radius: 1rem;" />
                     <label class="form-label" for="firstRegistration">Data pierwszej rejestracji</label>
                     <span asp-validation-for="FirstRegistration" class="text-danger"></span>

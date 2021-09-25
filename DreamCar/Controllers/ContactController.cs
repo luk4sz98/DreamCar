@@ -46,6 +46,7 @@ namespace DreamCar.Web.Controllers
 
         [AllowAnonymous]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendRequest(EmailVm email)
         {
             try

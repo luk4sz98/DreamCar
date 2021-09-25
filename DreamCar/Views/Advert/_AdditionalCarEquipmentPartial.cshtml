@@ -7,13 +7,24 @@
     </div>
     <div class="input-group d-flex justify-content-center align-items-center">
         @{
-            for (int i = 0; i < ViewBag.EquipmentList.Count; i++)
+            var equipmentSize = ViewBag.EquipmentList.Count;
+            for (int i = 0; i < equipmentSize / 2; i++)
             {
                 <div class="d-flex justify-content-center align-items-center">
                     <input type="checkbox" name="Checked" value="@ViewBag.EquipmentList[i].Id" class="btn-check shadow-none" id="btn-check-outlined @i" autocomplete="off">
                     <label class="btn btn-outline-primary mb-3 check shadow-none" for="btn-check-outlined @i" style="border-radius:1rem; width:250px; margin-left: 25px;">@ViewBag.EquipmentList[i].Description</label>
                 </div>
-            }
+            }              
+            @for (int i = equipmentSize / 2; i < equipmentSize; i++)
+            {
+                <div class="otherEqu justify-content-center align-items-center">
+                    <input type="checkbox" name="Checked" value="@ViewBag.EquipmentList[i].Id" class="btn-check shadow-none" id="btn-check-outlined @i" autocomplete="off">
+                    <label class="btn btn-outline-primary mb-3 check shadow-none" for="btn-check-outlined @i" style="border-radius:1rem; width:250px; margin-left: 25px;">@ViewBag.EquipmentList[i].Description</label>
+                </div>                       
+            }                
         }
     </div>
+    <div class="d-grid col-12 d-lg-flex justify-content-lg-center align-items-lg-center">
+        <button type="button" id="showMoreButton" class=" btn btn-outline-secondary mb-3 shadow-none" style="border-radius:1rem;">Wyświetl pozostałe</button>
+    </div>  
 </section>

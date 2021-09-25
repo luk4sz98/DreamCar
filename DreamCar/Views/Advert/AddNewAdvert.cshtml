@@ -131,7 +131,23 @@
             $('#price').mask("#,##0.00", { reverse: true });
             $("#phoneNumber").mask('(99) 999-999-999')
         })
+        $("#showMoreButton").click(function () {
+            if ($("#showMoreButton").text() == 'Wyświetl pozostałe') {
+                $("#showMoreButton").html('Ukryj')
+            }
+            else {
+                $("#showMoreButton").html('Wyświetl pozostałe')
+            }
+            $(".otherEqu").slideToggle(500);
+            if ($(".otherEqu").is(":visible")) {
+                $('html,body').animate({
+                    scrollTop: $(".otherEqu").offset().top
+                }, 'slow');
+            }
+        })
     </script>
+    <script src="~/assets/js/autoCompleteInputFields.js"></script>
+    <script src="~/assets/js/disabledElements.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=@AesOperationService.GetGoogleMapsApiKey()&language=pl&region=PL&callback=initAutocomplete&libraries=places&v=weekly" async></script>
     <script src="~/assets/js/googleSearchBox.js"></script>
 }

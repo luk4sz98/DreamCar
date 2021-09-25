@@ -27,7 +27,7 @@ namespace DreamCar.Services.Services
             _hostEnvironment = hostEnvironment;
         }
 
-        public async Task SaveImages(IFormFileCollection images, Guid advertId)
+        public async Task SaveUploadedImagesAsync(IFormFileCollection images, Guid advertId)
         {
             try
             {

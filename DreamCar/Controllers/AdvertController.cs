@@ -4,7 +4,6 @@ using DreamCar.Model.DataModels;
 using DreamCar.Services.Interfaces;
 using DreamCar.ViewModels.VM;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -78,12 +77,12 @@ namespace DreamCar.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddNewAdvert(CarVm car, CheckedEquVm equipments, ImageVm images, AdvertVm advert)
+        public async Task<IActionResult> AddNewAdvert(CarVm car, CheckedEquVm equipments, ImageUploadedVm imagesUploaded, AdvertVm advert)
         {
             if (!ModelState.IsValid)
             {
                 var errors = new List<string>();
-                foreach (var error in ModelState["Image"].Errors)
+                foreach (var error in ModelState["Images"].Errors)
                 {
                     errors.Add(error.ErrorMessage);
                 }
@@ -91,7 +90,7 @@ namespace DreamCar.Web.Controllers
                 return  RedirectToAction("AddNewAdvert", errors);
             }
             
-            var addAdvertVm = new AddAdvertVm { Car = car, Equipments = equipments, Images = images, Advert = advert };
+            var addAdvertVm = new AddAdvertVm { Car = car, Equipments = equipments, ImagesUploaded = imagesUploaded, Advert = advert };
 
             var result = await _advertService.AddNewAdvertAsync(addAdvertVm);
 
@@ -104,6 +103,33 @@ namespace DreamCar.Web.Controllers
             ModelState.AddModelError(string.Empty, result.Item2);
             TempData["AdvertAdded"] = false;
             return RedirectToAction("AddNewAdvert");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AutoCompleteBrand(string prefix)
+        {
+            var brands = await _applicationDbContext.Cars
+                                    .Where(car => car.Brand.StartsWith(prefix))
+                                    .Select(car => car.Brand)
+                                    .Distinct()
+                                    .ToListAsync();
+            return Json(brands);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AutoCompleteModel(string brand, string prefixModel)
+        {
+            var models = await _applicationDbContext.Cars
+                                    .Where(
+                                        car => car.Brand.ToLower() == brand.ToLower() &&
+                                        car.Model.StartsWith(prefixModel)
+                                     )
+                                    .Select(car => car.Model)
+                                    .Distinct()
+                                    .ToListAsync();
+            return Json(models);
         }
     }
 }

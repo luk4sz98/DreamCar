@@ -24,7 +24,7 @@
     outline: none !important;
 }
 
-.advertSection .form-control {
+.advertSection .form-control:enabled {
     background: #f7f9fc;
     border: none;
     border-bottom: 1px solid #dfe7f1;
@@ -34,7 +34,7 @@
     text-indent: 8px;
 }
 
-.advertSection .form-select {
+.advertSection .form-select:enabled {
     background: #f7f9fc;
     border: none;
     border-bottom: 1px solid #dfe7f1;
@@ -45,11 +45,15 @@
     height: 58px;
 }
 
-.advertSection .form-select:hover {
+.advertSection .form-select:disabled {
+    text-indent: 4px;   
+}
+
+select:hover {
     cursor: pointer;
 }
 
-.advertSection .form-select select option:hover {
+select option:hover {
     cursor: pointer;
 }
 
@@ -108,6 +112,10 @@
 }
 
 .advertSection .tab {
+    display: none;
+}
+
+.otherEqu {
     display: none;
 }
 
@@ -183,6 +191,14 @@
 .inputfile + label:hover {
     color: #f1e5e6;
     background-color: #79a5b0;
+}
+
+select:disabled:hover {
+    cursor: default;
+}
+
+.disabled {
+    color: #bdc2c7;
 }
 
 @media (max-width: 768px) {

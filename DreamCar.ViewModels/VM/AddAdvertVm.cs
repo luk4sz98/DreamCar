@@ -6,7 +6,7 @@ namespace DreamCar.ViewModels.VM
     {
         public CarVm Car { get; set; }
         public CheckedEquVm Equipments { get; set; }
-        public ImageVm Images { get; set; }
+        public ImageUploadedVm ImagesUploaded { get; set; }
         public AdvertVm Advert { get; set; }
     }
 }
