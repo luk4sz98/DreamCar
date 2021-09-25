@@ -104,32 +104,5 @@ namespace DreamCar.Web.Controllers
             TempData["AdvertAdded"] = false;
             return RedirectToAction("AddNewAdvert");
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AutoCompleteBrand(string prefix)
-        {
-            var brands = await _applicationDbContext.Cars
-                                    .Where(car => car.Brand.StartsWith(prefix))
-                                    .Select(car => car.Brand)
-                                    .Distinct()
-                                    .ToListAsync();
-            return Json(brands);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AutoCompleteModel(string brand, string prefixModel)
-        {
-            var models = await _applicationDbContext.Cars
-                                    .Where(
-                                        car => car.Brand.ToLower() == brand.ToLower() &&
-                                        car.Model.StartsWith(prefixModel)
-                                     )
-                                    .Select(car => car.Model)
-                                    .Distinct()
-                                    .ToListAsync();
-            return Json(models);
-        }
     }
 }
