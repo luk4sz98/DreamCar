@@ -370,3 +370,4 @@ web.config
 # images
 *.png
 *.jpg
+*.svg

@@ -35,7 +35,7 @@ namespace DreamCar.ViewModels.VM
         [Required(ErrorMessage = "Podanie numeru VIN pojazdu jest obowiązkowe")]
         [DataType(DataType.Text)]
         [StringLength(maximumLength: 17, ErrorMessage = "Numer VIN musi zawierać 17 znaków", MinimumLength = 17)]
-        [RegularExpression(@"^[A-Z0-9]+$", ErrorMessage = "Nr VIN nie może zawierać specjalnych znaków, małych liter")]
+        [RegularExpression(@"^[a-zA-Z0-9]{9}[a-zA-Z0-9-]{2}[0-9]{6}$", ErrorMessage = "Nr VIN nie może zawierać specjalnych znaków, małych liter")]
         public string VIN { get; set; }
 
         [RegularExpression(@"^[A-Z0-9\s{0,1}]+$", ErrorMessage = "Nr rejestracyjny pojazdu może zawierać tylko cyfry i wielkie litery")]

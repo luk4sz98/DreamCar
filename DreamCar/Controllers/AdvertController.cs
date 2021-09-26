@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -103,6 +102,37 @@ namespace DreamCar.Web.Controllers
             ModelState.AddModelError(string.Empty, result.Item2);
             TempData["AdvertAdded"] = false;
             return RedirectToAction("AddNewAdvert");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UserAdverts(int? page, int? pageSize, string filterValue = null)
+        {
+
+            //bool isAjaxRequest = HttpContext.Request.Headers["x-requested-with"] == "XMLHttpRequest";
+            //if (isAjaxRequest && !string.IsNullOrEmpty(filterValue))
+            //{
+            //    var filterAdverts = _advertService.GetUserAdvertsAsQueryable(filterValue.ToLower());
+
+            //    return PartialView("_AdvertTableDataPartial", filterAdverts);
+            //}
+            //TODO fixed filter
+
+            var user = await UserManager.GetUserAsync(User);
+            var userAdverts = await _advertService.GetUserAdvertsAsync(user.Id);
+
+            ViewBag.ActiveAdverts = userAdverts
+                                        .Where(ad => ad.IsActive && ad.ClosedAt == null)
+                                        .OrderByDescending(ad => ad.CreatedAt)
+                                        .ToList();
+            ViewBag.PendingAdverts = userAdverts
+                                        .Where(ad => !ad.IsActive && ad.ClosedAt == null)
+                                        .OrderByDescending(ad => ad.CreatedAt)
+                                        .ToList();
+            ViewBag.EndedAdverts = userAdverts
+                                        .Where(ad => ad.ClosedAt != null)
+                                        .OrderByDescending(ad => ad.CreatedAt)
+                                        .ToList();
+            return View();
         }
     }
 }

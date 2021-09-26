@@ -12,19 +12,15 @@
             </a>
         </li>
         <li class="nav-item d-block d-md-none">
-            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button class="btn btn-primary d-block w-100" id="menuButton" type="submit">Ustawienia</button>
-            </form>
-        </li>
-        <li class="nav-item d-block d-md-none">
-            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button class="btn btn-primary d-block w-100" id="menuButton" type="submit">Ogłoszenia</button>
-            </form>
+            <a class="btn btn-primary d-block w-100" id="menuButton" asp-controller="Advert" asp-action="UserAdverts">Ogłoszenia</a>
         </li>
         <li class="nav-item d-block d-md-none">
             <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                 <button class="btn btn-primary d-block w-100" id="menuButton" type="submit">Obserwowane</button>
             </form>
+        </li>
+        <li class="nav-item d-block d-md-none">
+            <a asp-controller="Account" asp-action="Index" class="btn btn-primary d-block w-100" id="menuButton">Ustawienia</a>
         </li>
         <li class="nav-item d-block d-md-none">
             <a class="btn btn-primary d-block w-100" id="menuButton" asp-controller="Contact" asp-action="SendRequest">Kontakt</a>
