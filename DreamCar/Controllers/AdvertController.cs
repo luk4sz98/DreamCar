@@ -33,7 +33,7 @@ namespace DreamCar.Web.Controllers
             "Rosja", "Rumunia", "Słowacja", "Słowenia",
             "Stany Zjednoczone", "Szwajcaria", "Szwecja", "Turcja",
             "Ukraina", "Węgry", "Wielka Brytania", "Włochy",
-            "Inny" 
+            "Inny"
         });
 
         private readonly SelectList _months = new(CultureInfo.GetCultureInfo("pl-Pl").DateTimeFormat.MonthNames);
@@ -70,7 +70,7 @@ namespace DreamCar.Web.Controllers
             ViewBag.Days = new SelectList(Enumerable.Range(1, 31));
             ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Now.Year, (DateTime.Now.Year + 10) - DateTime.Now.Year));
             ViewBag.User = await UserManager.GetUserAsync(User);
-                       
+
             return View();
         }
 
@@ -86,14 +86,14 @@ namespace DreamCar.Web.Controllers
                     errors.Add(error.ErrorMessage);
                 }
                 TempData["AdvertAdded"] = false;
-                return  RedirectToAction("AddNewAdvert", errors);
+                return RedirectToAction("AddNewAdvert", errors);
             }
-            
+
             var addAdvertVm = new AddAdvertVm { Car = car, Equipments = equipments, ImagesUploaded = imagesUploaded, Advert = advert };
 
             var result = await _advertService.AddNewAdvertAsync(addAdvertVm);
 
-            if(result.Item1)
+            if (result.Item1)
             {
                 TempData["AdvertAdded"] = true;
                 return RedirectToAction("Index", "Home"); //temporary
@@ -108,31 +108,45 @@ namespace DreamCar.Web.Controllers
         public async Task<IActionResult> UserAdverts(int? page, int? pageSize, string filterValue = null)
         {
 
-            //bool isAjaxRequest = HttpContext.Request.Headers["x-requested-with"] == "XMLHttpRequest";
-            //if (isAjaxRequest && !string.IsNullOrEmpty(filterValue))
-            //{
-            //    var filterAdverts = _advertService.GetUserAdvertsAsQueryable(filterValue.ToLower());
+            bool isAjaxRequest = HttpContext.Request.Headers["x-requested-with"] == "XMLHttpRequest";
+            if (isAjaxRequest && !string.IsNullOrEmpty(filterValue))
+            {
+                var filterAdverts = _advertService.GetUserAdvertsAsQueryable(filterValue.ToLower());
 
-            //    return PartialView("_AdvertTableDataPartial", filterAdverts);
-            //}
-            //TODO fixed filter
+                return PartialView("_AdvertTableDataPartial", filterAdverts);
+            }
 
             var user = await UserManager.GetUserAsync(User);
-            var userAdverts = await _advertService.GetUserAdvertsAsync(user.Id);
+            ViewBag.ActiveAdverts = await _advertService.GetUserAdvertsAsync(
+                                                ad => ad.IsActive &&
+                                                ad.ClosedAt == null &&
+                                                ad.UserId == user.Id
+                                            );
 
-            ViewBag.ActiveAdverts = userAdverts
-                                        .Where(ad => ad.IsActive && ad.ClosedAt == null)
-                                        .OrderByDescending(ad => ad.CreatedAt)
-                                        .ToList();
-            ViewBag.PendingAdverts = userAdverts
-                                        .Where(ad => !ad.IsActive && ad.ClosedAt == null)
-                                        .OrderByDescending(ad => ad.CreatedAt)
-                                        .ToList();
-            ViewBag.EndedAdverts = userAdverts
-                                        .Where(ad => ad.ClosedAt != null)
-                                        .OrderByDescending(ad => ad.CreatedAt)
-                                        .ToList();
+            ViewBag.PendingAdverts = await _advertService.GetUserAdvertsAsync(
+                                                ad => !ad.IsActive &&
+                                                ad.ClosedAt == null &&
+                                                ad.UserId == user.Id
+                                            );
+
+            ViewBag.EndedAdverts = await _advertService.GetUserAdvertsAsync(
+                                            ad =>
+                                            ad.ClosedAt != null &&
+                                            ad.UserId == user.Id
+                                        );
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UserPendingAdverts()
+        {
+            var user = await UserManager.GetUserAsync(User);
+            var userPendingAdverts = await _advertService.GetUserAdvertsAsync(
+                                                ad => !ad.IsActive &&
+                                                ad.ClosedAt == null &&
+                                                ad.UserId == user.Id
+                                            );
+            return PartialView("_AdvertTableDataPartial",userPendingAdverts);
         }
     }
 }

@@ -222,9 +222,15 @@ td {
 }
 
 td img {
-    max-width: 300px;
-    max-height: 150px;
-    border-radius:4px;
+    max-width: 200px;
+    max-height: 200px;
+}
+
+td:first-of-type{
+    border-radius: 0.5rem 0 0 0.5rem;
+}
+td:last-of-type {
+    border-radius: 0 0.5rem 0.5rem 0;
 }
 
 th {
@@ -234,6 +240,11 @@ th {
 
 th:hover{
     cursor: pointer;
+}
+
+th:first-of-type {
+    pointer-events: none;
+    cursor: default
 }
 
 .tableAdverts {

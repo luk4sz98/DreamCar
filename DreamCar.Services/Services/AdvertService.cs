@@ -19,6 +19,7 @@ namespace DreamCar.Services.Services
     {
         private readonly IHttpContextAccessor _httpContext;
         private readonly IImageService _imageService;
+        private readonly ICarService _carService;
 
         public AdvertService(
             ApplicationDbContext dbContext,
@@ -26,35 +27,29 @@ namespace DreamCar.Services.Services
             ILogger logger,
             UserManager<User> userManager,
             IHttpContextAccessor httpContext,
-            IImageService imageService)
+            IImageService imageService,
+            ICarService carService)
             : base(dbContext, mapper, logger, userManager)
         {
             _httpContext = httpContext;
             _imageService = imageService;
+            _carService = carService;
         }
 
         public async Task<(bool, string)> AddNewAdvertAsync(AddAdvertVm advert)
         {
             try
             {
-                var carEntity = Mapper.Map<Car>(advert.Car);
-                await DbContext.Cars.AddAsync(carEntity);
-
-                var carEqu = new List<CarEquipment>();
-                foreach (var equId in advert.Equipments.Checked)
-                {
-                    carEqu.Add(new CarEquipment { Car = carEntity, EquipmentId = equId });
-                }
-                await DbContext.CarEquipments.AddRangeAsync(carEqu);
 
                 var advertEntity = Mapper.Map<Advert>(advert.Advert);               
                 
                 advertEntity.CreatedAt = DateTime.Now;
                 advertEntity.User = await UserManager.GetUserAsync(_httpContext.HttpContext.User);
-                advertEntity.Car = carEntity;                  
-                
+                advertEntity.Car = await _carService.AddNewCarAsync(advert.Car, advert.Equipments.Checked)
+                                   ?? throw new InvalidOperationException("Wystąpił problem z dodaniem pojazdu");
+
                 if (string.IsNullOrEmpty(advertEntity.Title))
-                    advertEntity.Title = string.Concat(carEntity.Brand, " ", carEntity.Model);
+                    advertEntity.Title = string.Concat(advertEntity.Car.Brand, " ", advertEntity.Car.Model);
                 
                 await DbContext.Adverts.AddAsync(advertEntity);
 
@@ -70,11 +65,14 @@ namespace DreamCar.Services.Services
             }
         }
 
-        public async Task<IEnumerable<UserAdvertVm>> GetUserAdvertsAsync(int userId)
+        public async Task<IEnumerable<UserAdvertVm>> GetUserAdvertsAsync(Expression<Func<Advert, bool>> filterExpressions)
         {
             try
             {
-                var userAdvertsEntities = await DbContext.Adverts.Where(ad => ad.UserId == userId).ToListAsync();
+                var userAdvertsEntities = await DbContext.Adverts
+                                                            .Where(filterExpressions)
+                                                            .OrderByDescending(ad => ad.CreatedAt)
+                                                            .ToListAsync();
                 return Mapper.Map<IEnumerable<UserAdvertVm>>(userAdvertsEntities);
             }
             catch (Exception ex)
