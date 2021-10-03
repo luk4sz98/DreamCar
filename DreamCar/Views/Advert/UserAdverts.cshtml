@@ -2,6 +2,39 @@
     ViewData["Title"] = "Ogłoszenia użytkownika";
 }
 
+@{
+    if (TempData["EndAdvertError"] != null)
+    {
+        <div class="alertMessage alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["EndAdvertError"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    if (TempData["EndAdvertSuccess"] != null)
+    {
+        <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["EndAdvertSuccess"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+}
+
+<!-- Modal End Confirmation -->
+<div class="modal fade" id="endConfirmationModal" tabindex="-1" aria-labelledby="endConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Czy na pewno chcesz zakończyć to ogłoszenie?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Powrót</button>
+                <button type="button" id="endAdvertButton" class="btn btn-primary">Zakończ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <section class="pt-2">
     <div class="container">
         <div class="row">
@@ -17,7 +50,7 @@
                         <button class="nav-link" id="ended-tab" data-bs-toggle="tab" data-bs-target="#ended" type="button" role="tab" aria-controls="ended" aria-selected="false">Zakończone (@ViewBag.EndedAdverts.Count)</button>
                     </li>
                 </ul>
-                <div class="tab-content" id="myTabContent" >
+                <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="active" role="tabpanel" aria-labelledby="home-tab">
                         <partial name="_ActiveAdvertsPartial" model="ViewBag.ActiveAdverts">
                     </div>
@@ -35,6 +68,28 @@
 </section>
 
 @section Scripts {
-    <script src="~/assets/js/tableSort.js"></script>
+    <script src="~/assets/js/tableScript.js"></script>
+    <script>
+        var advertId
+        $(".dropdownAdvertManageButton").click(function () {
+            advertId = $(this).closest("tr").children("td:first").text()
+        })
+        $("#endAdvertButton").click(function () {
+            $.ajax({
+                url: "@Url.Action("EndAdvert", "Advert")",
+                data: {
+                    advertId: advertId
+                },
+                type: 'POST',
+                success: function (response) {
+                    window.location.href = response.redirectToUrl
+                    $("#endConfirmationModal").modal('hide');
+                },
+                error: function () {
+                    $("#endConfirmationModal").modal('hide');
+                }
+            })
+        })
+    </script>
 }
 

@@ -70,6 +70,7 @@ namespace DreamCar.Services.Services
             try
             {
                 var userAdvertsEntities = await DbContext.Adverts
+                                                            .AsQueryable()
                                                             .Where(filterExpressions)
                                                             .OrderByDescending(ad => ad.CreatedAt)
                                                             .ToListAsync();
@@ -82,15 +83,10 @@ namespace DreamCar.Services.Services
             }
         }
 
-        public IEnumerable<UserAdvertVm> GetUserAdvertsAsQueryable(string filterValue)
+        public IEnumerable<UserAdvertVm> GetUserAdvertsAsQueryable(Expression<Func<Advert, bool>> filterExpressions)
         {
             try
             {
-                Expression<Func<Advert, bool>> filterExpressions = null;
-                filterExpressions = ad => ad.Title
-                                                .ToLower()
-                                                .Contains(filterValue);
-
                 var adverts = DbContext.Adverts.AsQueryable();
                 adverts = adverts.Where(filterExpressions);
                 
@@ -100,6 +96,29 @@ namespace DreamCar.Services.Services
             {
                 Logger.LogError(ex, ex.Message);
                 return null;
+            }
+        }
+
+        public async Task<bool> EndAdvertAsync(Guid advertId)
+        {
+            try
+            {
+                var advertToEnd = await DbContext.Adverts.FirstOrDefaultAsync(ad => ad.Id == advertId);
+
+                if (advertToEnd == null)
+                    throw new ArgumentNullException($"Brak ogłoszenia z podanym id: {advertId}");
+
+                advertToEnd.ClosedAt = DateTime.Now;
+                advertToEnd.IsActive = false;
+                
+                await DbContext.SaveChangesAsync();
+                
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return false;
             }
         }
     }

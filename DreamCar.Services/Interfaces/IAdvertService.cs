@@ -11,6 +11,7 @@ namespace DreamCar.Services.Interfaces
     {
         Task<(bool, string)> AddNewAdvertAsync(AddAdvertVm advert);
         Task<IEnumerable<UserAdvertVm>> GetUserAdvertsAsync(Expression<Func<Advert, bool>> filterExpressions);
-        IEnumerable<UserAdvertVm> GetUserAdvertsAsQueryable(string filterValue);
+        IEnumerable<UserAdvertVm> GetUserAdvertsAsQueryable(Expression<Func<Advert, bool>> filterExpressions);
+        Task<bool> EndAdvertAsync(Guid advertId);
     }
 }

@@ -242,7 +242,7 @@ th:hover{
     cursor: pointer;
 }
 
-th:first-of-type {
+th:nth-of-type(1) + th:nth-of-type(2) {
     pointer-events: none;
     cursor: default
 }
@@ -260,6 +260,11 @@ th:first-of-type {
 
 tbody {
     animation: transitionIn 0.65s linear;
+}
+
+#dropdownAdverManageButton {
+    font-size: 15px;
+    padding: 10px;
 }
 
 @keyframes transitionIn {
@@ -281,6 +286,10 @@ tbody {
     td {
         font-size: 15px;
     }
+    #dropdownAdverManageButton {
+        font-size: 12px;
+        padding:5px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -298,6 +307,11 @@ tbody {
         height: 30px;
         width: 30px;
         font-size: 20px;
+    }
+
+    #dropdownAdverManageButton {
+        font-size: 12px;
+        padding: 5px;
     }
 }
 
