@@ -121,5 +121,34 @@ namespace DreamCar.Services.Services
                 return false;
             }
         }
+
+        public async Task<bool> DeleteAdvertAsync(Guid advertId)
+        {
+            try
+            {
+                var advertEntity = await DbContext.Adverts.FirstOrDefaultAsync(ad => ad.Id == advertId);
+                
+                if (advertEntity == null)
+                    throw new ArgumentNullException($"Nie ma ogłoszenia z tym numerem id {advertId}");
+
+                var carEntity = await DbContext.Cars.FirstOrDefaultAsync(car => car.Advert.Id == advertId);
+
+                
+                DbContext.Remove(advertEntity);
+                DbContext.Remove(carEntity);
+                
+                _imageService.DeleteSavedImages(advertId);
+
+                await DbContext.SaveChangesAsync();
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return false;
+            }
+        }
     }
 }

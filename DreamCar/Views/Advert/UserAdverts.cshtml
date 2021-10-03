@@ -17,6 +17,27 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
+    if (TempData["DeleteAdvertError"] != null)
+    {
+        <div class="alertMessage alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["DeleteAdvertError"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    if (TempData["DeleteAdvertSuccess"] != null)
+    {
+        <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["DeleteAdvertSuccess"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    if (TempData["AdvertAdded"] == null ? false : true)
+    {
+        <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
+            Ogłoszenie zostało dodane pomyślnie, ma status oczekujące dopóki jeden z moderatorów je zaakceptuje
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 }
 
 <!-- Modal End Confirmation -->
@@ -30,6 +51,22 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Powrót</button>
                 <button type="button" id="endAdvertButton" class="btn btn-primary">Zakończ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Delete Confirmation -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Czy na pewno chcesz usunąć to ogłoszenie?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Powrót</button>
+                <button type="button" id="deleteAdvertButton" class="btn btn-danger">Usuń</button>
             </div>
         </div>
     </div>
@@ -87,6 +124,22 @@
                 },
                 error: function () {
                     $("#endConfirmationModal").modal('hide');
+                }
+            })
+        })
+        $("#deleteAdvertButton").click(function () {
+            $.ajax({
+                url: "@Url.Action("DeleteAdvert", "Advert")",
+                data: {
+                    advertId: advertId
+                },
+                type: 'POST',
+                success: function (response) {
+                    window.location.href = response.redirectToUrl
+                    $("#deleteConfirmationModal").modal('hide');
+                },
+                error: function () {
+                    $("#deleteConfirmationModal").modal('hide');
                 }
             })
         })

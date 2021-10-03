@@ -47,12 +47,30 @@ namespace DreamCar.Services.Services
                     using var filestream = new FileStream(Path.Combine(path, filename), FileMode.Create);
                     await image.CopyToAsync(filestream);
                     await DbContext.Images.AddAsync(
-                        new Image { 
+                        new Image
+                        {
                             AdvertId = advertId,
                             FileName = filename
                         });
                 }
 
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+            }
+        }
+
+        public void DeleteSavedImages(Guid advertId)
+        {
+            try
+            {
+                var pathToAdvertDirectory = Path.GetFullPath(
+                                                Path.Combine(
+                                                        _hostEnvironment.WebRootPath,
+                                                        @"advertImages\\Advert " + advertId
+                                                    ));
+                Directory.Delete(pathToAdvertDirectory, true);
             }
             catch (Exception ex)
             {

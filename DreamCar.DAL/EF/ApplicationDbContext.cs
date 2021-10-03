@@ -74,13 +74,13 @@ namespace DreamCar.DAL.EF
                 .HasOne(carEqu => carEqu.Car)
                 .WithMany(car => car.CarEquipment)
                 .HasForeignKey(carEqu => carEqu.CarId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CarEquipment>()
                 .HasOne(carEqu => carEqu.Equipment)
                 .WithMany(equ => equ.CarEquipment)
                 .HasForeignKey(carEqu => carEqu.EquipmentId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<FollowAdvert>()
                 .HasOne(fa => fa.User)

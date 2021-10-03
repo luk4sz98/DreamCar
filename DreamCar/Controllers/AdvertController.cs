@@ -216,5 +216,25 @@ namespace DreamCar.Web.Controllers
                 return Json(new { redirectToUrl = Url.Action("UserAdverts", "Advert") });
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAdvert(Guid advertId)
+        {
+            try
+            {
+                var result = await _advertService.DeleteAdvertAsync(advertId);
+                if (result)
+                    TempData["DeleteAdvertSuccess"] = "Ogłoszenie usunięto pomyślnie";
+                else
+                    TempData["DeleteAdvertError"] = "Coś poszło nie tak, spróbuj ponownie";
+                return Json(new { redirectToUrl = Url.Action("UserAdverts", "Advert") });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                TempData["DeleteAdvertError"] = "Coś poszło nie tak, spróbuj ponownie";
+                return Json(new { redirectToUrl = Url.Action("UserAdverts", "Advert") });
+            }
+        }
     }
 }
