@@ -25,7 +25,8 @@ namespace DreamCar.Services.Services
         {
         }
 
-        public async Task<Car> AddNewCarAsync(CarVm carVm, IEnumerable<int> carEqu)
+        public async Task<Car> AddNewCarAsync(CarVm carVm,
+                                              IEnumerable<int> carEqu)
         {
             try
             {
@@ -34,12 +35,15 @@ namespace DreamCar.Services.Services
                 await DbContext.Cars.AddAsync(carEntity);
 
                 var carEquipments = new List<CarEquipment>();
-                
-                foreach (var equId in carEqu)
+
+                if (carEqu is not null)
                 {
-                    carEquipments.Add(new CarEquipment { Car = carEntity, EquipmentId = equId });
+                    foreach (var equId in carEqu)
+                    {
+                        carEquipments.Add(new CarEquipment { Car = carEntity, EquipmentId = equId });
+                    }
                 }
-                
+              
                 await DbContext.CarEquipments.AddRangeAsync(carEquipments);
                 
                 return carEntity;

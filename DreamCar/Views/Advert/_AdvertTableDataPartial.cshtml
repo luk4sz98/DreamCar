@@ -41,7 +41,7 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownAdverManageButton">
 
-                    @if (advert.ClosedAt == null)
+                    @if (advert.ClosedAt == null && (DateTime.Now-advert.CreatedAt).Hours > 24)
                     {
                         <li><a class="dropdown-item" href="#">Edytuj</a></li>
                         <li>

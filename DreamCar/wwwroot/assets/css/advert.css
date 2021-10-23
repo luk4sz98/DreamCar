@@ -24,6 +24,10 @@
     outline: none !important;
 }
 
+.advertSection .form-control, .form-select {
+    height:54px !important;
+}
+
 .advertSection .form-control:enabled {
     background: #f7f9fc;
     border: none;
@@ -34,6 +38,13 @@
     text-indent: 8px;
 }
 
+.advertSection .fa-star {
+    margin: 0;
+    text-indent: -3px;
+    font-size: 6px;
+    color: rgb(255,23,8);
+}
+
 .advertSection .form-select:enabled {
     background: #f7f9fc;
     border: none;
@@ -42,7 +53,6 @@
     outline: none;
     color: #343434;
     text-indent: 4px;
-    height: 58px;
 }
 
 .advertSection .form-select:disabled {

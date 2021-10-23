@@ -105,7 +105,7 @@ namespace DreamCar.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> UserAdverts(int? page, int? pageSize, string filterValue = null, string advertType = null)
+        public async Task<IActionResult> UserAdverts(string filterValue = null, string advertType = null)
         {
             var user = await UserManager.GetUserAsync(User);
             bool isAjaxRequest = HttpContext.Request.Headers["x-requested-with"] == "XMLHttpRequest";
@@ -144,7 +144,7 @@ namespace DreamCar.Web.Controllers
                                                 ad.UserId == user.Id
                                             );
 
-            ViewBag.PendingAdverts = await _advertService.GetUserAdvertsAsync(
+            ViewBag.PendingAdvertss = await _advertService.GetUserAdvertsAsync(
                                                 ad => !ad.IsActive &&
                                                 ad.ClosedAt == null &&
                                                 ad.UserId == user.Id
@@ -155,6 +155,7 @@ namespace DreamCar.Web.Controllers
                                             ad.ClosedAt != null &&
                                             ad.UserId == user.Id
                                         );
+
             return View();
         }
 

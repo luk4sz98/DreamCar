@@ -1,20 +1,4 @@
-﻿jQuery(document).ready(function () {
-    $("#reCaptcha").hide();
-});
-
-jQuery("#confirmPassword").focusin(function () {
-    $("#reCaptcha").show(500);
-})
-
-jQuery("#message").focusin(function () {
-    $("#reCaptcha").show(500);
-})
-
-jQuery("#confirmNewPassword").focusin(function () {
-    $("#reCaptcha").show(500);
-})
-
-function reCaptchaCallback() {
+﻿function reCaptchaCallback() {
     var response = grecaptcha.getResponse();
     if (response.length !== 0) {
         $("#lblMessage").hide(500)

@@ -76,9 +76,11 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required(ErrorMessage = "Musisz podać hasło")]
-            [StringLength(100, ErrorMessage = "Hasło musi składać się co najmniej z {2} i maksymalnie {1} znaków.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "Hasło musi składać się co najmniej z {2} i maksymalnie {1} znaków.", MinimumLength = 8)]
             [DataType(DataType.Password)]
             [Display(Name = "Hasło")]
+            [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$",
+                ErrorMessage = "Hasło musi zawierać co najmniej 8 znaków, minimum 1 duża, 1 mała literę, 1 cyfrę i 1 znak specjalny")]
             public string Password { get; set; }
 
             [Required(ErrorMessage = "Musisz potwierdzić hasło")]

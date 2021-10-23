@@ -67,7 +67,7 @@ namespace DreamCar.Services.Services
 
                 await _signInManager.RefreshSignInAsync(user);
 
-                return (true, "");
+                return (true, string.Empty);
             }
             catch (Exception ex)
             {

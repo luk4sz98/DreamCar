@@ -53,7 +53,8 @@ namespace DreamCar.Services.Services
                 
                 await DbContext.Adverts.AddAsync(advertEntity);
 
-                await _imageService.SaveUploadedImagesAsync(advert.ImagesUploaded.Images, advertEntity.Id);
+                if (advert.ImagesUploaded.Images is not null || advert.ImagesUploaded.Images.Count != 0)
+                    await _imageService.SaveUploadedImagesAsync(advert.ImagesUploaded.Images, advertEntity.Id);
 
                 await DbContext.SaveChangesAsync();
 

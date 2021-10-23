@@ -2,7 +2,6 @@
 using DreamCar.Model.DataModels;
 using DreamCar.ViewModels.VM;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace DreamCar.Web.Configuration.Profiles
@@ -43,7 +42,7 @@ namespace DreamCar.Web.Configuration.Profiles
 
             CreateMap<AdvertVm, Advert>()
                 .ForMember(dest => dest.Price, y => y.MapFrom(
-                    src => src.ToNegotiate ? Decimal.Multiply(Convert.ToDecimal(src.Price, CultureInfo.InvariantCulture), (decimal)1.23) : 
+                    src => src.Brutto ? Decimal.Multiply(Convert.ToDecimal(src.Price, CultureInfo.InvariantCulture), (decimal)1.23) : 
                     Convert.ToDecimal(src.Price, CultureInfo.InvariantCulture)));
 
             CreateMap<Image, ImageVm>()
