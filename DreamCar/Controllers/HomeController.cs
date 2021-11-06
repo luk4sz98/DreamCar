@@ -1,26 +1,25 @@
-﻿using DreamCar.ViewModels.VM;
+﻿using AutoMapper;
+using DreamCar.Model.DataModels;
+using DreamCar.ViewModels.VM;
+using DreamCar.Web.Controllers;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
-
 namespace DreamCar.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(
+            ILogger logger,
+            IMapper mapper,
+            UserManager<User> userManager) : base(logger, mapper, userManager)
         {
-            _logger = logger;
         }
 
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }

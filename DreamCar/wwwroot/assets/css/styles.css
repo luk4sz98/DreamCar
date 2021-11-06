@@ -44,6 +44,17 @@ footer {
   }
 }
 
+.buttons-pdf, .buttons-print, .buttons-csv, .buttons-copy, .buttons-excel {
+    margin-top: 20px;
+    color: var(--bs-secondary);
+    background-color: #fff;
+    border: none;
+}
+
+.fa-file-pdf, .fa-print, .fa-file-text-o, .fa-file-excel, .fa-copy {
+    font-size: 30px;
+}
+
 @media (max-width: 576px) {
   #registrationButton {
     margin-left: 0px;

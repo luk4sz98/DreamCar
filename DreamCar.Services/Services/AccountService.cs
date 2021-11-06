@@ -62,7 +62,7 @@ namespace DreamCar.Services.Services
                     {
                         errorDescription.Append(error + "\n");
                     }
-                    throw new Exception(errorDescription.ToString());
+                    throw new InvalidOperationException(errorDescription.ToString());
                 }
 
                 await _signInManager.RefreshSignInAsync(user);
@@ -121,7 +121,7 @@ namespace DreamCar.Services.Services
             {
                 var user = await DbContext.Users.OfType<User>().FirstOrDefaultAsync(user => user.Id == changeEmailVm.UserId);
                 if (user == null)
-                    throw new ArgumentNullException($"Nie ma użytkownika z tym id - {user.Id}");
+                    throw new ArgumentNullException($"Nie ma użytkownika z tym id - {changeEmailVm.UserId}");
 
                 if (user.Email == changeEmailVm.NewEmail)
                     return (false, "Adres email jest taki sam jak dotychczasowy");
@@ -166,7 +166,7 @@ namespace DreamCar.Services.Services
             {
                 var user = await DbContext.Users.OfType<User>().FirstOrDefaultAsync(user => user.Id == int.Parse(userId));
                 if (user == null)
-                    throw new Exception("Nie ma takiego użytkownika");
+                    throw new ArgumentException("Nie ma takiego użytkownika");
 
                 code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
                 var result = await UserManager.ChangeEmailAsync(user, email, code);
@@ -174,7 +174,7 @@ namespace DreamCar.Services.Services
                 if (!result.Succeeded)
                     return (false, "Błąd podczas zmiany adresu email");
 
-                var setUserNameResult = await UserManager.SetUserNameAsync(user, email);
+                await UserManager.SetUserNameAsync(user, email);
 
                 await _signInManager.RefreshSignInAsync(user);
                 return (true, string.Empty);

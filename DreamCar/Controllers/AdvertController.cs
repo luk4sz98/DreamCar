@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -20,7 +21,6 @@ namespace DreamCar.Web.Controllers
     public class AdvertController : BaseController
     {
         private readonly IEquipmentService _equipmentService;
-        private readonly ApplicationDbContext _applicationDbContext;
         private readonly IAdvertService _advertService;
 
         private readonly SelectList _countries = new(new string[] {
@@ -42,18 +42,16 @@ namespace DreamCar.Web.Controllers
             ILogger logger,
             IMapper mapper,
             IEquipmentService equipmentService,
-            ApplicationDbContext applicationDbContext,
             UserManager<User> userManager,
             IAdvertService advertService
         ) : base(logger, mapper, userManager)
         {
             _equipmentService = equipmentService;
-            _applicationDbContext = applicationDbContext;
             _advertService = advertService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddNewAdvert(List<string> errors)
+        public async Task<IActionResult> AddOrEdit(List<string> errors, Guid? advertId)
         {
             if (errors.Any())
             {
@@ -71,12 +69,17 @@ namespace DreamCar.Web.Controllers
             ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Now.Year, (DateTime.Now.Year + 10) - DateTime.Now.Year));
             ViewBag.User = await UserManager.GetUserAsync(User);
 
-            return View();
+            if (advertId == null) return View();
+
+            var userAdvert = await _advertService.GetAdvertToEditAsync((Guid)advertId);
+            ViewBag.advertId = userAdvert.Advert.AdvertId;
+
+            return View(userAdvert);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddNewAdvert(CarVm car, CheckedEquVm equipments, ImageUploadedVm imagesUploaded, AdvertVm advert)
+        public async Task<IActionResult> AddOrEdit(CarVm car, CheckedEquVm equipments, ImageUploadedVm imagesUploaded, AdvertVm advert)
         {
             if (!ModelState.IsValid)
             {
@@ -89,9 +92,9 @@ namespace DreamCar.Web.Controllers
                 return RedirectToAction("AddNewAdvert", errors);
             }
 
-            var addAdvertVm = new AddAdvertVm { Car = car, Equipments = equipments, ImagesUploaded = imagesUploaded, Advert = advert };
+            var addAdvertVm = new AddOrEditAdvertVm { Car = car, Equipments = equipments, ImagesUploaded = imagesUploaded, Advert = advert };
 
-            var result = await _advertService.AddNewAdvertAsync(addAdvertVm);
+            var result = await _advertService.AddOrEditAdvertAsync(addAdvertVm);
 
             if (result.Item1)
             {
@@ -135,32 +138,85 @@ namespace DreamCar.Web.Controllers
                                                   .StartsWith(filterValue.ToLower()) &&
                                                 ad.UserId == user.Id),
                 };
-                return PartialView("_AdvertTableDataPartial", filterAdverts);
+                return Json(filterAdverts);
             }
 
-            ViewBag.ActiveAdverts = await _advertService.GetUserAdvertsAsync(
+            var activeAdvertsNumber = (await _advertService.GetUserAdvertsAsync(
                                                 ad => ad.IsActive &&
                                                 ad.ClosedAt == null &&
                                                 ad.UserId == user.Id
-                                            );
+                                            )).Count();
 
-            ViewBag.PendingAdvertss = await _advertService.GetUserAdvertsAsync(
+            ViewBag.PendingAdverts = await _advertService.GetUserAdvertsAsync(
                                                 ad => !ad.IsActive &&
                                                 ad.ClosedAt == null &&
                                                 ad.UserId == user.Id
                                             );
 
-            ViewBag.EndedAdverts = await _advertService.GetUserAdvertsAsync(
+            var endedAdvertsNumber = (await _advertService.GetUserAdvertsAsync(
                                             ad =>
                                             ad.ClosedAt != null &&
                                             ad.UserId == user.Id
-                                        );
+                                        )).Count();
 
             return View();
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUserSpecificAdverts(string advertType)
+        public async Task<IActionResult> PendingAdverts(int? page, int? _pageSize, string filterValue = null)
+        {
+            var user = await UserManager.GetUserAsync(User);
+            bool isAjaxRequest = HttpContext.Request.Headers["x-requested-with"] == "XMLHttpRequest";
+            if (isAjaxRequest)
+            {
+                IEnumerable<UserAdvertVm> filterAdverts = null;
+                
+                if(!string.IsNullOrEmpty(filterValue))
+                    filterAdverts = _advertService.GetUserAdvertsAsQueryable(
+                                                    ad =>
+                                                    !ad.IsActive &&
+                                                    ad.ClosedAt == null &&
+                                                    ad.Title.ToLower()
+                                                      .StartsWith(filterValue.ToLower()) &&
+                                                    ad.UserId == user.Id);
+                else
+                    filterAdverts = await _advertService.GetUserAdvertsAsync(
+                                         ad => !ad.IsActive &&
+                                         ad.ClosedAt == null &&
+                                         ad.UserId == user.Id
+                                     );
+                return PartialView("_AdvertTableDataPartial", filterAdverts);
+            }
+
+            var pendingAdverts = await _advertService.GetUserAdvertsAsync(
+                                                         ad => !ad.IsActive &&
+                                                         ad.ClosedAt == null &&
+                                                         ad.UserId == user.Id
+                                                     );
+            var pageSize = _pageSize ?? 10;
+            ViewBag.page = page > 0 ? page : page = 1;
+
+            int start = (int)(page - 1) * pageSize;
+
+            //Aktualny numer strony
+            ViewBag.pageCurrent = page;
+
+            //Rozmiar listy
+            int totalPage = pendingAdverts.Count();
+
+            //Ilość wszystkich stron do wyświetlenia
+            float totalNumsize = (totalPage / (float)pageSize);
+            int numSize = (int)Math.Ceiling(totalNumsize);
+
+            ViewBag.pageSize = pageSize;
+            ViewBag.numSize = numSize;
+
+            return View("PendingAdverts", pendingAdverts.Skip(start).Take(pageSize));
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserSpecificAdverts(int? page, int? _pageSize, string advertType)
         {
             try
             {
@@ -174,6 +230,7 @@ namespace DreamCar.Web.Controllers
                                                                         ad.ClosedAt == null &&
                                                                         ad.UserId == user.Id
                                                                     );
+
                         return PartialView("_AdvertTableDataPartial", userPendingAdverts);
                     case "Ended":
                         var userEndedAdverts = await _advertService.GetUserAdvertsAsync(

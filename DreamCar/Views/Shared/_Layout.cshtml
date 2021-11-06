@@ -34,13 +34,15 @@
     <link rel="stylesheet" href="/assets/css/registerForm.css">
     <link rel="stylesheet" href="/assets/css/advert.css">
     <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jq-3.6.0/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-html5-2.0.1/b-print-2.0.1/fh-3.2.0/r-2.2.9/sb-1.3.0/datatables.min.css" />
+
 </head>
 
 <body style="font-family: Alegreya, serif;">
     <a id="scroll-to-top" href="#"><i class="fas fa-car" style="font-size: 40px;color: var(--bs-gray-dark);"></i></a>
     <nav class="navbar navbar-light navbar-expand-md" data-aos="fade-down" data-aos-duration="1200" data-aos-once="true" style="margin-bottom: 5px;">
         <div class="container">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" id="brand"></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1" style="border: none !important; outline: none !important"><span class="visually-hidden">Toggle navigation</span><span class="icon-menu" style="border: none !important; outline: none !important"></span></button>
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" id="brand"></a><button data-bs-toggle="collapse" class="navbar-toggler shadow-none" data-bs-target="#navcol-1" style="border: none !important; outline: none !important"><span class="visually-hidden">Toggle navigation</span><span class="icon-menu" style="border: none !important; outline: none !important"></span></button>
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav d-xl-flex ms-auto">
                     <li class="nav-item">
@@ -124,17 +126,19 @@
         <p class="copyright">Dream Car © 2021</p>
     </footer>
     <script src="/assets/js/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="/assets/js/bs-init.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.4.8/swiper-bundle.min.js"></script>
     <script src="/assets/js/Lightbox-Gallery.js"></script>
     <script src="/assets/js/scrollToTop.js"></script>
-    <script src="/assets/js/Simple-Slider.js"></script>
     <script src="~/assets/js/jquery.mask.js"></script>
     <script src="/assets/js/site.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jq-3.6.0/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-html5-2.0.1/b-print-2.0.1/fh-3.2.0/r-2.2.9/sb-1.3.0/datatables.min.js"></script>
     <script>
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {

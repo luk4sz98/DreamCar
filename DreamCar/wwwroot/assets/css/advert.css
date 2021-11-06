@@ -236,13 +236,6 @@ td img {
     max-height: 200px;
 }
 
-td:first-of-type{
-    border-radius: 0.5rem 0 0 0.5rem;
-}
-td:last-of-type {
-    border-radius: 0 0.5rem 0.5rem 0;
-}
-
 th {
     font-size: 25px;
     font-weight:300;
@@ -258,13 +251,7 @@ th:nth-of-type(1) + th:nth-of-type(2) {
 }
 
 .tableAdverts {
-    box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-    padding: 15px;
     border-radius: 1rem;
-    background: #ffffff;
-    color: #343434;
-    max-width: 1200px;
-    width: 90%;
     margin: 0 auto;
 }
 

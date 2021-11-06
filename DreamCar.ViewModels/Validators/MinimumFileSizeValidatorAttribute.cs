@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DreamCar.ViewModels.Validators
 {
-    public class MinimumFileSizeValidator : ValidationAttribute, IClientModelValidator
+    public class MinimumFileSizeValidatorAttribute : ValidationAttribute, IClientModelValidator
     {
         private readonly string _errorMessage = "Jedno z wybranych zdjęć jest mniejsze niż {1} MB";
 
@@ -15,7 +15,7 @@ namespace DreamCar.ViewModels.Validators
         public double MinimumFileSize { get; private set; }
 
         /// <param name="minimumFileSize">MinimumFileSize file size in MB</param>
-        public MinimumFileSizeValidator(
+        public MinimumFileSizeValidatorAttribute(
             double minimumFileSize)
             : base()
         {
@@ -34,17 +34,12 @@ namespace DreamCar.ViewModels.Validators
             {
                 if (!IsValidMinimumFileSize(file.Length))
                 {
-                    ErrorMessage = string.Format(_errorMessage, "{0}", MinimumFileSize);
+                    ErrorMessage = string.Format("{0} {1}", _errorMessage, MinimumFileSize);
                     return false;
                 }
             }
 
             return true;
-        }
-
-        public override string FormatErrorMessage(string name)
-        {
-            return string.Format(_errorMessage, name, MinimumFileSize);
         }
 
         private bool IsValidMinimumFileSize(long fileSize)
@@ -59,23 +54,21 @@ namespace DreamCar.ViewModels.Validators
 
         public void AddValidation(ClientModelValidationContext context)
         {
-            var errorMessage = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
             MergeAttribute(context.Attributes, "data-val", "true");
-            MergeAttribute(context.Attributes, "data-val-minimumfilesize", errorMessage);
+            MergeAttribute(context.Attributes, "data-val-minimumfilesize", _errorMessage);
             MergeAttribute(context.Attributes, "data-val-minimumfilesize-minimumSize", MinimumFileSize.ToString());
         }
 
-        private static bool MergeAttribute(
+        private static void MergeAttribute(
             IDictionary<string, string> attributes,
             string key,
             string value)
         {
             if (attributes.ContainsKey(key))
             {
-                return false;
+                return;
             }
             attributes.Add(key, value);
-            return true;
         }
     }
 }

@@ -9,10 +9,11 @@ namespace DreamCar.Services.Interfaces
 {
     public interface IAdvertService
     {
-        Task<(bool, string)> AddNewAdvertAsync(AddAdvertVm advert);
+        Task<(bool, string)> AddOrEditAdvertAsync(AddOrEditAdvertVm advertVm);
         Task<IEnumerable<UserAdvertVm>> GetUserAdvertsAsync(Expression<Func<Advert, bool>> filterExpressions);
         IEnumerable<UserAdvertVm> GetUserAdvertsAsQueryable(Expression<Func<Advert, bool>> filterExpressions);
         Task<bool> EndAdvertAsync(Guid advertId);
         Task<bool> DeleteAdvertAsync(Guid advertId);
+        Task<AddOrEditAdvertVm> GetAdvertToEditAsync(Guid advertId);
     }
 }

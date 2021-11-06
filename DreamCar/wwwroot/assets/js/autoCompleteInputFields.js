@@ -13,8 +13,8 @@
             error: function (xhr, textStatus, error) {
                 alert(xhr.statusText);
             },
-            failure: function (response) {
-                alert("failure " + response.responseText);
+            failure: function (failure) {
+                alert("failure " + failure.responseText);
             }
         })
     }
@@ -35,8 +35,8 @@ $("#modelCar").autocomplete({
             error: function (xhr, textStatus, error) {
                 alert(xhr.statusText);
             },
-            failure: function (response) {
-                alert("failure " + response.responseText);
+            failure: function (failure) {
+                alert("failure " + failure.responseText);
             }
         })
     }

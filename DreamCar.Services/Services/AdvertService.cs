@@ -36,28 +36,39 @@ namespace DreamCar.Services.Services
             _carService = carService;
         }
 
-        public async Task<(bool, string)> AddNewAdvertAsync(AddAdvertVm advert)
+        public async Task<(bool, string)> AddOrEditAdvertAsync(AddOrEditAdvertVm advertVm)
         {
             try
             {
+                // If Id has value, it means, it is edit operation
+                if (advertVm.Advert.AdvertId.HasValue || advertVm.Advert.AdvertId != Guid.Empty)
+                {
+                    var advertToUpdate = await DbContext.Adverts.FirstOrDefaultAsync(ad => ad.Id == advertVm.Advert.AdvertId);
+                    UpdateAdvert(advertToUpdate, Mapper.Map<Advert>(advertVm.Advert));
+                    await _carService.UpdateCar(advertToUpdate.Car, Mapper.Map<Car>(advertVm.Car), advertVm.Equipments.Checked);
 
-                var advertEntity = Mapper.Map<Advert>(advert.Advert);               
-                
-                advertEntity.CreatedAt = DateTime.Now;
-                advertEntity.User = await UserManager.GetUserAsync(_httpContext.HttpContext.User);
-                advertEntity.Car = await _carService.AddNewCarAsync(advert.Car, advert.Equipments.Checked)
-                                   ?? throw new InvalidOperationException("Wystąpił problem z dodaniem pojazdu");
+                    if (advertVm.ImagesUploaded.Images is not null)
+                        await _imageService.SaveUploadedImagesAsync(advertVm.ImagesUploaded.Images, advertToUpdate.Id);
+                }
+                else //if we are here, it means, it is new advert
+                {
+                    var advertEntity = Mapper.Map<Advert>(advertVm.Advert);
 
-                if (string.IsNullOrEmpty(advertEntity.Title))
-                    advertEntity.Title = string.Concat(advertEntity.Car.Brand, " ", advertEntity.Car.Model);
-                
-                await DbContext.Adverts.AddAsync(advertEntity);
+                    advertEntity.CreatedAt = DateTime.Now;
+                    advertEntity.User = await UserManager.GetUserAsync(_httpContext.HttpContext.User);
+                    advertEntity.Car = await _carService.AddNewCarAsync(advertVm.Car, advertVm.Equipments.Checked)
+                                       ?? throw new InvalidOperationException("Wystąpił problem z dodaniem pojazdu");
 
-                if (advert.ImagesUploaded.Images is not null || advert.ImagesUploaded.Images.Count != 0)
-                    await _imageService.SaveUploadedImagesAsync(advert.ImagesUploaded.Images, advertEntity.Id);
+                    if (string.IsNullOrEmpty(advertEntity.Title))
+                        advertEntity.Title = string.Concat(advertEntity.Car.Brand, " ", advertEntity.Car.Model);
 
+                    await DbContext.Adverts.AddAsync(advertEntity);
+
+                    if (advertVm.ImagesUploaded.Images is not null || advertVm.ImagesUploaded.Images.Count != 0)
+                        await _imageService.SaveUploadedImagesAsync(advertVm.ImagesUploaded.Images, advertEntity.Id);
+
+                }
                 await DbContext.SaveChangesAsync();
-
                 return (true, string.Empty);
             }
             catch (Exception ex) {
@@ -96,7 +107,7 @@ namespace DreamCar.Services.Services
             catch (Exception ex)
             {
                 Logger.LogError(ex, ex.Message);
-                return null;
+                return Enumerable.Empty<UserAdvertVm>();
             }
         }
 
@@ -136,7 +147,8 @@ namespace DreamCar.Services.Services
 
                 
                 DbContext.Remove(advertEntity);
-                DbContext.Remove(carEntity);
+                DbContext.CarEquipments.RemoveRange(carEntity.CarEquipment);
+                DbContext.Remove(carEntity);              
                 
                 _imageService.DeleteSavedImages(advertId);
 
@@ -149,6 +161,48 @@ namespace DreamCar.Services.Services
             {
                 Logger.LogError(ex, ex.Message);
                 return false;
+            }
+        }
+
+        public async Task<AddOrEditAdvertVm> GetAdvertToEditAsync(Guid advertId)
+        {
+            try
+            {
+                AddOrEditAdvertVm addOrEditAdvert;
+                var advert = await DbContext.Adverts.FirstOrDefaultAsync(ad => ad.Id == advertId);
+
+                addOrEditAdvert = new AddOrEditAdvertVm {
+                    Advert = Mapper.Map<AdvertVm>(advert),
+                    Car = Mapper.Map<CarVm>(advert.Car),
+                    Equipments = new CheckedEquVm { Checked = advert.Car.CarEquipment.Select(ad => ad.EquipmentId) },
+                    ImagesUploaded = new ImageUploadedVm { ImagesSaved = Mapper.Map<IEnumerable<ImageVm>>(advert.Images)}
+                };
+                return addOrEditAdvert;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return null;
+            }
+        }
+
+        private void UpdateAdvert(Advert advertToUpdate, Advert updatedAdvert)
+        {
+            try
+            {
+                advertToUpdate.CreatedAt = DateTime.Now;
+                advertToUpdate.Brutto = updatedAdvert.Brutto;
+                advertToUpdate.Price = updatedAdvert.Price;
+                advertToUpdate.Currency = updatedAdvert.Currency;
+                advertToUpdate.Title = string.IsNullOrEmpty(updatedAdvert.Title) ? string.Concat(advertToUpdate.Car.Brand, " ", advertToUpdate.Car.Model) : updatedAdvert.Title;
+                advertToUpdate.Localization = updatedAdvert.Localization;
+                advertToUpdate.Description = updatedAdvert.Description;
+                advertToUpdate.ToNegotiate = updatedAdvert.ToNegotiate;
+                advertToUpdate.VAT = updatedAdvert.VAT;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
             }
         }
     }

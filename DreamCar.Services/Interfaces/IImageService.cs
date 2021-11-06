@@ -8,5 +8,6 @@ namespace DreamCar.Services.Interfaces
     {
         Task SaveUploadedImagesAsync(IFormFileCollection images, Guid advertId);
         void DeleteSavedImages(Guid advertId);
+        Task DeleteImage(Guid advertId, string imageName);
     }
 }

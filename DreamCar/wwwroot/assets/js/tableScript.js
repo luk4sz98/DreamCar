@@ -1,30 +1,16 @@
 ﻿$('th').click(function () {
-    var thText = $(this).children('span').text()
     var icon = $(this).children('icon')
-
-    switch (thText) {
-        case "Tytuł": {
-            toggleArrow(icon)
-            break;
-        }
-        case "Cena": {
-            toggleArrow(icon)
-            break;
-        }
-        default: {
-            toggleArrow(icon)
-            break;
-        }
-    }
+    toggleArrow(icon)
 
     var table = $(this).parents('table').eq(0)
     var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+
     this.asc = !this.asc
     if (!this.asc) {
         rows = rows.reverse()
     }
-    for (var i = 0; i < rows.length; i++) {
-        table.append(rows[i])
+    for (let row of rows) {
+        table.append(row)
     }
 })
 
@@ -55,13 +41,11 @@ function comparer(index) {
                 reverseStringToValidDateFormat(
                     valB.replace(/\./g, '-')
                 ))
+            return valA - valB
         }
 
-        if ($.isNumeric(valA) && $.isNumeric(valB)) {
-            return valA - valB;
-        }
-        else if (valA instanceof Date) {
-            return valA - valB;
+        if (valA.match(/[0-9]{3,}\,[0-9]{2}/)) {
+            return parseFloat(valA.substr(0, valA.length - 3)) - parseFloat(valB.substr(0, valA.length - 3))
         }
         else {
             return valA.toString().localeCompare(valB)
@@ -78,13 +62,12 @@ function getCellValue(row, index) {
     return $(row).children('td').eq(index).text()
 }
 
-$(".filterAdvert").on("keyup focus", async function () {
+$(".filterAdvert").on("keyup", async function () {
     const filterValue = $(this).val();
     if (filterValue !== "" && filterValue != " ") {
-        if ($("#pending-tab").hasClass("active")) {
-            const result = await $.get("/Advert/UserAdverts", $.param({
-                filterValue: filterValue,
-                advertType: "Pending"
+        if ($("#pendingLink").hasClass("active")) {
+            const result = await $.get("/Advert/PendingAdverts", $.param({
+                filterValue: filterValue
             }));
             $(".pendingAdvertsTableData").html(result);
         }
@@ -104,10 +87,8 @@ $(".filterAdvert").on("keyup focus", async function () {
         }
     }
     else {
-        if ($("#pending-tab").hasClass("active")) {
-            const result = await $.get("/Advert/GetUserSpecificAdverts", $.param({
-                advertType: "Pending"
-            }));
+        if ($("#pendingLink").hasClass("active")) {
+            const result = await $.get("/Advert/PendingAdverts");
             $(".pendingAdvertsTableData").html(result);
         }
         else if ($("#active-tab").hasClass("active")) {

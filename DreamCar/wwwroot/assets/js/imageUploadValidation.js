@@ -1,6 +1,5 @@
 ﻿$.validator.addMethod("maximumcollectionsize", function (value, element, params) {
     var photosLimit = params[1];
-    console.log(photosLimit);
     if (element.files.length > photosLimit) {
         return false;
     }
@@ -49,7 +48,7 @@ $.validator.addMethod("minimumfilesize", function (value, element, params) {
 
 $.validator.unobtrusive.adapters.add("maximumcollectionsize", ['limit'], function (options) {
     var element = $(options.form).find('input#fileUpload')[0];
-    options.rules['maximumcollectionsize'] = [element, parseFloat(options.params['limit'])];
+    options.rules['maximumcollectionsize'] = [element, parseFloat(options.params['limit']) - $('img').length];
     options.messages["maximumcollectionsize"] = options.message;
 });
 

@@ -1,6 +1,8 @@
-﻿namespace DreamCar.ViewModels.VM
+﻿using System.Collections.Generic;
+
+namespace DreamCar.ViewModels.VM
 {
-    public class AddAdvertVm
+    public class AddOrEditAdvertVm
     {
         public CarVm Car { get; set; }
         public CheckedEquVm Equipments { get; set; }

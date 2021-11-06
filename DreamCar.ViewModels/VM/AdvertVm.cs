@@ -1,16 +1,19 @@
 ﻿using DreamCar.Model.DataModels.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace DreamCar.ViewModels.VM
 {
     public class AdvertVm
     {
+        public Guid? AdvertId { get; set; }
+
         [RegularExpression(@"^[a-zA-Z0-9\s]+$", ErrorMessage = "Tytuł nie może zawierać specjalnych znaków")]
         [DataType(DataType.Text)]
         [StringLength(200, ErrorMessage = "Tytuł musi zawierać co najmniej {2} oraz maksymalnie {1} znaków", MinimumLength = 10)]
         public string Title { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z0-9\s,]+$", ErrorMessage = "Opis nie może zawierać specjalnych znaków")]
+        [RegularExpression(@"^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9\s,]+$", ErrorMessage = "Opis nie może zawierać specjalnych znaków")]
         [DataType(DataType.MultilineText)]
         [StringLength(4096, ErrorMessage = "Opis musi zawierać co najmniej {2} oraz maksymalnie {1} znaków", MinimumLength = 10)]
         public string Description { get; set; }

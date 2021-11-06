@@ -1,0 +1,19 @@
+﻿<div class="row">
+    <nav class="navbar navbar-expand navbar-light">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" asp-action="UserAdverts" asp-controller="Advert">Aktywne</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="pendingLink" class="nav-link" asp-action="PendingAdverts" asp-controller="Advert">Oczekujące</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="EndedAdverts" asp-controller="Advert">Zakończone</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
