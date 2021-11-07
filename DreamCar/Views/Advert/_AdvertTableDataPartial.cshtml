@@ -1,5 +1,18 @@
 ﻿@model IEnumerable<UserAdvertVm>
 
+<style>
+    .dropdownAdvertManageButton {
+        background-color: lightseagreen !important;
+        border-radius: 2rem !important;
+        outline: none !important;
+        border: none !important;
+        opacity: 0.8;
+    }
+    .dropdownAdvertManageButton:focus {
+        opacity: 1;
+    }
+</style>
+
 @if (Model != null)
 {
     @foreach (var advert in Model)
@@ -45,7 +58,7 @@
             }
             <td class="align-middle">
                 <div class="dropdown">
-                    <button style="border-radius:1rem;" class="btn btn-secondary dropdown-toggle dropdownAdvertManageButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button style="border-radius:1rem;" class="btn btn-secondary dropdown-toggle dropdownAdvertManageButton shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Zarządzaj
                     </button>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownAdverManageButton">
