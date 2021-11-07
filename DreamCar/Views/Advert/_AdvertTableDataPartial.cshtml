@@ -1,17 +1,5 @@
 ﻿@model IEnumerable<UserAdvertVm>
-
-<style>
-    .dropdownAdvertManageButton {
-        background-color: lightseagreen !important;
-        border-radius: 2rem !important;
-        outline: none !important;
-        border: none !important;
-        opacity: 0.8;
-    }
-    .dropdownAdvertManageButton:focus {
-        opacity: 1;
-    }
-</style>
+@using System.Globalization
 
 @if (Model != null)
 {
@@ -21,7 +9,7 @@
             <td class="d-none">
                 @advert.Id
             </td>
-            <td class="col-2 align-middle">
+            <td class="col-5 col-sm-4 col-md-2 align-middle">
                 @if (advert.Images.Count() != 0)
                 {
                     <div id="carouselCarImages @advert.Id" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -40,45 +28,58 @@
                 }
                 else
                 {
-                    <h5 class="align-middle">Brak zdjęć</h5>
+                    <span>Brak zdjęć</span>
                 }
             </td>
-            <td class="align-middle col-3">
+            <td class="align-middle col-4 col-sm-4 col-md-2">
                 @advert.Title
             </td>
-            <td class="align-middle col-3" style="font-size:25px; font-weight:500;">@advert.Price<sup style="font-size:10px;">@advert.Currency</sup></td>
-
+            <td class="align-middle col-3 col-sm-2" style="font-size:25px; font-weight:500;">@advert.Price</td>
+            <td class="align-middle d-none d-md-table-cell col">@advert.Currency</td>
             @if (advert.ClosedAt != null)
             {
-                <td class="align-middle text-center d-none d-md-table-cell">@advert.ClosedAt.Value.ToShortDateString()</td>
+                <td class="align-middle d-none d-md-table-cell">@advert.ClosedAt.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</td>
             }
             else
             {
-                <td class="align-middle text-center d-none d-md-table-cell">@advert.CreatedAt.ToShortDateString()</td>
+                <td class="align-middle d-none d-md-table-cell">@advert.CreatedAt.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</td>
             }
             <td class="align-middle">
                 <div class="dropdown">
-                    <button style="border-radius:1rem;" class="btn btn-secondary dropdown-toggle dropdownAdvertManageButton shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button type="button" class="btn d-block d-lg-none shadow-none" data-bs-toggle="dropdown" aria-expanded="false">
+                        <icon class="fa fa-edit" style="font-size: 20px;"></icon>
+                    </button>
+                    <button style="border-radius:1rem;" class="d-none d-lg-block btn btn-secondary dropdown-toggle dropdownAdvertManageButton shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Zarządzaj
                     </button>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownAdverManageButton">
-
-                        @if (advert.ClosedAt == null && (DateTime.Now - advert.CreatedAt).TotalHours > 24)
+                        @if (advert.ClosedAt != null)
                         {
-                            <li><a class="dropdown-item" asp-action="AddOrEdit" asp-controller="Advert" asp-route-advertId="@advert.Id">Edytuj</a></li>
+                            <li>
+                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal">Usuń</button>
+                            </li>
                         }
                         else
                         {
-                            <li data-bs-toggle="tooltip" data-bs-placement="right" title="Edycja ogłoszenia możliwa po 24h od momentu dodania ogłoszenia" data-bs-animation="true">
-                                <a class="dropdown-item disabled" asp-action="AddOrEdit" asp-controller="Advert" asp-route-advertId="@advert.Id">Edytuj</a>
+                            if ((DateTime.Now - advert.CreatedAt).TotalHours > 24)
+                            {
+                                <li>
+                                    <a class="dropdown-item" asp-action="AddOrEdit" asp-controller="Advert" asp-route-advertId="@advert.Id">Edytuj</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li data-bs-toggle="tooltip" data-bs-placement="right" title="Edycja ogłoszenia możliwa po 24h od momentu dodania ogłoszenia" data-bs-animation="true">
+                                    <a class="dropdown-item disabled" asp-action="AddOrEdit" asp-controller="Advert" asp-route-advertId="@advert.Id">Edytuj</a>
+                                </li>
+                            }
+                            <li>
+                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#endConfirmationModal">Zakończ</button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal">Usuń</button>
                             </li>
                         }
-                        <li>
-                            <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#endConfirmationModal">Zakończ</button>
-                        </li>
-                        <li>
-                            <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal">Usuń</button>
-                        </li>
                     </ul>
                 </div>
             </td>

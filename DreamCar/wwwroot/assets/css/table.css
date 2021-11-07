@@ -1,0 +1,50 @@
+﻿.dropdownAdvertManageButton {
+    background-color: lightseagreen !important;
+    border-radius: 2rem !important;
+    outline: none !important;
+    border: none !important;
+    opacity: 0.8;
+}
+
+.dropdownAdvertManageButton:focus {
+    opacity: 1;
+}
+
+.dataTables_filter, .dataTables_length {
+    margin-top: 20px !important;
+}
+
+.form-select, .form-control {
+    box-shadow: none !important;
+}
+
+.form-select:focus, .form-control:focus {
+    border-color: var(--bs-secondary) !important;
+}
+
+.fa-edit {
+    opacity: 0.8;
+}
+
+.fa-edit:hover {
+    font-weight: bold;
+    opacity: 1;
+}
+
+.paginate_button.active .page-link {
+    background-color: grey !important;
+    border: none !important;
+    color: #fff !important;
+}
+
+.paginate_button .page-link {
+    color: black !important;
+    box-shadow: none !important;
+}
+
+@media (max-width: 700px) {
+    .dataTables_filter, .dataTables_length {
+        display: flex;
+        justify-content: start !important;
+    }
+}
