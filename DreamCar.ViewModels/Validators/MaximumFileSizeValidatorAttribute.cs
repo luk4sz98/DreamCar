@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DreamCar.ViewModels.Validators
 {
-    public class MaximumFileSizeValidator : ValidationAttribute, IClientModelValidator
+    public class MaximumFileSizeValidatorAttribute : ValidationAttribute, IClientModelValidator
     {
         private readonly string _errorMessage = "Jedno z wybranych zdjęć jest większe niż {1} MB";
 
@@ -15,7 +15,7 @@ namespace DreamCar.ViewModels.Validators
         public double MaximumFileSize { get; private set; }
 
         /// <param name="maximumFileSize">Maximum file size in MB</param>
-        public MaximumFileSizeValidator(
+        public MaximumFileSizeValidatorAttribute(
             double maximumFileSize)
         {
             MaximumFileSize = maximumFileSize;
@@ -23,9 +23,8 @@ namespace DreamCar.ViewModels.Validators
 
         public void AddValidation(ClientModelValidationContext context)
         {
-            var errorMessage = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
             MergeAttribute(context.Attributes, "data-val", "true");
-            MergeAttribute(context.Attributes, "data-val-maximumfilesize", errorMessage);
+            MergeAttribute(context.Attributes, "data-val-maximumfilesize", _errorMessage);
             MergeAttribute(context.Attributes, "data-val-maximumfilesize-maximumSize", MaximumFileSize.ToString());
         }
 
@@ -41,18 +40,12 @@ namespace DreamCar.ViewModels.Validators
             {
                 if (!IsValidMaximumFileSize(file.Length))
                 {
-                    ErrorMessage = string.Format(_errorMessage, "{0}", MaximumFileSize);
+                    ErrorMessage = string.Format("{0} {1}", _errorMessage, MaximumFileSize);
                     return false;
                 }
             }
 
             return true;
-        }
-
-        public override string FormatErrorMessage(
-            string name)
-        {
-            return string.Format(_errorMessage, name, MaximumFileSize);
         }
 
         private bool IsValidMaximumFileSize(
@@ -67,17 +60,16 @@ namespace DreamCar.ViewModels.Validators
             return bytes / 1024f / 1024f;
         }
 
-        private static bool MergeAttribute(
+        private static void MergeAttribute(
             IDictionary<string, string> attributes,
             string key,
             string value)
         {
             if (attributes.ContainsKey(key))
             {
-                return false;
+                return;
             }
             attributes.Add(key, value);
-            return true;
         }
     }
 }

@@ -1,0 +1,71 @@
+﻿@model IEnumerable<UserAdvertVm>
+
+<link rel="stylesheet" href="/assets/css/table.css">
+
+<!-- Modal End Confirmation -->
+<div class="modal fade" id="endConfirmationModal" tabindex="-1" aria-labelledby="endConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Czy na pewno chcesz zakończyć to ogłoszenie?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Powrót</button>
+                <button type="button" id="endAdvertButton" class="btn btn-primary">Zakończ</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Delete Confirmation -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Czy na pewno chcesz usunąć to ogłoszenie?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Powrót</button>
+                <button type="button" id="deleteAdvertButton" class="btn btn-danger">Usuń</button>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    <div class="container">
+        <div class="row">
+            @{
+                await Html.RenderPartialAsync("_NavbarPartial");
+            }
+        </div>
+        <div class="row mt-3">
+            <div class="tableAdverts mx-auto table-responsive mb-3">
+                <table id="endedAdvertsTable" class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th class="d-none"></th>
+                            <th></th>
+                            <th data-bs-toggle="tooltip" data-bs-placement="left" title="Sortuj malejąco/rosnąco wg tytułu" data-bs-animation="true" scope="col"><span>Tytuł</span></th>
+                            <th data-bs-toggle="tooltip" data-bs-placement="left" title="Sortuj malejąco/rosnąco wg ceny" data-bs-animation="true" scope="col"><span>Cena</span></th>
+                            <th class="d-none d-md-table-cell" style="cursor:default !important;"></th>
+                            <th class="d-none d-md-table-cell" data-bs-toggle="tooltip" data-bs-placement="right" title="Sortuj malejąco/rosnąco wg daty utworzenia" data-bs-animation="true" scope="col"><span>Zakończone</span></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="endedAdvertsTableData">
+                        @{
+                            await Html.RenderPartialAsync("_AdvertTableDataPartial", Model);
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+}
+
+@section Scripts {
+    <script src="~/assets/js/tableScript.js"></script>
+    <script src="~/assets/js/dataTable.js"></script>
+}

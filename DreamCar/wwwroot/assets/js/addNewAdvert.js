@@ -27,12 +27,17 @@ function showTab(n) {
     var x = $(".tab")
 
     $(x[n]).slideToggle(800)
-    $('html,body').animate({
-        scrollTop: $(x[n]).offset().top
-    }, 'slow');
+    if (n != 0) {
+        $('html,body').animate({
+            scrollTop: $(x[n]).offset().top
+        }, 'slow');
+    }
 
     if (n == 0) {
         $("#prevBtn").hide()
+        $('html,body').animate({
+            scrollTop: $('.infoHeader').offset().top
+        }, 'slow');
     } else {
         $("#prevBtn").show()
     }
@@ -82,7 +87,7 @@ function fixStepIndicator(n) {
     $(".progress-bar").css("width", number.toString() + "%");
 }
 
-(function ($, window, document, undefined) {
+(function ($, window, document) {
     $('.inputfile').each(function () {
         var $input = $(this),
             $label = $input.next('label'),

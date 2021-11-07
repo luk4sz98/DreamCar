@@ -11,5 +11,6 @@ namespace DreamCar.Services.Interfaces
     public interface ICarService
     {
         Task<Car> AddNewCarAsync(CarVm carVm, IEnumerable<int> carEqu);
+        Task UpdateCar(Car carToUpdate, Car carUpdated, IEnumerable<int> carEqu);
     }
 }

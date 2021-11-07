@@ -6,6 +6,7 @@ namespace DreamCar.ViewModels.VM
 {
     public class CarVm
     {
+        public int? Id { get; set; }
         public bool IsImported { get; set; }
         public bool IsDamaged { get; set; }
         public bool IsRightHandDrive { get; set; }
@@ -29,7 +30,7 @@ namespace DreamCar.ViewModels.VM
         public string GuaranteePeriodMileage { get; set; }
 
         [RegularExpression(@"^[0-9]+$", ErrorMessage = "Nieprawidłowy znak, dozwolone jedynie cyfry")]
-        [StringLength(maximumLength: 4, ErrorMessage = "To poleże może zawierać co najmniej {2} oraz maksymalnie {1} cyfr", MinimumLength = 2)]
+        [StringLength(maximumLength: 4, ErrorMessage = "To poleże może zawierać co najmniej {2} oraz maksymalnie {1} cyfr", MinimumLength = 1)]
         public string CO2Emission { get; set; }
 
         [Required(ErrorMessage = "Podanie numeru VIN pojazdu jest obowiązkowe")]

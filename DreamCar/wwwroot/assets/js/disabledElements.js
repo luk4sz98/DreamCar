@@ -1,4 +1,15 @@
-﻿$("#productionYearList").change(function () {
+﻿$(document).ready(function () {
+    $("form").each(function () {
+        $(this).find(':input').each(function () {
+            if ($(this).val() != '') {
+                $(this).removeAttr('disabled')
+                $(this).next('label').removeClass('disabled')
+            }               
+        })
+    })
+})
+
+$("#productionYearList").change(function () {
     $("#brandCar").removeAttr('disabled');
     $("#brandCarLabel").removeClass('disabled');
 });

@@ -13,13 +13,12 @@ namespace DreamCar.Services.Services
         protected readonly IMapper Mapper;
 
         protected readonly UserManager<User> UserManager;
-        public BaseService(ApplicationDbContext dbContext, IMapper mapper, ILogger logger, UserManager<User> userManager)
+        protected BaseService(ApplicationDbContext dbContext, IMapper mapper, ILogger logger, UserManager<User> userManager)
         {
             DbContext = dbContext;
             Mapper = mapper;
             Logger = logger;
             UserManager = userManager;
         }
-
     }
 }

@@ -5,9 +5,9 @@ using DreamCar.Services.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -71,6 +71,25 @@ namespace DreamCar.Services.Services
                                                         @"advertImages\\Advert " + advertId
                                                     ));
                 Directory.Delete(pathToAdvertDirectory, true);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+            }
+        }
+        public async Task DeleteImage(Guid advertId, string imageName)
+        {
+            try
+            {
+                var pathToImage =
+                    Path.GetFullPath(
+                        Path.Combine(_hostEnvironment.WebRootPath, @"advertImages\\Advert " + advertId + @"\\" + imageName));
+                var image = await DbContext.Images.FirstOrDefaultAsync(img => img.AdvertId == advertId && img.FileName == imageName);
+                DbContext.Images.Remove(image);
+
+                File.Delete(pathToImage);
+
+                await DbContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {

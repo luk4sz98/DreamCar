@@ -1,15 +1,15 @@
-﻿<div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
+﻿<div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="true" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
     <div class="offcanvas-header">
         <button type="button" class="btn-close text-reset ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body text-center">
         <div class="mb-3">
-            <a class="btn btn-primary" id="addAdvertButton" asp-controller="Advert" asp-action="AddNewAdvert">
+            <a class="btn btn-primary" id="addAdvertButton" asp-controller="Advert" asp-action="AddOrEdit">
                 Dodaj ogłoszenie
             </a>
         </div>
         <div class="mb-3">
-            <a class="btn btn-primary d-block w-100" id="menuButton" asp-controller="Advert" asp-action="UserAdverts">Ogłoszenia</a>
+            <a class="btn btn-primary d-block w-100" id="menuButton" asp-controller="Advert" asp-action="ActiveAdverts">Ogłoszenia</a>
         </div>
         <div class="mb-3">
             <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

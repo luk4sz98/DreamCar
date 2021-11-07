@@ -1,4 +1,5 @@
 ﻿using DreamCar.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using System;
@@ -10,10 +11,12 @@ namespace DreamCar.Services.Services
     public class ReCaptchaService: HttpClient, IReCaptchaService
     { 
         private readonly ILogger _logger;
+        private readonly IConfiguration _config;
 
-        public ReCaptchaService(ILogger logger)
+        public ReCaptchaService(ILogger logger, IConfiguration configuration)
         {
-            BaseAddress = new Uri("https://www.google.com/recaptcha/api/siteverify");
+            _config = configuration;
+            BaseAddress = new Uri(GetUrl());
             _logger = logger;
         }
 
@@ -33,5 +36,7 @@ namespace DreamCar.Services.Services
                 return false;
             }
         }
+
+        private string GetUrl() => _config.GetValue<string>("ReCaptchaUrl");
     }
 }

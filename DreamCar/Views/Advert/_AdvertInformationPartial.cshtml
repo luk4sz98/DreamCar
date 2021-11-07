@@ -1,5 +1,6 @@
 ﻿@model AdvertVm
 @using DreamCar.Model.DataModels.Enums
+@using System.Globalization;
 
 <section class="additionalEquipment">
     <div class="text-center">
@@ -9,6 +10,9 @@
         <div class="container g-0">
             <div class="row carSection">
                 <h5 class="text-center">Dane ogłoszenia</h5>
+                <div class="d-none">
+                    <input asp-for="AdvertId" id="advertId" />
+                </div>
                 <div class="form-floating col-12 mb-2">
                     <input data-bs-toggle="tooltip" data-bs-placement="right" title="To tekst, który razem z marką i modelem pojazdu tworzy tytuł ogłoszenia." data-bs-animation="true" id="title" asp-for="Title" placeholder="Tytuł" class="form-control" style="border-radius: 1rem;" />
                     <label class="form-label" for="title">Tytuł ogłoszenia</label>
@@ -23,7 +27,18 @@
             <div class="row carSection">
                 <h5 class="text-center">Informacje o cenie</h5>
                 <div class="form-floating col-12 col-lg-3 mb-2">
-                    <input required id="price" asp-for="Price" placeholder="Cena" class="form-control" style="border-radius: 1rem;" />
+                    @{
+                        if (Model is not null && Model.Brutto)
+                        {
+                            var price = decimal.Round(decimal.Multiply(Convert.ToDecimal(Model.Price), (decimal)0.77), 2, MidpointRounding.ToNegativeInfinity);
+                            <input value="@price" required id="price" asp-for="Price" placeholder="Cena" class="form-control" style="border-radius: 1rem;" />
+                        }
+                        else
+                        {
+                            <input required id="price" asp-for="Price" placeholder="Cena" class="form-control" style="border-radius: 1rem;" />
+                        }
+                    }
+
                     <label class="form-label" for="price">Cena <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
                     <span class="text-danger" asp-validation-for="Price"></span>
                 </div>

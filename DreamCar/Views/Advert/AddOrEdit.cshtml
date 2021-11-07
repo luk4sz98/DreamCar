@@ -1,4 +1,4 @@
-﻿@model AddAdvertVm
+﻿@model AddOrEditAdvertVm
 @using DreamCar.Services.Services
 
 @{
@@ -58,32 +58,87 @@
                     </div>
                 </div>
             </div>
-            <form id="addAdvertForm" asp-action="AddNewAdvert" asp-controller="Advert" method="post" enctype="multipart/form-data">
-                <h4 class="text-center">Formularz składa się z 3 etapów, wypełnij wszystkie wymagane pola</h4>
+            <form id="addAdvertForm" asp-action="AddOrEdit" asp-controller="Advert" method="post" enctype="multipart/form-data">
+                @{
+                    if (Model != null)
+                    {
+                        <h3 class="text-center infoHeader">Edycja ogłoszenia</h3>
+                    }
+                    else
+                    {
+                        <h3 class="text-center infoHeader">Dodawanie ogłoszenia</h3>
+                        <h4 class="text-center">Formularz składa się z 5 etapów, wypełnij wszystkie wymagane pola</h4>
+                    }
+                }
                 <hr />
                 <div class="row">
                     <div class="tab">
-                        <partial name="_BasicCarInformationPartial" />
+                        @{
+                            if (Model is not null)
+                            {
+                                await Html.RenderPartialAsync("_BasicCarInformationPartial", Model.Car);
+                            }
+                            else
+                            {
+                                await Html.RenderPartialAsync("_BasicCarInformationPartial");
+                            }
+                        }
                     </div>
                 </div>
                 <div class="row">
                     <div class="tab">
-                        <partial name="_AdditionalCarEquipmentPartial" />
+                        @{
+                            if (Model is not null)
+                            {
+                                await Html.RenderPartialAsync("_AdditionalCarEquipmentPartial", Model.Equipments);
+                            }
+                            else
+                            {
+                                await Html.RenderPartialAsync("_AdditionalCarEquipmentPartial");
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="tab" id="carImages">
+                        @{
+                            if (Model is not null)
+                            {
+                                await Html.RenderPartialAsync("~/Views/Image/_CarImagesUploadPartial.cshtml", Model.ImagesUploaded);
+                            }
+                            else
+                            {
+                                await Html.RenderPartialAsync("~/Views/Image/_CarImagesUploadPartial.cshtml");
+                            }
+                        }
+                    </div>
+                 </div>
+                <div class="row">
+                    <div class="tab">
+                        @{
+                            if (Model is not null)
+                            {
+                                await Html.RenderPartialAsync("_AdditionalCarInformationPartial", Model.Car);
+                            }
+                            else
+                            {
+                                await Html.RenderPartialAsync("_AdditionalCarInformationPartial");
+                            }
+                        }
                     </div>
                 </div>
                 <div class="row">
                     <div class="tab">
-                        <partial name="_CarImagesUploadPartial" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="tab">
-                        <partial name="_AdditionalCarInformationPartial" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="tab">
-                        <partial name="_AdvertInformationPartial" />
+                        @{
+                            if (Model is not null)
+                            {
+                                await Html.RenderPartialAsync("_AdvertInformationPartial", Model.Advert);
+                            }
+                            else
+                            {
+                                await Html.RenderPartialAsync("_AdvertInformationPartial");
+                            }
+                        }
                     </div>
                 </div>
                 <div class="float-start">
@@ -144,6 +199,14 @@
                     scrollTop: $(".otherEqu").offset().top
                 }, 'slow');
             }
+        })
+        $("img").click(async function () {
+            const advertId = $("#advertId").val();
+            const imageName = $(this).attr('src').substr($(this).attr('src').lastIndexOf('/') + 1)
+            const result = await $.get("/Image/DeleteImage", $.param({
+                advertId: advertId, imageName: imageName
+            }))
+            $("#carImages").html(result)
         })
     </script>
     <script src="~/assets/js/autoCompleteInputFields.js"></script>
