@@ -179,8 +179,8 @@ $(document).ready(function () {
             }
         ],
         lengthMenu: [
-            [2, 10, 25, 50, -1],
-            [2, 10, 25, 50, "wszystkie"]
+            [5, 10, 25, 50, -1],
+            [5, 10, 25, 50, "wszystkie"]
         ],
         conditionalPaging: {
             style: 'fade',
