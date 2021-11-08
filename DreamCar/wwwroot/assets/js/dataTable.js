@@ -34,7 +34,62 @@ $("#deleteAdvertButton").click(function () {
         }
     })
 })
+
 $(document).ready(function () {
+    (function (window, document, $) {
+        $(document).on('init.dt', function (e, dtSettings) {
+            if (e.namespace !== 'dt') {
+                return;
+            }
+
+            var options = dtSettings.oInit.conditionalPaging || $.fn.dataTable.defaults.conditionalPaging;
+
+            if ($.isPlainObject(options) || options === true) {
+                var config = $.isPlainObject(options) ? options : {},
+                    api = new $.fn.dataTable.Api(dtSettings),
+                    speed = 'slow',
+                    conditionalPaging = function (e) {
+                        var $paging = $(api.table().container()).find('div.dataTables_paginate'),
+                            pages = api.page.info().pages;
+
+                        if (e instanceof $.Event) {
+                            if (pages <= 1) {
+                                if (config.style === 'fade') {
+                                    $paging.stop().fadeTo(speed, 0);
+                                }
+                                else {
+                                    $paging.css('visibility', 'hidden');
+                                }
+                            }
+                            else {
+                                if (config.style === 'fade') {
+                                    $paging.stop().fadeTo(speed, 1);
+                                }
+                                else {
+                                    $paging.css('visibility', '');
+                                }
+                            }
+                        }
+                        else if (pages <= 1) {
+                            if (config.style === 'fade') {
+                                $paging.css('opacity', 0);
+                            }
+                            else {
+                                $paging.css('visibility', 'hidden');
+                            }
+                        }
+                    };
+
+                if (config.speed !== undefined) {
+                    speed = config.speed;
+                }
+
+                conditionalPaging();
+
+                api.on('draw.dt', conditionalPaging);
+            }
+        });
+    })(window, document, jQuery);
     $.fn.dataTable.moment('DD/MM/YYYY');
     $("table").DataTable({
         clientSide: true,
@@ -76,7 +131,7 @@ $(document).ready(function () {
         },
         dom: "<'row'<'col-12'B>>" +
             "<'row g-0'<'col-12 col-md-6'l><'col-12 col-md-6'f>>" +
-            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 mt-3'tr>>" +
             "<'row'<'col-sm-12 col-md-5 d-flex justify-content-start align-items-start mb-3 mb-md-0'i><'col-sm-12 col-md-7 d-flex justify-content-center justify-content-md-end'p>>",
         buttons: [
             {
@@ -124,8 +179,12 @@ $(document).ready(function () {
             }
         ],
         lengthMenu: [
-            [5, 10, 25, 50, -1],
-            [5, 10, 25, 50, "wszystkie"]
-        ]
+            [2, 10, 25, 50, -1],
+            [2, 10, 25, 50, "wszystkie"]
+        ],
+        conditionalPaging: {
+            style: 'fade',
+            speed: 500
+        }
     })
 })
