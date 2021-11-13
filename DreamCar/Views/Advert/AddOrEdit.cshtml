@@ -200,7 +200,8 @@
                 }, 'slow');
             }
         })
-        $("img").click(async function () {
+
+        $('#carImages').on('click', 'img', async function () {
             const advertId = $("#advertId").val();
             const imageName = $(this).attr('src').substr($(this).attr('src').lastIndexOf('/') + 1)
             const result = await $.get("/Image/DeleteImage", $.param({
