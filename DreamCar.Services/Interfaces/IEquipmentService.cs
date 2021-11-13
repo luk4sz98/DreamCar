@@ -6,6 +6,6 @@ namespace DreamCar.Services.Interfaces
 {
     public interface IEquipmentService
     {
-        Task<IEnumerable<EquipmentVm>> GetEquipmentsAsync();
+        Task<IEnumerable<EquipmentVm>> GetEquipmentsAsync(IEnumerable<int> equIds = null);
     }
 }

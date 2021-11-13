@@ -21,5 +21,6 @@ namespace DreamCar.ViewModels.VM
         public bool VAT { get; set; }
         public IEnumerable<ImageVm> Images { get; set; }
         public CarVm Car { get; set; }
+        public IEnumerable<EquipmentVm> Equipment { get; set; }
     }
 }

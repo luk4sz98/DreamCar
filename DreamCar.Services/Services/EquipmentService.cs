@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DreamCar.Services.Services
@@ -23,12 +24,21 @@ namespace DreamCar.Services.Services
         {
 
         }
-        public async Task<IEnumerable<EquipmentVm>> GetEquipmentsAsync()
+        public async Task<IEnumerable<EquipmentVm>> GetEquipmentsAsync(IEnumerable<int> equIds = null)
         {
             try
             {
-                var equipments = await DbContext.Equipment.ToListAsync();
-                
+                IEnumerable<Equipment> equipments = null;
+                if (equIds is not null && equIds.Any()) {
+                    equipments = await DbContext.Equipment
+                        .Where(equ => equIds.Contains(equ.Id))
+                        .ToListAsync();
+                }
+                else
+                {
+                   equipments = await DbContext.Equipment.ToListAsync();
+                }
+                               
                 return Mapper.Map<IEnumerable<EquipmentVm>>(equipments);
              }
             catch (Exception ex)

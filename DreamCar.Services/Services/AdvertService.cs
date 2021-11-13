@@ -20,6 +20,7 @@ namespace DreamCar.Services.Services
         private readonly IHttpContextAccessor _httpContext;
         private readonly IImageService _imageService;
         private readonly ICarService _carService;
+        private readonly IEquipmentService _equipmentService;
 
         public AdvertService(
             ApplicationDbContext dbContext,
@@ -28,12 +29,14 @@ namespace DreamCar.Services.Services
             UserManager<User> userManager,
             IHttpContextAccessor httpContext,
             IImageService imageService,
-            ICarService carService)
+            ICarService carService,
+            IEquipmentService equipmentService)
             : base(dbContext, mapper, logger, userManager)
         {
             _httpContext = httpContext;
             _imageService = imageService;
             _carService = carService;
+            _equipmentService = equipmentService;
         }
 
         public async Task<(bool, string)> AddOrEditAdvertAsync(AddOrEditAdvertVm advertVm)
@@ -178,6 +181,31 @@ namespace DreamCar.Services.Services
                     ImagesUploaded = new ImageUploadedVm { ImagesSaved = Mapper.Map<IEnumerable<ImageVm>>(advert.Images)}
                 };
                 return addOrEditAdvert;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return null;
+            }
+        }
+
+        public async Task<UserAdvertVm> GetAdvertAsync(Guid advertId)
+        {
+            try
+            {
+                var advertEntity = await DbContext.Adverts.FirstOrDefaultAsync(ad => ad.Id == advertId);
+                
+                if (advertEntity is null)
+                {
+                    throw new ArgumentException($"Nie ma ogłoszenia z tym id: {advertId}");
+                }
+
+                var userAdvert = Mapper.Map<UserAdvertVm>(advertEntity);
+                var equIds = advertEntity.Car.CarEquipment
+                    .Select(equId => equId.EquipmentId)
+                    .AsEnumerable();
+                userAdvert.Equipment = await _equipmentService.GetEquipmentsAsync(equIds);
+                return userAdvert;
             }
             catch (Exception ex)
             {

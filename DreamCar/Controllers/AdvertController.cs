@@ -184,5 +184,22 @@ namespace DreamCar.Web.Controllers
                 return Json(new { redirectToUrl = Url.Action("ActiveAdverts", "Advert") });
             }
         }
+
+        [HttpGet]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GetAdvert(Guid advertId)
+        {
+            try
+            {
+                var advert = await _advertService.GetAdvertAsync(advertId);
+                return View("Advert", advert);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                TempData["GetAdvertError"] = "Coś poszło nie tak, spróbuj ponownie";
+                return RedirectToAction("Index", "Home");
+            }
+        }
     }
 }
