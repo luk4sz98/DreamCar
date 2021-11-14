@@ -32,7 +32,11 @@
                 }
             </td>
             <td class="align-middle col-4 col-sm-4 col-md-2">
-                @advert.Title
+                <a data-bs-toggle="tooltip" data-bs-placement="top" title="Naciśnij by przejść do ogłoszenia" data-bs-animation="true" class="advertLink"
+                   asp-action="GetAdvert" asp-controller="Advert" asp-route-advertId="@advert.Id" 
+                   style="text-decoration:none;color:inherit !important;">
+                    @advert.Title
+                </a>
             </td>
             <td class="align-middle col-3 col-sm-2" style="font-size:25px; font-weight:500;">@advert.Price</td>
             <td class="align-middle d-none d-md-table-cell col">@advert.Currency</td>

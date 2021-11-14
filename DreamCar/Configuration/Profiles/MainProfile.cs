@@ -50,9 +50,13 @@ namespace DreamCar.Web.Configuration.Profiles
 
             CreateMap<Image, ImageVm>()
                 .ForMember(dest => dest.Name, y => y.MapFrom(src => src.FileName));
+
+            CreateMap<User, UserVm>();
+
             CreateMap<Advert, UserAdvertVm>()
                 .ForMember(dest => dest.Images, y => y.MapFrom(src => src.Images))
-                .ForMember(dest => dest.Car, y => y.MapFrom(src => src.Car));
+                .ForMember(dest => dest.Car, y => y.MapFrom(src => src.Car))
+                .ForMember(dest => dest.User, y => y.MapFrom(src => src.User));
         }
     }
 }

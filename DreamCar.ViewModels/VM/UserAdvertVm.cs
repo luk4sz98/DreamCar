@@ -22,5 +22,6 @@ namespace DreamCar.ViewModels.VM
         public IEnumerable<ImageVm> Images { get; set; }
         public CarVm Car { get; set; }
         public IEnumerable<EquipmentVm> Equipment { get; set; }
+        public UserVm User { get; set; }
     }
 }

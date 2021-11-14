@@ -1,0 +1,225 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using DreamCar.Model.DataModels
+@using DreamCar.Services.Services.Extensions
+@using System.ComponentModel.DataAnnotations
+@model UserAdvertVm
+@inject UserManager<User> UserManager
+@inject SignInManager<User> SignManager
+
+<style>
+    .carousel-control-prev-icon, .carousel-control-next-icon {
+        width: 45px;
+        height: 45px;
+        font-weight: bold !important;
+    }
+
+    #carouselCarImages {
+        background-color: #a9a9a9;
+        height: 500px;
+    }
+
+    /* Indicators list style */
+    .carousel-indicators {
+        display: flex;
+        justify-content: start;
+        align-items: end;
+        margin: 0 auto;
+        width: 100%;
+    }
+        /* Indicators list style */
+        .carousel-indicators li {
+            border: medium none;
+            border-radius: 0;
+            height: 54px;
+            width: 100px;
+            margin-left: 20px !important;
+            margin-right: 50px !important;
+        }
+        /* Indicators images style */
+        .carousel-indicators img {
+            border: 2px solid #FFFFFF;
+            float: left;
+            height: 54px;
+            width: 100px;
+            opacity: 0.75;
+        }
+            /* Indicators images style */
+            .carousel-indicators img:hover {
+                opacity: 1;
+            }
+        /* Indicators active image style */
+        .carousel-indicators .active img {
+            border: 2px solid #428BCA;
+            opacity: 1;
+        }
+
+    #currency {
+        font-size: 15px;
+    }
+
+    #price {
+        color: lightseagreen;
+    }
+
+    .userInfo {
+        box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+        padding: 15px;
+        border-radius: 0.5rem;
+        width: 100%;
+    }
+
+    i {
+        font-size: 20px;
+    }
+
+    .btn {
+        box-shadow: none;
+        text-shadow: none;
+        padding: 7px;
+        border-radius: 2rem;
+        opacity: 1;
+    }
+</style>
+
+<!-- Message Modal -->
+
+
+<div class="container mt-3 gap-0">
+    <div class="row">
+        <div class="col-md-8 d-flex flex-column">
+            @if (Model.Images.Count() != 0)
+            {
+                <div id="carouselCarImages" class="carousel slide" data-interval="false" data-ride="carousel" data-pause="hover">
+                    <ol class="carousel-indicators">
+                        <li data-bs-target="#carouselCarImages" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1">
+                            <img src="~/advertImages/Advert @Model.Id/@Model.Images.ElementAt(0).Name" class="img-responsive" style="border-radius:0.25rem;" />
+                        </li>
+                        @for (int i = 1; i < Model.Images.Count(); i++)
+                        {
+                            <li data-bs-target="#carouselCarImages" data-bs-slide-to="@i" aria-label="Slide @i">
+                                <img src="~/advertImages/Advert @Model.Id/@Model.Images.ElementAt(i).Name" class="img-responsive" style="border-radius:0.25rem;" />
+                            </li>
+                        }
+                    </ol>
+                    <div class="carousel-inner text-center">
+                        <div class="carousel-item active">
+                            <img src="~/advertImages/Advert @Model.Id/@Model.Images.ElementAt(0).Name" class="img-fluid" style="border-radius:0.25rem;" />
+                        </div>
+                        @for (int i = 1; i < Model.Images.Count(); i++)
+                        {
+                            <div class="carousel-item">
+                                <img src="~/advertImages/Advert @Model.Id/@Model.Images.ElementAt(i).Name" class="img-fluid" style="border-radius:0.25rem;" />
+                            </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselCarImages" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselCarImages" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            }
+            else
+            {
+                <span>Brak zdjęć</span>
+            }
+        </div>
+        <div class="col-md-4 d-flex justify-content-start flex-column">
+            <div class="userInfo">
+                <div class="row">
+                    <h2 style="margin: 0 !important;">@Model.Title</h2>
+                </div>
+                <div class="row g-0">
+                    @{
+                        var fuel = Model.Car.FuelType.GetAttribute<DisplayAttribute>().Name;
+                        var body = Model.Car.BodyType.GetAttribute<DisplayAttribute>().Name;
+                    }
+                    <h5 style="margin: 0 !important;" class="col-2 col-sm-6 col-lg-2">
+                        @Model.Car.ProductionYear
+                    </h5>
+                    <h5 style="margin: 0 !important;" class="col-4 col-sm-6 col-lg-4">
+                        @Model.Car.Mileage km
+                    </h5>
+                    <h5 style="margin: 0 !important;" class="col-3 col-sm-6 col-lg-3">
+                        @fuel
+                    </h5>
+
+                    <h5 style="margin: 0 !important;" class="col-3 col-sm-6 col-lg-3">
+                        @body
+                    </h5>
+                </div>
+                <div class="row mt-3">
+                    <h2 id="price">@Model.Price <span id="currency">@Model.Currency</span></h2>
+                </div>
+                <div class="row mt-5">
+                    <h4 style="font-weight: normal;">@Model.User.FirstName</h4>
+                    <div class="col-12">
+                        <i class="fas fa-user"></i>
+                        <span style="font-size: 20px;" class="ms-2">Zarejestrowany w @Model.User.RegistrationDate.Year</span>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span style="font-size: 20px;" class="ms-2">@Model.Localization</span>
+                    </div>
+                    <div class="col-12 mt-3 d-flex justify-content-center" style="font-size: 20px;">
+                        @{
+
+                            if (SignManager.IsSignedIn(User))
+                            {
+                                var userId = UserManager.GetUserId(User);
+                                if (userId == Model.User.Id.ToString())
+                                {
+                                    <button  class="btn btn-danger w-100 d-flex justify-content-center align-items-center shadow-none">
+                                        <i style="font-size: 21px;" class="far fa-envelope"></i>
+                                        <span style="font-size: 21px;" class="ms-2">Kontakt ze sprzedającym</span>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-danger w-100 d-flex justify-content-center align-items-center shadow-none">
+                                        <i style="font-size: 21px;" class="far fa-envelope"></i>
+                                        <span style="font-size: 21px;" class="ms-2">Kontakt ze sprzedającym</span>
+                                    </button>
+                                }
+                            }
+                            else
+                            {
+                                <div data-bs-toggle="tooltip" data-bs-placement="top" title="By móc wysłać wiadomość, musisz posiadać konto"
+                                     data-bs-animation="true">
+                                    <button disabled
+                                            class="btn btn-danger w-100 d-flex justify-content-center align-items-center shadow-none">
+                                        <i style="font-size: 21px;" class="far fa-envelope"></i>
+                                        <span style="font-size: 21px;" class="ms-2">Kontakt ze sprzedającym</span>
+                                    </button>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <div class="col-12 mt-3 d-flex justify-content-center">
+                        <button id="phone" class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center shadow-none">
+                            <i style="font-size: 21px;" class="fas fa-phone"></i>
+                            <span id="text" style="font-size: 21px;" class="ms-2">Wyświetl telefon</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $("#phone").on('click', function () {
+            if ($("#text").text() === "Wyświetl telefon") {
+                $("#text").html('@Model.User.PhoneNumber')
+            }
+            else {
+                $("#text").html('Wyświetl telefon')
+            }
+        })
+    </script>
+}

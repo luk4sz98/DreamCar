@@ -17,7 +17,6 @@ using System.Threading.Tasks;
 
 namespace DreamCar.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Mod, User")]
     public class AdvertController : BaseController
     {
         private readonly IEquipmentService _equipmentService;
@@ -51,6 +50,7 @@ namespace DreamCar.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Mod, User")]
         public async Task<IActionResult> AddOrEdit(List<string> errors, Guid? advertId)
         {
             if (errors.Any())
@@ -79,6 +79,7 @@ namespace DreamCar.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Mod, User")]
         public async Task<IActionResult> AddOrEdit(CarVm car, CheckedEquVm equipments, ImageUploadedVm imagesUploaded, AdvertVm advert)
         {
             if (!ModelState.IsValid)
@@ -99,7 +100,7 @@ namespace DreamCar.Web.Controllers
             if (result.Item1)
             {
                 TempData["AdvertAdded"] = true;
-                return RedirectToAction("UserAdverts");
+                return RedirectToAction("ActiveAdverts");
             }
 
             ModelState.AddModelError(string.Empty, result.Item2);
@@ -109,6 +110,7 @@ namespace DreamCar.Web.Controllers
 
         [HttpGet]
         [Route("UserAdverts/Active")]
+        [Authorize(Roles = "Admin, Mod, User")]
         public async Task<IActionResult> ActiveAdverts()
         {
             var user = await UserManager.GetUserAsync(User);
@@ -122,6 +124,7 @@ namespace DreamCar.Web.Controllers
 
         [HttpGet]
         [Route("UserAdverts/Pending")]
+        [Authorize(Roles = "Admin, Mod, User")]
         public async Task<IActionResult> PendingAdverts()
         {
             var user = await UserManager.GetUserAsync(User);
@@ -135,6 +138,7 @@ namespace DreamCar.Web.Controllers
 
         [HttpGet]
         [Route("UserAdverts/Ended")]
+        [Authorize(Roles = "Admin, Mod, User")]
         public async Task<IActionResult> EndedAdverts()
         {
             var user = await UserManager.GetUserAsync(User);
@@ -146,6 +150,7 @@ namespace DreamCar.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Mod, User")]
         public async Task<IActionResult> EndAdvert(Guid advertId)
         {
             try
@@ -166,6 +171,7 @@ namespace DreamCar.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Mod, User")]
         public async Task<IActionResult> DeleteAdvert(Guid advertId)
         {
             try
@@ -186,7 +192,7 @@ namespace DreamCar.Web.Controllers
         }
 
         [HttpGet]
-        [ValidateAntiForgeryToken]
+        [Route("Advert")]
         public async Task<IActionResult> GetAdvert(Guid advertId)
         {
             try

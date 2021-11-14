@@ -17,7 +17,7 @@ footer {
 }
 
 #brand {
-  background: url("../../assets/img/default.svg") center / auto no-repeat, #ffffff;
+  background: url("../../assets/img/default.svg");
   border-style: none;
   font-size: 40px;
   width: 125px;
@@ -29,10 +29,11 @@ footer {
 }
 
 #registrationButton {
-  border-radius: 2rem;
-  color: #ffffff;
-  margin-left: 10px;
-  background-color: lightseagreen;
+    border-radius: 2rem;
+    color: #ffffff;
+    margin-left: 10px;
+    background-color: lightseagreen;
+    border-color: lightseagreen !important;
 }
 
 @media (max-width: 765px) {
@@ -62,8 +63,8 @@ footer {
 }
 
 #registrationButton:hover {
-  background-color: #ffffff;
-  color: black;
+    background-color: #ffffff;
+    color: lightseagreen;
 }
 
 #loginButton:hover {
@@ -203,4 +204,8 @@ footer {
     right: 60px;
     z-index: 10;
     opacity: 0.92;
+}
+
+.advertLink:hover {
+    font-weight: 500;
 }

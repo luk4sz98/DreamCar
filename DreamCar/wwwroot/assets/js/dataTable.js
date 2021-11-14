@@ -120,7 +120,7 @@ $(document).ready(function () {
                 "next": "<i class='fas fa-chevron-right'></i>"
             },
             "zeroRecords": "Nie znaleziono pasujących danych",
-            "emptyTable": "Brak danych",
+            "emptyTable": "Brak ogłoszeń",
             "info": "Pozycje od _START_ do _END_ z _TOTAL_ łącznie",
             "infoEmpty": "Pozycji 0 z 0 dostępnych",
             "infoFiltered": "(filtrowanie spośród _MAX_ dostepnych pozycji)",

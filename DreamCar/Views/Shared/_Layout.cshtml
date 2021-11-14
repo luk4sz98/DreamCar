@@ -39,25 +39,9 @@
 
 <body style="font-family: Alegreya, serif;">
     <a id="scroll-to-top" href="#"><img src="~/assets/img/arrow-up.png" style="width:30px; height:30px;"/></a>
-    <nav class="navbar navbar-light navbar-expand-md" style="margin-bottom: 5px;">
-        <div class="container">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" id="brand"></a><button data-bs-toggle="collapse" class="navbar-toggler shadow-none" data-bs-target="#navcol-1" style="border: none !important; outline: none !important"><span class="visually-hidden">Toggle navigation</span><span class="icon-menu" style="border: none !important; outline: none !important"></span></button>
-            <div class="collapse navbar-collapse" id="navcol-1">
-                <ul class="navbar-nav d-xl-flex ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="search" href="#" style="font-size: 22px; margin-right:75px;">
-                            Samochody
-                            <i class="fa fa-search" style="font-size: 25px;margin-left: 8px;"></i>
-                        </a>
-                    </li>
-                </ul>
-                <partial name="_LoginPartial" />
-            </div>
-        </div>
-    </nav>
-    <partial name="_MenuPartial" />
+    <partial name="_LoginPartial" />
     @RenderBody()
-    <footer data-aos="slide-right" data-aos-duration="1200" data-aos-delay="2200" data-aos-once="true" class="footer-basic">
+    <footer class="footer-basic">
         <div class="social"></div>
         <ul class="list-inline">
             <li class="list-inline-item">
@@ -72,21 +56,29 @@
             @if (SignInManager.IsSignedIn(User))
             {
                 <li class="list-inline-item">
-                    <a class="d-none d-md-inline" asp-area="Identity" asp-page="/Account/Login">
-                        Logowanie
-                        <icon class="icon-login footer-icon"></icon>
+                    <a class="d-none d-md-inline" asp-controller="Advert" asp-action="ActiveAdverts">
+                        Ogłoszenia
                     </a>
-                    <a asp-area="Identity" asp-page="/Account/Login">
-                        <icon class="icon-login footer-icon d-md-none" data-bs-toggle="tooltip" data-bs-placement="top" title="Logowanie" data-bs-animation="true"></icon>
+                    <a asp-controller="Advert" asp-action="ActiveAdverts">
+                        <icon class="icon-login footer-icon d-md-none" data-bs-toggle="tooltip" data-bs-placement="top" title="Twoje ogłoszenia" data-bs-animation="true"></icon>
                     </a>
                 </li>
                 <li class="list-inline-item">
-                    <a class="d-none d-md-inline" asp-area="Identity" asp-page="/Account/Register">
-                        Rejestracja
-                        <icon class="icon-user-follow footer-icon"></icon>
+                    <a class="d-none d-md-inline" asp-controller="Account" asp-action="Index">
+                        Obserwowane
+                        <i class="icon-heart"></i>
                     </a>
-                    <a asp-area="Identity" asp-page="/Account/Register">
-                        <icon class="icon-user-follow footer-icon d-md-none" data-bs-toggle="tooltip" data-bs-placement="top" title="Rejestracja" data-bs-animation="true"></icon>
+                    <a asp-controller="Account" asp-action="Index">
+                        <i class="icon-heart footer-icon d-md-none" data-bs-toggle="tooltip" data-bs-placement="top" title="Obserwowane" data-bs-animation="true"></i>
+                    </a>
+                </li>
+                <li class="list-inline-item">
+                    <a class="d-none d-md-inline" asp-controller="Account" asp-action="Index">
+                        Ustawienia
+                        <i class="icon-settings"></i>
+                    </a>
+                    <a asp-controller="Account" asp-action="Index">
+                        <i class="icon-settings footer-icon d-md-none" data-bs-toggle="tooltip" data-bs-placement="top" title="Ustawienia" data-bs-animation="true"></i>
                     </a>
                 </li>
             }
