@@ -63,7 +63,7 @@
 
     .userInfo {
         box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
-        padding: 15px;
+        padding: 0 15px 15px 15px;
         border-radius: 0.5rem;
         width: 100%;
     }
@@ -83,6 +83,31 @@
 
 <!-- Message Modal -->
 
+
+<!-- Login Required Info Modal -->
+<div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-labelledby="loginRequiredModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">By móc wysłać wiadomość, musisz się zalogować</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button style="font-size: 18px;" type="button" class="btn btn-secondary w-25 shadow-none" data-bs-dismiss="modal">Powrót</button>
+                <a asp-area="Identity" asp-page="/Account/Login"
+                   asp-route-returnUrl="@Url.Action("GetAdvert", "Advert", new { advertId = Model.Id })" 
+                   style="font-size: 18px; margin-left: 15px !important;" 
+                   id="registrationButton" 
+                   class="shadow-none btn btn-primary w-25">Zaloguj</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    var userId = UserManager.GetUserId(User);
+    var isSignedIn = SignManager.IsSignedIn(User);
+}
 
 <div class="container mt-3 gap-0">
     <div class="row">
@@ -127,8 +152,32 @@
                 <span>Brak zdjęć</span>
             }
         </div>
-        <div class="col-md-4 d-flex justify-content-start flex-column">
-            <div class="userInfo">
+        <div class="col-md-4 d-flex flex-column">
+            <div class="userInfo justify-content-start">
+                <div class="d-flex justify-content-end">
+                    @if (isSignedIn)
+                    {
+                        if (userId == Model.User.Id.ToString())
+                        {
+                            <button @*disabled*@ id="follow" type="button" class="btn shadow-none" style="font-size: 20px; color: lightseagreen;">
+                                Obserwuj <i id="followIcon" class="far fa-star"></i>
+                            </button>
+                        }
+                        else
+                        {
+                            <button id="follow" type="button" class="btn shadow-none" style="font-size: 20px; color: lightseagreen;">
+                                Obserwuj <i id="followIcon" class="far fa-star"></i>
+                            </button>
+                        }
+                    }
+                    else
+                    {
+                        <!-- Przycisk dla użytkownika bez konta, być może dodanie obserwowanego ogłoszenia do ciasteczek?-->
+                        <button id="follow" type="button" class="btn shadow-none" style="font-size: 20px; color: lightseagreen;">
+                            Obserwuj <i id="followIcon" class="far fa-star"></i>
+                        </button>
+                    }
+                </div>
                 <div class="row">
                     <h2 style="margin: 0 !important;">@Model.Title</h2>
                 </div>
@@ -167,12 +216,11 @@
                     <div class="col-12 mt-3 d-flex justify-content-center" style="font-size: 20px;">
                         @{
 
-                            if (SignManager.IsSignedIn(User))
+                            if (isSignedIn)
                             {
-                                var userId = UserManager.GetUserId(User);
                                 if (userId == Model.User.Id.ToString())
                                 {
-                                    <button  class="btn btn-danger w-100 d-flex justify-content-center align-items-center shadow-none">
+                                    <button disabled class="btn btn-danger w-100 d-flex justify-content-center align-items-center shadow-none">
                                         <i style="font-size: 21px;" class="far fa-envelope"></i>
                                         <span style="font-size: 21px;" class="ms-2">Kontakt ze sprzedającym</span>
                                     </button>
@@ -186,15 +234,11 @@
                                 }
                             }
                             else
-                            {
-                                <div data-bs-toggle="tooltip" data-bs-placement="top" title="By móc wysłać wiadomość, musisz posiadać konto"
-                                     data-bs-animation="true">
-                                    <button disabled
-                                            class="btn btn-danger w-100 d-flex justify-content-center align-items-center shadow-none">
-                                        <i style="font-size: 21px;" class="far fa-envelope"></i>
-                                        <span style="font-size: 21px;" class="ms-2">Kontakt ze sprzedającym</span>
-                                    </button>
-                                </div>
+                            {                                
+                                <button data-bs-toggle="modal" data-bs-target="#loginRequiredModal" class="btn btn-danger w-100 d-flex justify-content-center align-items-center shadow-none">
+                                    <i style="font-size: 21px;" class="far fa-envelope"></i>
+                                    <span style="font-size: 21px;" class="ms-2">Kontakt ze sprzedającym</span>
+                                </button>
                             }
                         }
                     </div>
@@ -219,6 +263,17 @@
             }
             else {
                 $("#text").html('Wyświetl telefon')
+            }
+        })
+
+        $("#follow").hover(function () {
+            if ($("#followIcon").hasClass('far')) {
+                $("#followIcon").removeClass('far fa-star')
+                $("#followIcon").addClass('fas fa-star')
+            }
+            else {
+                $("#followIcon").removeClass('fas fa-star')
+                $("#followIcon").addClass('far fa-star')
             }
         })
     </script>
