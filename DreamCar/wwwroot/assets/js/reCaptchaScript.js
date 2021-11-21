@@ -11,7 +11,6 @@ jQuery('button[type="button"]').click(function (e) {
     if (typeof (grecaptcha) != 'undefined') {
         var response = grecaptcha.getResponse();
         if (response.length === 0) {
-            message = 'Dokonaj walidacji reCaptcha'
             jQuery('#lblMessage').html(message);
         }
         else {

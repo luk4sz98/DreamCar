@@ -214,6 +214,23 @@ namespace DreamCar.Services.Services
             }
         }
 
+        public async Task FollowAdvert(Guid advertId, int userId)
+        {
+            try
+            {
+                await DbContext.FollowAdverts.AddAsync(new FollowAdvert { 
+                    AdvertId = advertId,
+                    UserId = userId
+                });
+
+                await DbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+            }
+        }
+
         private void UpdateAdvert(Advert advertToUpdate, Advert updatedAdvert)
         {
             try
@@ -231,6 +248,21 @@ namespace DreamCar.Services.Services
             catch (Exception ex)
             {
                 Logger.LogError(ex, ex.Message);
+            }
+        }
+
+        public async Task<bool> IsFollowedAdvert(Guid advertId, int userId)
+        {
+            try
+            {
+                var followed = await DbContext.FollowAdverts.FirstOrDefaultAsync(followed => followed.AdvertId == advertId && followed.UserId == userId);
+                if (followed is null) return false;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return false;
             }
         }
     }

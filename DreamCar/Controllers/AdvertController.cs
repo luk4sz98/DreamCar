@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DreamCar.DAL.EF;
 using DreamCar.Model.DataModels;
 using DreamCar.Services.Interfaces;
 using DreamCar.ViewModels.VM;
@@ -7,12 +6,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace DreamCar.Web.Controllers
@@ -21,6 +21,9 @@ namespace DreamCar.Web.Controllers
     {
         private readonly IEquipmentService _equipmentService;
         private readonly IAdvertService _advertService;
+        private readonly ICookiesService _cookiesService;
+        private readonly SignInManager<User> _signInManager;
+        private readonly IMemoryCache _memoryCache;
 
         private readonly SelectList _countries = new(new string[] {
             "Austria", "Belgia", "Białoruś", "Bułgaria",
@@ -42,11 +45,17 @@ namespace DreamCar.Web.Controllers
             IMapper mapper,
             IEquipmentService equipmentService,
             UserManager<User> userManager,
-            IAdvertService advertService
+            IAdvertService advertService,
+            ICookiesService cookiesService,
+            SignInManager<User> signInManager,
+            IMemoryCache memoryCache
         ) : base(logger, mapper, userManager)
         {
             _equipmentService = equipmentService;
             _advertService = advertService;
+            _cookiesService = cookiesService;
+            _signInManager = signInManager;
+            _memoryCache = memoryCache;
         }
 
         [HttpGet]
@@ -198,6 +207,27 @@ namespace DreamCar.Web.Controllers
             try
             {
                 var advert = await _advertService.GetAdvertAsync(advertId);
+                ViewBag.OthersAdvert = await _advertService.GetUserAdvertsAsync(
+                    ad => 
+                    ad.Id != advertId && 
+                    !ad.IsActive &&
+                    ad.ClosedAt == null &&
+                    ad.UserId == advert.User.Id);
+
+                var user = await UserManager.GetUserAsync(User);
+
+                if(_signInManager.IsSignedIn(User))
+                {
+                    ViewBag.IsFollowed = await _advertService.IsFollowedAdvert(advertId, user.Id);
+                }
+                else
+                {
+                    var followedAdverts = (List<Guid>)_memoryCache.Get("followedAdverts");
+                    if (followedAdverts is not null && followedAdverts.Contains(advertId))
+                        ViewBag.IsFollowed = true;
+                    else
+                        ViewBag.IsFollowed = false;
+                }
                 return View("Advert", advert);
             }
             catch (Exception ex)
@@ -205,6 +235,49 @@ namespace DreamCar.Web.Controllers
                 Logger.LogError(ex, ex.Message);
                 TempData["GetAdvertError"] = "Coś poszło nie tak, spróbuj ponownie";
                 return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpPost]
+        public async Task<HttpStatusCode> FollowAdvert(Guid advertId)
+        {
+            try
+            {
+                if (_signInManager.IsSignedIn(User))
+                {
+                    var user = await UserManager.GetUserAsync(User);
+                    await _advertService.FollowAdvert(advertId, user.Id);
+                    return HttpStatusCode.OK;
+                }
+                else
+                {
+                    var cacheExpiryOptions = new MemoryCacheEntryOptions
+                    {
+                        AbsoluteExpiration = DateTime.Now.AddDays(5),
+                        Priority = CacheItemPriority.High
+                    };
+                    if (_memoryCache.Get("followedAdverts") is null)
+                    {
+
+                        var adverts = new List<Guid>
+                        {
+                            advertId
+                        };
+                        _memoryCache.Set("followedAdverts", adverts, cacheExpiryOptions);
+                    }
+                    else
+                    {
+                        List<Guid> adverts = (List<Guid>)_memoryCache.Get("followedAdverts");
+                        adverts.Add(advertId);
+                        _memoryCache.Set("followedAdverts", adverts, cacheExpiryOptions);
+                    }
+                    return HttpStatusCode.OK;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return HttpStatusCode.InternalServerError;
             }
         }
     }

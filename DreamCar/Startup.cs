@@ -33,6 +33,7 @@ namespace DreamCar
         public void ConfigureServices(IServiceCollection services)
         {
             AesOperationService.Initiate(Configuration);
+            services.AddMemoryCache();
             services.AddAutoMapper(typeof(Startup));
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
@@ -53,6 +54,7 @@ namespace DreamCar
             services.AddScoped<IAdvertService, AdvertService>();
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<ICarService, CarService>();
+            services.AddScoped<ICookiesService, CookiesService>();
             services.Configure<AppSettingsService>(Configuration.GetSection(AppSettingsService.SectionName));
             services.AddOptions();
             services.AddScoped<IReCaptchaService, ReCaptchaService>();

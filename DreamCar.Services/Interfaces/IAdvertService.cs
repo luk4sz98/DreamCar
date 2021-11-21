@@ -16,5 +16,7 @@ namespace DreamCar.Services.Interfaces
         Task<bool> DeleteAdvertAsync(Guid advertId);
         Task<AddOrEditAdvertVm> GetAdvertToEditAsync(Guid advertId);
         Task<UserAdvertVm> GetAdvertAsync(Guid advertId);
+        Task FollowAdvert(Guid advertId, int userId);
+        Task<bool> IsFollowedAdvert(Guid advertId, int userId);
     }
 }
