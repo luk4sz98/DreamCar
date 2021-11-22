@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 
 namespace DreamCar.Services.Services
 {
@@ -39,7 +38,7 @@ namespace DreamCar.Services.Services
         /// <param name="key">key (unique indentifier)</param>  
         /// <param name="value">value to store in cookie object</param>  
         /// <param name="expireTime">expiration time</param>  
-        public void Set(string key, string value, int? expireTime)
+        public void Set(string key, string value, int? expireTime = null)
         {
             CookieOptions option = new();
             if (expireTime.HasValue)

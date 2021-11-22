@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -23,7 +22,6 @@ namespace DreamCar.Web.Controllers
         private readonly IAdvertService _advertService;
         private readonly ICookiesService _cookiesService;
         private readonly SignInManager<User> _signInManager;
-        private readonly IMemoryCache _memoryCache;
 
         private readonly SelectList _countries = new(new string[] {
             "Austria", "Belgia", "Białoruś", "Bułgaria",
@@ -47,15 +45,13 @@ namespace DreamCar.Web.Controllers
             UserManager<User> userManager,
             IAdvertService advertService,
             ICookiesService cookiesService,
-            SignInManager<User> signInManager,
-            IMemoryCache memoryCache
+            SignInManager<User> signInManager
         ) : base(logger, mapper, userManager)
         {
             _equipmentService = equipmentService;
             _advertService = advertService;
             _cookiesService = cookiesService;
             _signInManager = signInManager;
-            _memoryCache = memoryCache;
         }
 
         [HttpGet]
@@ -208,22 +204,24 @@ namespace DreamCar.Web.Controllers
             {
                 var advert = await _advertService.GetAdvertAsync(advertId);
                 ViewBag.OthersAdvert = await _advertService.GetUserAdvertsAsync(
-                    ad => 
-                    ad.Id != advertId && 
+                    ad =>
+                    ad.Id != advertId &&
                     !ad.IsActive &&
                     ad.ClosedAt == null &&
                     ad.UserId == advert.User.Id);
 
                 var user = await UserManager.GetUserAsync(User);
 
-                if(_signInManager.IsSignedIn(User))
+                if (_signInManager.IsSignedIn(User))
                 {
                     ViewBag.IsFollowed = await _advertService.IsFollowedAdvert(advertId, user.Id);
                 }
                 else
                 {
-                    var followedAdverts = (List<Guid>)_memoryCache.Get("followedAdverts");
-                    if (followedAdverts is not null && followedAdverts.Contains(advertId))
+                    var followedAdverts = _cookiesService.Get("follow");
+                    if (string.IsNullOrEmpty(followedAdverts))
+                        ViewBag.IsFollowed = false;
+                    else if (followedAdverts.Contains(advertId.ToString()))
                         ViewBag.IsFollowed = true;
                     else
                         ViewBag.IsFollowed = false;
@@ -249,35 +247,81 @@ namespace DreamCar.Web.Controllers
                     await _advertService.FollowAdvert(advertId, user.Id);
                     return HttpStatusCode.OK;
                 }
-                else
-                {
-                    var cacheExpiryOptions = new MemoryCacheEntryOptions
-                    {
-                        AbsoluteExpiration = DateTime.Now.AddDays(5),
-                        Priority = CacheItemPriority.High
-                    };
-                    if (_memoryCache.Get("followedAdverts") is null)
-                    {
 
-                        var adverts = new List<Guid>
-                        {
-                            advertId
-                        };
-                        _memoryCache.Set("followedAdverts", adverts, cacheExpiryOptions);
-                    }
-                    else
-                    {
-                        List<Guid> adverts = (List<Guid>)_memoryCache.Get("followedAdverts");
-                        adverts.Add(advertId);
-                        _memoryCache.Set("followedAdverts", adverts, cacheExpiryOptions);
-                    }
+                var followAdverts = _cookiesService.Get("follow");
+                if (string.IsNullOrEmpty(followAdverts))
+                {
+                    //by default, expire time is set to 5 days from today
+                    _cookiesService.Set("follow", advertId.ToString());
                     return HttpStatusCode.OK;
                 }
+
+                followAdverts += ";" + advertId.ToString();
+                _cookiesService.Set("follow", followAdverts);
+                
+                return HttpStatusCode.OK;
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, ex.Message);
                 return HttpStatusCode.InternalServerError;
+            }
+        }
+
+        [HttpPost]
+        public async Task<HttpStatusCode> UnfollowAdvert(Guid advertId)
+        {
+            try
+            {
+                if (_signInManager.IsSignedIn(User))
+                {
+                    var user = await UserManager.GetUserAsync(User);
+                    await _advertService.UnfollowAdvert(advertId, user.Id);
+                    return HttpStatusCode.OK;
+                }
+
+                var followAdverts = _cookiesService.Get("follow");
+                followAdverts = followAdverts.Replace(advertId.ToString(), string.Empty);
+                _cookiesService.Set("follow", followAdverts);
+
+                return HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return HttpStatusCode.InternalServerError;
+            }
+        }
+
+        [HttpGet]
+        [Route("Adverts/Follow")]
+        public async Task<IActionResult> GetFollowAdverts()
+        {
+            try
+            {
+                IEnumerable<UserAdvertVm> followAdverts;
+                if (_signInManager.IsSignedIn(User))
+                {
+                    var user = await UserManager.GetUserAsync(User);
+                    followAdverts = await _advertService.GetFollowAdvertsAsync(null, user.Id);
+                    return View("FollowAdverts", followAdverts);
+                }
+
+                var followAdvertsId = _cookiesService.Get("follow")
+                    .Split(';')
+                    .Where(id => !string.IsNullOrEmpty(id) &&
+                                 !string.Equals(id, ";"))
+                    .Select(id => Guid.Parse(id));
+
+                followAdverts = await _advertService.GetFollowAdvertsAsync(followAdvertsId, null);              
+
+                return View("FollowAdverts", followAdverts);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                TempData["GetAdvertError"] = "Coś poszło nie tak, spróbuj ponownie";
+                return RedirectToAction("Index", "Home");
             }
         }
     }

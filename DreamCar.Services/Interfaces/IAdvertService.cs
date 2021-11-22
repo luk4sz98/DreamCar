@@ -18,5 +18,7 @@ namespace DreamCar.Services.Interfaces
         Task<UserAdvertVm> GetAdvertAsync(Guid advertId);
         Task FollowAdvert(Guid advertId, int userId);
         Task<bool> IsFollowedAdvert(Guid advertId, int userId);
+        Task UnfollowAdvert(Guid advertId, int userId);
+        Task<IEnumerable<UserAdvertVm>> GetFollowAdvertsAsync(IEnumerable<Guid> followIds, int? userId);
     }
 }

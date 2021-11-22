@@ -1,81 +1,27 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using DreamCar.Model.DataModels
-@using DreamCar.Services.Services.Extensions
-@using System.ComponentModel.DataAnnotations
-@using DreamCar.Services.Services
+﻿@using DreamCar.Services.Services
 @model UserAdvertVm
-@inject UserManager<User> UserManager
-@inject SignInManager<User> SignManager
 
 <link rel='stylesheet' href='/assets/css/lc_lightbox.min.css' />
 <link rel='stylesheet' href='/assets/css/minimal.css' />
+<link rel="stylesheet" href="~/assets/css/userAdvert.css" />
 
-<style>
-    .carousel-control-prev-icon, .carousel-control-next-icon {
-        width: 45px;
-        height: 45px;
-        font-weight: bold !important;
-    }
-
-    #carouselCarImages {
-        background-color: #a9a9a9;
-        border-radius: .5rem;
-        max-height: 465px;
-    }
-
-    img {
-        max-height: 465px;
-    }
-
-    #currency {
-        font-size: 15px;
-    }
-
-    #price {
-        color: lightseagreen;
-    }
-
-    .userInfo {
-        box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
-        padding: 0 15px 15px 15px;
-        border-radius: 0.5rem;
-        width: 100%;
-    }
-
-    i {
-        font-size: 20px;
-    }
-
-    .btn {
-        box-shadow: none;
-        text-shadow: none;
-        padding: 7px;
-        border-radius: 2rem;
-        opacity: 1;
-    }
-
-    .section {
-        background-color: #fff;
-        padding: 8px 15px 15px 15px;
-        border-radius: 0.5rem;
-        box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    #map {
-        border-radius: 1rem;
-    }
-</style>
-
-<div id="followSuccess" class="alertMessage alert alert-success alert-dismissible fade " role="alert">
+<div id="followSuccess" class="alertMessage alert alert-success alert-dismissible" role="alert" style="display: none;">
     Ogłoszenie zostało dodane do obserwowanych.
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
-<div id="followError" class="alertMessage alert alert-danger alert-dismissible fade " role="alert">
+
+<div id="unfollowSuccess" class="alertMessage alert alert-success alert-dismissible" role="alert" style="display: none;">
+    Ogłoszenie zostało usunięte z obserwowanych.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<div id="followError" class="alertMessage alert alert-danger alert-dismissible" role="alert" style="display: none;">
     Wystąpił nieoczekiwany błąd, spróbuj ponownie.
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 
 <!-- Message Modal -->
+
 <!-- Login Required Info Modal -->
 <div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-labelledby="loginRequiredModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -96,442 +42,14 @@
     </div>
 </div>
 
-@{
-    var userId = UserManager.GetUserId(User);
-    var isSignedIn = SignManager.IsSignedIn(User);
-    var fuel = Model.Car.FuelType.GetAttribute<DisplayAttribute>().Name;
-    var body = Model.Car.BodyType.GetAttribute<DisplayAttribute>().Name;
-    var gearbox = Model.Car.Gearbox.GetAttribute<DisplayAttribute>().Name;
-    var drive = Model.Car.DriveType.GetAttribute<DisplayAttribute>().Name;
-    var colorType = Model.Car.ColorType.GetAttribute<DisplayAttribute>().Name;
-    var isFollowed = (bool)ViewBag.IsFollowed;
-}
-
 <div class="container mt-3 gap-0">
     <div class="row">
         <div class="col-lg-8 d-flex flex-column">
-            @if (Model.Images.Count() != 0)
-            {
-                <div class="col-12">
-                    <div id="carouselCarImages" class="carousel slide" data-interval="false" data-ride="carousel" data-pause="hover">
-                        <div class="carousel-indicators">
-                            <button type="button" data-bs-target="#carouselCarImages" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                            @for (int i = 1; i < Model.Images.Count(); i++)
-                            {
-                                <button type="button" data-bs-target="#carouselCarImages" data-bs-slide-to="@i" aria-label="Slide @i"></button>
-                            }
-                        </div>
-                        <div class="carousel-inner text-center">
-                            <div id="gallery1">
-                                <div class="carousel-item active">
-                                    <a href="~/advertImages/Advert @Model.Id/@Model.Images.ElementAt(0).Name">
-                                        <img src="~/advertImages/Advert @Model.Id/@Model.Images.ElementAt(0).Name" class="img-fluid" style="border-radius:0.25rem;" />
-                                    </a>
-                                </div>
-                                @for (int i = 1; i < Model.Images.Count(); i++)
-                                {
-                                    <div class="carousel-item">
-                                        <a href="~/advertImages/Advert @Model.Id/@Model.Images.ElementAt(i).Name">
-                                            <img src="~/advertImages/Advert @Model.Id/@Model.Images.ElementAt(i).Name" class="img-fluid" style="border-radius:0.25rem;" />
-                                        </a>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselCarImages" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselCarImages" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                </div>
-
-            }
-            else
-            {
-                <div class="col-12">
-                    <span>Brak zdjęć</span>
-                </div>
-            }
-            <div class="col-12 d-flex justify-content-end ">
-                <span>@Model.CreatedAt.ToString("dddd, dd MMMM yyyy")</span>
-            </div>
-            <div class="col-12 section mt-5 mb-3">
-                <div data-bs-toggle="tooltip" data-bs-placement="left" title="Naciśnij by rozwinąć">
-                    <button class="btn shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#detailsContent" aria-expanded="true" aria-controls="detailsContent">
-                        <h4 id="details" class="d-flex justify-content-center justify-content-md-start align-items-center pt-2">
-                            <img style="height:32px; width:32px;" src="https://img.icons8.com/external-kiranshastry-gradient-kiranshastry/64/000000/external-car-automobile-kiranshastry-gradient-kiranshastry-10.png" />
-                            <span class="ms-2">Szczegóły pojazdu</span>
-                        </h4>
-                    </button>
-                </div>
-                <div class="flex-row pt-3 ps-2 collapse show" id="detailsContent">
-                    <div class="row g-0 row-cols-2 row-cols-md-3 row-cols-lg-4">
-                        <div class="col-6 col-md-4 col-lg-3 mb-2">
-                            <span>Marka<strong><span class="ms-2">@Model.Car.Brand</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3 mb-2">
-                            <span>Model<strong><span class="ms-2">@Model.Car.Model</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Wersja<strong><span class="ms-2">@Model.Car.Version</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Generacja<strong><span class="ms-2">@Model.Car.Generation</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Rok produckji<strong><span class="ms-2">@Model.Car.ProductionYear</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Przebieg<strong><span class="ms-2">@Model.Car.Mileage km</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Pojemność<strong><span class="ms-2">@Model.Car.EngineCapacity cm<sup>3</sup></span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Paliwo<strong><span class="ms-2">@fuel</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Moc<strong><span class="ms-2">@Model.Car.Power KM</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Skrzynia biegów<strong><span class="ms-2">@gearbox</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Napęd<strong><span class="ms-2">@drive</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Filtr cząstek stałych<strong><span class="ms-2">@(Model.Car.DPF ? "Tak" : "Nie")</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Typ nadowzia<strong><span class="ms-2">@body</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Emisja CO2<strong><span class="ms-2">@(int.Parse(Model.Car.CO2Emission) == 0 ? "-" : Model.Car.CO2Emission)</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Liczba drzwi<strong><span class="ms-2">@Model.Car.Doors</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Liczba miejsc<strong><span class="ms-2">@(Model.Car.Seats == 0 ? "-" : Model.Car.Seats)</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Kolor<strong><span class="ms-2">@Model.Car.Color</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Rodzaj koloru<strong><span class="ms-2">@colorType</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  col-lg-3  mb-2">
-                            <span>Faktura VAT<strong><span class="ms-2">@(Model.VAT ? "Tak" : "Nie")</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>
-                                Okres gwarancji producenta<strong>
-                                    @{
-                                        if (string.IsNullOrEmpty(Model.Car.GuaranteePeriodMileage))
-                                        {
-                                            if (string.IsNullOrEmpty(Model.Car.DayGuaranteePeriod) ||
-                                                string.IsNullOrEmpty(Model.Car.MonthGuaranteePeriod) ||
-                                                string.IsNullOrEmpty(Model.Car.YearGuaranteePeriod))
-                                            {
-                                                <span class="ms-2">-</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="ms-2">@(Model.Car.DayGuaranteePeriod + "/" + Model.Car.MonthGuaranteePeriod + "/" + Model.Car.YearGuaranteePeriod)</span>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <span class="ms-2">@Model.Car.GuaranteePeriodMileage km</span>
-                                        }
-                                    }
-                                </strong>
-                            </span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Numer rejestracyjny<strong><span class="ms-2">@(string.IsNullOrEmpty(Model.Car.RegistrationNumber) ? "-" : Model.Car.RegistrationNumber)</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Zarejestrowany w Polsce<strong><span class="ms-2">@(Model.Car.RegisterdInPoland ? "Tak" : "Nie")</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Pierwszy właściciel<strong><span class="ms-2">@(Model.Car.FirstOwner ? "Tak" : "Nie")</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Bezwypadkowy<strong><span class="ms-2">@(Model.Car.AccidentFree ? "Tak" : "Nie")</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Serisowany w ASO<strong><span class="ms-2">@(Model.Car.ASOServiced ? "Tak" : "Nie")</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Uszkodzony<strong><span class="ms-2">@(Model.Car.IsDamaged ? "Tak" : "Nie")</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Importowany<strong><span class="ms-2">@(Model.Car.IsImported ? "Tak" : "Nie")</span></strong></span>
-                        </div>
-                        <div class="col-6 col-md-4 col-lg-3  mb-2">
-                            <span>Anglik<strong><span class="ms-2">@(Model.Car.IsRightHandDrive ? "Tak" : "Nie")</span></strong></span>
-                        </div>
-                        <div class="col-12 mb-2">
-                            <span>VIN <strong><span class="ms-2" id="vin">Zweryfikuj</span></strong></span>
-                            <div id="reCaptcha" class="mt-2">
-                                <div class="mb-3">
-                                    <div id="recaptchaContainer">
-                                        <div class="g-recaptcha" data-callback="reCaptchaCallbackAdvert" data-language="pl" data-sitekey="@AesOperationService.GetReCaptchaSiteKey()"></div>
-                                    </div>
-                                    <span id="lblMessage" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 carSection mb-3">
-                <div data-bs-toggle="tooltip" data-bs-placement="left" title="Naciśnij by rozwinąć">
-                    <button class="btn shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#equContent" aria-expanded="true" aria-controls="equContent">
-                        <h4 id="equipments" class="d-flex justify-content-center justify-content-md-start align-items-center pt-2">
-                            <img style="height:32px; width:32px;" src="https://img.icons8.com/external-kiranshastry-gradient-kiranshastry/64/000000/external-car-automobile-kiranshastry-gradient-kiranshastry-14.png" />
-                            <span class="ms-2">Wyposażenie pojazdu</span>
-                        </h4>
-                    </button>
-                </div>
-                <div class="flex-row pt-3 ps-2 collapse show" id="equContent">
-                    <div class="row g-0 row-cols-2 row-cols-md-3">
-                        @{
-                            foreach (var equ in Model.Equipment)
-                            {
-                                <div class="col-6 col-md-4 mb-2 d-flex align-items-center">
-                                    <i class="fa fa-check-circle-o" style="color:lightseagreen; font-size: 22px;"></i>
-                                    <strong><span class="ms-2">@equ.Description</span></strong>
-                                </div>
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 carSection mb-3">
-                <div data-bs-toggle="tooltip" data-bs-placement="left" title="Naciśnij by rozwinąć">
-                    <button class="btn shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#descriptionContent" aria-expanded="true" aria-controls="descriptionContent">
-                        <h4 id="description" class="d-flex justify-content-center justify-content-md-start align-items-center pt-2">
-                            <i class="fa fa-file-text-o ms-2" style="font-size: 24px; color: #58bac2 "></i>
-                            <span class="ms-2">Opis</span>
-                        </h4>
-                    </button>
-                </div>
-                <div class="flex-row pt-3 ps-2 collapse show" id="descriptionContent">
-                    @{
-                        if (string.IsNullOrEmpty(Model.Description))
-                        {
-                            <div class="d-flex justify-content-center align-items-center">
-                                <h5>Brak opisu</h5>
-                            </div>
-                        }
-                        else
-                        {
-                            <span>@Model.Description</span>
-                        }
-                    }
-                </div>
-            </div>
-            <div class="col-12 carSection mb-3">
-                <div data-bs-toggle="tooltip" data-bs-placement="left" title="Naciśnij by rozwinąć">
-                    <button class="btn shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#locationContent" aria-expanded="true" aria-controls="locationContent">
-                        <h4 id="location" class="d-flex justify-content-center justify-content-md-start align-items-center pt-2">
-                            <i class="icon-location-pin ms-2" style="font-size: 24px; color: #58bac2 "></i>
-                            <span class="ms-2">Lokalizacja</span>
-                        </h4>
-                    </button>
-                </div>
-                <div class="col-12 pt-3 ps-2 collapse show" id="locationContent">
-                    <div id="map" style="height: 400px;"></div>
-                </div>
-            </div>
-            <div class="col-12 carSection mb-3">
-                <div data-bs-toggle="tooltip" data-bs-placement="left" title="Naciśnij by rozwinąć">
-                    <button class="btn shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#othersContent" aria-expanded="true" aria-controls="othersContent">
-                        <h4 id="others" class="d-flex justify-content-center justify-content-md-start align-items-center pt-2">
-                            <img style="height:32px; width:32px;" src="https://img.icons8.com/external-kiranshastry-gradient-kiranshastry/64/000000/external-car-automobile-kiranshastry-gradient-kiranshastry-1.png" />
-                            <span class="ms-2">Inne ogłoszenia sprzedającego</span>
-                        </h4>
-                    </button>
-                </div>
-                <div class="col-12 pt-3 ps-2 collapse show" id="othersContent">
-                    @{
-                        IEnumerable<UserAdvertVm> otherAdverts = ViewBag.OthersAdvert;
-                        if (!otherAdverts.Any())
-                        {
-                            <div class="d-flex justify-content-center align-items-center">
-                                <h5>Brak innych ogłoszeń</h5>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="flex-row ps-2">
-                                <div class="row row-cols-2 row-cols-md-3">
-                                    @foreach (var advert in otherAdverts)
-                                    {
-                                        IEnumerable<ImageVm> othersImages = advert.Images;
-                                        <div class="col-6 col-md-4 col-xl-3">
-                                            <div class="card">
-                                                @if (othersImages.Any())
-                                                {
-                                                    <div class="col-12">
-                                                        <div id="carouselOtherImages" style="height:120px;" class="carousel slide" data-bs-ride="carousel">
-                                                            <div class="carousel-inner text-center">
-                                                                <div id="gallery2">
-                                                                    <div class="carousel-item active">
-                                                                        <a href="~/advertImages/Advert @advert.Id/@othersImages.ElementAt(0).Name">
-                                                                            <img src="~/advertImages/Advert @advert.Id/@othersImages.ElementAt(0).Name" class="img-fluid card-img-top" style="max-height:120px;border-radius:0.25rem;" />
-                                                                        </a>
-                                                                    </div>
-                                                                    @for (int i = 1; i < othersImages.Count(); i++)
-                                                                    {
-                                                                        <div class="carousel-item">
-                                                                            <a href="~/advertImages/Advert @advert.Id/@othersImages.ElementAt(i).Name">
-                                                                                <img src="~/advertImages/Advert @advert.Id/@othersImages.ElementAt(i).Name" class="img-fluid card-img-top" style="max-height:120px;border-radius:0.25rem;" />
-                                                                            </a>
-                                                                        </div>
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                else
-                                                {
-                                                    <div class="col-12 d-flex justify-content-center align-items-center">
-                                                        <span class="card-img-top">Brak zdjęć</span>
-                                                    </div>
-                                                }
-                                                <div class="card-body">
-                                                    <h5 class="card-title">@advert.Title</h5>
-                                                    <p id="price" style="font-size: 1.5rem; font-weight: 600;" class="card-text">@advert.Price <span style="font-size: .75rem">@advert.Currency</span></p>
-                                                    <div class="d-flex justify-content-center">
-                                                        <a asp-action="GetAdvert"
-                                                           asp-controller="Advert"
-                                                           asp-route-advertId="@advert.Id"
-                                                           class="btn btn-primary shadow-none d-flex justify-content-center align-items-center"
-                                                           style="width: 80%; height: 35px;">
-                                                            Przejdź
-                                                        </a>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        }
-                    }
-                </div>
-            </div>
+            <partial name="_SellerAdvertPartial" />
             <div class="mb-5"></div>
-        </div>
+        </div>       
         <div class="col-lg-4 d-flex flex-column mb-5">
-            <div class="userInfo justify-content-start">
-                <div class="d-flex justify-content-end">
-                    @if (isSignedIn)
-                    {
-                        if (userId == Model.User.Id.ToString())
-                        {
-                            <button @*disabled*@ id="follow" type="button" class="btn shadow-none" style="font-size: 20px; color: lightseagreen;">
-                                Obserwuj <i id="followIcon" class="far fa-star"></i>
-                            </button>
-                        }
-                    }
-                    else
-                    {
-                        @*if (isFollowed)
-                        {
-                            <button id="follow" type="button" class="btn shadow-none" style="font-size: 20px; color: lightseagreen;">
-                                Obserwuj <i id="followIcon" class="fas fa-star"></i>
-                            </button>
-                        }
-                        else
-                        {
-                            <button id="follow" type="button" class="btn shadow-none" style="font-size: 20px; color: lightseagreen;">
-                                Obserwuj <i id="followIcon" class="far fa-star"></i>
-                            </button>
-                        }*@
-                        <button id="follow" type="button" class="btn shadow-none" style="font-size: 20px; color: lightseagreen;">
-                            Obserwuj <i id="followIcon" class="far fa-star"></i>
-                        </button>
-                    }
-                </div>
-                <div class="row">
-                    <h2 style="margin: 0 !important;">@Model.Title</h2>
-                </div>
-                <div class="row g-0">
-                    <h5 style="margin: 0 !important;" class="col-2 col-sm-6 col-lg-2">
-                        @Model.Car.ProductionYear
-                    </h5>
-                    <h5 style="margin: 0 !important;" class="col-4 col-sm-6 col-lg-4">
-                        @Model.Car.Mileage km
-                    </h5>
-                    <h5 style="margin: 0 !important;" class="col-3 col-sm-6 col-lg-3">
-                        @fuel
-                    </h5>
-
-                    <h5 style="margin: 0 !important;" class="col-3 col-sm-6 col-lg-3">
-                        @body
-                    </h5>
-                </div>
-                <div class="row mt-3">
-                    <h2 id="price">@Model.Price <span id="currency">@Model.Currency</span></h2>
-                </div>
-                <div class="row mt-5">
-                    <h4 style="font-weight: normal;">@Model.User.FirstName</h4>
-                    <div class="col-12">
-                        <i class="fas fa-user"></i>
-                        <span style="font-size: 20px;" class="ms-2">Zarejestrowany w @Model.User.RegistrationDate.Year</span>
-                    </div>
-                    <div class="col-12 mt-2">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span style="font-size: 20px;" class="ms-2">@Model.Localization</span>
-                    </div>
-                    <div class="col-12 mt-3 d-flex justify-content-center" style="font-size: 20px;">
-                        @{
-
-                            if (isSignedIn)
-                            {
-                                if (userId == Model.User.Id.ToString())
-                                {
-                                    <button disabled class="btn btn-danger w-100 d-flex justify-content-center align-items-center shadow-none">
-                                        <i style="font-size: 21px;" class="far fa-envelope"></i>
-                                        <span style="font-size: 21px;" class="ms-2">Kontakt ze sprzedającym</span>
-                                    </button>
-                                }
-                                else
-                                {
-                                    <button class="btn btn-danger w-100 d-flex justify-content-center align-items-center shadow-none">
-                                        <i style="font-size: 21px;" class="far fa-envelope"></i>
-                                        <span style="font-size: 21px;" class="ms-2">Kontakt ze sprzedającym</span>
-                                    </button>
-                                }
-                            }
-                            else
-                            {
-                                <button data-bs-toggle="modal" data-bs-target="#loginRequiredModal" class="btn btn-danger w-100 d-flex justify-content-center align-items-center shadow-none">
-                                    <i style="font-size: 21px;" class="far fa-envelope"></i>
-                                    <span style="font-size: 21px;" class="ms-2">Kontakt ze sprzedającym</span>
-                                </button>
-                            }
-                        }
-                    </div>
-                    <div class="col-12 mt-3 d-flex justify-content-center">
-                        <button id="phone" class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center shadow-none">
-                            <i style="font-size: 21px;" class="fas fa-phone"></i>
-                            <span id="text" style="font-size: 21px;" class="ms-2">Wyświetl telefon</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <partial name="_SellerInfoPartial" />
         </div>
     </div>
 </div>
@@ -600,21 +118,8 @@
             mousewheel: false
         }
         $(document).ready(function () {
-            gallery('1');
-            var isFollowed = @isFollowed.ToJS();
-            if (isFollowed) {
-                $("#followIcon").removeClass('far fa-star')
-                $("#followIcon").addClass('fas fa-star')
-            }
-            else {
-                $("#followIcon").removeClass('fas fa-star')
-                $("#followIcon").addClass('far fa-star')
-            }
+            lc_lightbox('#gallery a', options)
         });
-
-        function gallery(key) {
-            return lc_lightbox('#gallery'+key+' a', options)
-        }
 
         $("#phone").on('click', function () {
             if ($("#text").text() === "Wyświetl telefon") {
@@ -625,46 +130,38 @@
             }
         })
 
-        $("#follow").hover(function () {
-            if ($("#followIcon").hasClass('far')) {
-                $("#followIcon").removeClass('far fa-star')
-                $("#followIcon").addClass('fas fa-star')
-            }
-            else {
-                $("#followIcon").removeClass('fas fa-star')
-                $("#followIcon").addClass('far fa-star')
-            }
-        })
-
-        $("#follow").click(async function () {
+        $("#follow").click(this, async function () {
             const advertId = "@Model.Id";
-            var isSigned = @isSignedIn.ToJS();
-            if (isSigned) {
-                const userId = @Model.User.Id;
-                const result = await $.post("/Advert/FollowAdvert", $.param({
-                    advertId: advertId, userId: userId
-                }))
-                if (result === 200) {
-                    $("#followIcon").removeClass('far fa-star')
-                    $("#followIcon").addClass('fas fa-star')
-                    $("#followSuccess").show();
-                }
-                else {
-                    console.log(result)
-                    $("#followError").show();
-                }
-            }
-            else {
+
+            //it means it will be follow action
+            if ($("#followIcon").hasClass("far")) {
                 const result = await $.post("/Advert/FollowAdvert", $.param({
                     advertId: advertId
                 }))
                 if (result === 200) {
-                    alert('adsadsa')
-                    $("#followSuccess").show();
+                    $("#followIcon").removeClass('far fa-star')
+                    $("#followIcon").addClass('fas fa-star')
+                    $("#followSuccess").fadeIn(1000);
+                    $("#followSuccess").fadeOut(3500);
+                    $("#follow").html("Usuń z obserwowanych <i id='followIcon' class='fas fa-star'></i>")
                 }
                 else {
-                    console.log(result)
-                    $("#followError").show();
+                    $("#followError").fadeToggle(2000);
+                }
+            } // it will be Unfollow action
+            else {
+                const result = await $.post("/Advert/UnfollowAdvert", $.param({
+                    advertId: advertId
+                }))
+                if (result === 200) {
+                    $("#followIcon").removeClass('fas fa-star')
+                    $("#followIcon").addClass('far fa-star')
+                    $("#unfollowSuccess").fadeIn(1000);
+                    $("#unfollowSuccess").fadeOut(3500);
+                    $("#follow").html("Obserwuj <i id='followIcon' class='far fa-star'></i>")
+                }
+                else {
+                    $("#followError").fadeToggle(2000);
                 }
             }
         })

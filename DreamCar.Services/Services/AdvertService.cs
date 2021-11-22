@@ -231,6 +231,68 @@ namespace DreamCar.Services.Services
             }
         }
 
+        public async Task<bool> IsFollowedAdvert(Guid advertId, int userId)
+        {
+            try
+            {
+                var followed = await DbContext.FollowAdverts.FirstOrDefaultAsync(followed => followed.AdvertId == advertId && followed.UserId == userId);
+                if (followed is null) return false;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return false;
+            }
+        }
+        public async Task UnfollowAdvert(Guid advertId, int userId)
+        {
+            try
+            {
+                var followAdvertEntity = await DbContext.FollowAdverts.FirstOrDefaultAsync(
+                    follow =>
+                    follow.AdvertId == advertId &&
+                    follow.UserId == userId);
+                DbContext.FollowAdverts.Remove(followAdvertEntity);
+                await DbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<UserAdvertVm>> GetFollowAdvertsAsync(IEnumerable<Guid> followIds, int? userId)
+        {
+            try
+            {
+                List<Advert> followedAdverts = null;
+                //for logged users
+                if (userId.HasValue && userId is not null)
+                {
+                    var followedIds = await DbContext.FollowAdverts
+                        .Where(fl => fl.UserId == userId)
+                        .Select(fl => fl.AdvertId)
+                        .ToListAsync();
+                    followedAdverts = await DbContext.Adverts
+                        .Where(ad => followedIds.Contains(ad.Id))
+                        .ToListAsync();                   
+                }
+                else
+                {
+                    followedAdverts = await DbContext.Adverts
+                       .Where(ad => followIds.Contains(ad.Id))
+                       .ToListAsync();
+                }
+                return Mapper.Map<IEnumerable<UserAdvertVm>>(followedAdverts);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return null;
+            }
+        }
+
         private void UpdateAdvert(Advert advertToUpdate, Advert updatedAdvert)
         {
             try
@@ -248,21 +310,6 @@ namespace DreamCar.Services.Services
             catch (Exception ex)
             {
                 Logger.LogError(ex, ex.Message);
-            }
-        }
-
-        public async Task<bool> IsFollowedAdvert(Guid advertId, int userId)
-        {
-            try
-            {
-                var followed = await DbContext.FollowAdverts.FirstOrDefaultAsync(followed => followed.AdvertId == advertId && followed.UserId == userId);
-                if (followed is null) return false;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, ex.Message);
-                return false;
             }
         }
     }
