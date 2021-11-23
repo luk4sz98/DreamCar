@@ -53,6 +53,15 @@
                     <icon class="icon-home footer-icon d-md-none" data-bs-toggle="tooltip" data-bs-placement="top" title="Strona główna" data-bs-animation="true"></icon>
                 </a>
             </li>
+            <li class="list-inline-item">
+                <a class="d-none d-md-inline" asp-controller="Advert" asp-action="GetFollowAdverts">
+                    Obserwowane
+                    <i class="icon-heart"></i>
+                </a>
+                <a asp-controller="Advert" asp-action="GetFollowAdverts">
+                    <i class="icon-heart footer-icon d-md-none" data-bs-toggle="tooltip" data-bs-placement="top" title="Obserwowane" data-bs-animation="true"></i>
+                </a>
+            </li>
             @if (SignInManager.IsSignedIn(User))
             {
                 <li class="list-inline-item">
@@ -61,15 +70,6 @@
                     </a>
                     <a asp-controller="Advert" asp-action="ActiveAdverts">
                         <icon class="icon-login footer-icon d-md-none" data-bs-toggle="tooltip" data-bs-placement="top" title="Twoje ogłoszenia" data-bs-animation="true"></icon>
-                    </a>
-                </li>
-                <li class="list-inline-item">
-                    <a class="d-none d-md-inline" asp-controller="Account" asp-action="Index">
-                        Obserwowane
-                        <i class="icon-heart"></i>
-                    </a>
-                    <a asp-controller="Account" asp-action="Index">
-                        <i class="icon-heart footer-icon d-md-none" data-bs-toggle="tooltip" data-bs-placement="top" title="Obserwowane" data-bs-animation="true"></i>
                     </a>
                 </li>
                 <li class="list-inline-item">

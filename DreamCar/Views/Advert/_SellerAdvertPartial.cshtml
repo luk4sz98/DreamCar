@@ -286,23 +286,27 @@ else
                                 <div class="card">
                                     @if (othersImages.Any())
                                     {
-                                        <div class="col-12">
-                                            <div id="carouselOtherImages" style="height:120px;" class="carousel slide" data-bs-ride="carousel">
-                                                <div class="carousel-inner text-center">
-                                                    <div>
-                                                        <div class="carousel-item active">
-                                                            <img src="~/advertImages/Advert @advert.Id/@othersImages.ElementAt(0).Name" class="img-fluid card-img-top" style="max-height:120px;border-radius:0.25rem;" />
-                                                        </div>
-                                                        @for (int i = 1; i < othersImages.Count(); i++)
-                                                        {
-                                                            <div class="carousel-item">
-                                                                <img src="~/advertImages/Advert @advert.Id/@othersImages.ElementAt(i).Name" class="img-fluid card-img-top" style="max-height:120px;border-radius:0.25rem;" />
+                                        <a asp-action="GetAdvert"
+                                           asp-controller="Advert"
+                                           asp-route-advertId="@advert.Id">
+                                            <div class="col-12">
+                                                <div id="carouselOtherImages" style="height:120px;" class="carousel slide" data-bs-ride="carousel">
+                                                    <div class="carousel-inner text-center">
+                                                        <div>
+                                                            <div class="carousel-item active">
+                                                                <img src="~/advertImages/Advert @advert.Id/@othersImages.ElementAt(0).Name" class="img-fluid card-img-top" style="max-height:120px;border-radius:0.25rem;" />
                                                             </div>
-                                                        }
+                                                            @for (int i = 1; i < othersImages.Count(); i++)
+                                                            {
+                                                                <div class="carousel-item">
+                                                                    <img src="~/advertImages/Advert @advert.Id/@othersImages.ElementAt(i).Name" class="img-fluid card-img-top" style="max-height:120px;border-radius:0.25rem;" />
+                                                                </div>
+                                                            }
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </a>
                                     }
                                     else
                                     {
@@ -322,7 +326,6 @@ else
                                                 Przejdź
                                             </a>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>

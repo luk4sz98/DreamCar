@@ -45,6 +45,9 @@
                     <a class="btn btn-primary d-block w-100" id="menuButton" asp-controller="Contact" asp-action="SendRequest">Kontakt</a>
                 </li>
                 <li class="nav-item">
+                    <a class="btn btn-primary d-block w-100" id="menuButton" asp-controller="Home" asp-action="Index">Strona główna</a>
+                </li>
+                <li class="nav-item">
                     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                         <button class="btn btn-primary d-block w-100" id="menuButton" type="submit">Wyloguj</button>
                     </form>
@@ -53,7 +56,13 @@
             else
             {
                 <li class="nav-item">
+                    <a class="btn btn-primary d-block w-100" id="menuButton" asp-controller="Home" asp-action="Index">Strona główna</a>
+                </li>
+                <li class="nav-item">
                     <a asp-controller="Advert" asp-action="GetFollowAdverts" class="btn btn-primary d-block w-100" id="menuButton">Obserwowane</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-primary d-block w-100" id="menuButton" asp-controller="Contact" asp-action="SendRequest">Kontakt</a>
                 </li>
                 <li class="nav-item">
                     <a asp-area="Identity" asp-page="/Account/Login" class="nav-link active shadow-none" id="loginButton" style="font-size: 18px;">Zaloguj</a>
@@ -103,13 +112,16 @@
                 <a class="btn btn-primary d-block w-100" id="menuButton" asp-controller="Advert" asp-action="ActiveAdverts">Ogłoszenia</a>
             </div>
             <div class="mb-3">
-               <a asp-controller="Advert" asp-action="GetFollowAdverts" class="btn btn-primary d-block w-100" id="menuButton">Obserwowane</a>
+                <a asp-controller="Advert" asp-action="GetFollowAdverts" class="btn btn-primary d-block w-100" id="menuButton">Obserwowane</a>
             </div>
             <div class="mb-3">
                 <a asp-controller="Account" asp-action="Index" class="btn btn-primary d-block w-100" id="menuButton">Ustawienia</a>
             </div>
             <div class="mb-3">
                 <a class="btn btn-primary d-block w-100" id="menuButton" asp-controller="Contact" asp-action="SendRequest">Kontakt</a>
+            </div>
+            <div class="mb-3">
+                <a class="btn btn-primary d-block w-100" id="menuButton" asp-controller="Home" asp-action="Index">Strona główna</a>
             </div>
             <div class="mb-3">
                 <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
@@ -120,7 +132,13 @@
         else
         {
             <div class="mb-3">
+                <a class="btn btn-primary d-block w-100" id="menuButton" asp-controller="Home" asp-action="Index">Strona główna</a>
+            </div>
+            <div class="mb-3">
                 <a asp-controller="Advert" asp-action="GetFollowAdverts" class="btn btn-primary d-block w-100" id="menuButton">Obserwowane</a>
+            </div>
+            <div class="mb-3">
+                <a class="btn btn-primary d-block w-100" id="menuButton" asp-controller="Contact" asp-action="SendRequest">Kontakt</a>
             </div>
             <div class="mb-3">
                 <a asp-area="Identity" asp-page="/Account/Login" class="nav-link active shadow-none" id="loginButton" style="font-size: 18px;">Zaloguj</a>
@@ -129,6 +147,5 @@
                 <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary shadow-none w-50" id="registrationButton" style="font-size: 18px;">Rejestracja</a>
             </div>
         }
-
     </div>
 </div>
