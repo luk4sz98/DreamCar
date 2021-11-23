@@ -307,11 +307,14 @@ namespace DreamCar.Web.Controllers
                     return View("FollowAdverts", followAdverts);
                 }
 
-                var followAdvertsId = _cookiesService.Get("follow")
-                    .Split(';')
-                    .Where(id => !string.IsNullOrEmpty(id) &&
-                                 !string.Equals(id, ";"))
-                    .Select(id => Guid.Parse(id));
+                var followAdvertsId = _cookiesService.Get("follow") is null 
+                    ?  Enumerable.Empty<Guid>() :
+                    _cookiesService.Get("follow")
+                        .Split(';')
+                        .Where(id => !string.IsNullOrEmpty(id) &&
+                                        !string.Equals(id, ";"))
+                        .Select(id => Guid.Parse(id));
+
 
                 followAdverts = await _advertService.GetFollowAdvertsAsync(followAdvertsId, null);              
 
