@@ -33,6 +33,7 @@ namespace DreamCar.Web.Controllers
 
         [AllowAnonymous]
         [HttpGet]
+        [Route("Contact")]
         public IActionResult SendRequest()
         {
             if(_signInManager.IsSignedIn(User)) {

@@ -1,0 +1,49 @@
+﻿@model FilterVm
+@using DreamCar.Model.DataModels.Enums
+
+
+<button id="collapseButton" class="pt-3 col-12 d-flex justify-content-center align-items-center  btn shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilters" aria-expanded="true" aria-controls="collapseFilters">
+    <h3>Filtrowanie</h3>
+</button>
+<div class="collapse show" id="collapseFilters">
+    <div class="row">
+        <div class="form-floating col-12 col-md-6 mb-3">
+            <input id="brandCar" asp-for="Brand" placeholder="Marka" class="form-control shadow-none" style="border-radius: 1rem;" />
+            <label id="brandCarLabel" class="form-label ms-2" for="brandCar">Marka</label>
+            <span asp-validation-for="Brand" class="text-danger"></span>
+        </div>
+        <div class="form-floating col-12 col-md-6 mb-3">
+            <input asp-for="Model" disabled id="modelCar" placeholder="Model" class="form-control shadow-none" style="border-radius: 1rem;" />
+            <label id="modelCarlabel" class="form-label disabled ms-2" for="modelCar">Model</label>
+            <span asp-validation-for="Model" class="text-danger"></span>
+        </div>
+        <div class="form-floating col-12 mb-3">
+            <input asp-for="Generation" disabled id="generationCar" placeholder="Generation" class="form-control shadow-none" style="border-radius: 1rem;" />
+            <label id="generationCarLabel" class="form-label disabled ms-2" for="generationCar">Generacja</label>
+            <span asp-validation-for="Generation" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-12 col-md-6 mb-3">
+            <select asp-for="Body" id="bodyTypeList" asp-items="Html.GetEnumSelectList<BodyType>()" class="form-select shadow-none" style="border-radius: 1rem;">
+                <option value="" disabled selected>Typ nadwozia</option>
+            </select>
+        </div>
+        <div class="form-group col-12 col-md-6">
+            <select asp-for="Fuel" id="fuelTypeList" asp-items="Html.GetEnumSelectList<FuelType>()" class="form-select shadow-none" style="border-radius: 1rem;">
+                <option value="" disabled selected>Typ paliwa</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-12 pb-3 d-flex justify-content-between align-items-center mt-3 mt-lg-0">
+        @if (TempData["filter"] is not null)
+        {
+            <a asp-action="GetAdverts" asp-controller="Advert" class="btn btn-outline-danger shadow-none" style="border-radius: 1rem; width: fit-content;">
+                Wyczyść
+            </a>
+        }
+        <button class="btn btn-outline-primary shadow-none" style="border-radius: 1rem; width: fit-content;" type="submit">
+            Wyszukaj
+        </button>
+    </div>
+</div>

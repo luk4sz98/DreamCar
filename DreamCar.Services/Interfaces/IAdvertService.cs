@@ -2,6 +2,7 @@
 using DreamCar.ViewModels.VM;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -20,5 +21,6 @@ namespace DreamCar.Services.Interfaces
         Task<bool> IsFollowedAdvert(Guid advertId, int userId);
         Task UnfollowAdvert(Guid advertId, int userId);
         Task<IEnumerable<UserAdvertVm>> GetFollowAdvertsAsync(IEnumerable<Guid> followIds, int? userId);
+        IQueryable<Advert> GetAdverts(Expression<Func<Advert, bool>> filterExpressions = null);
     }
 }

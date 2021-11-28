@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace DreamCar.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Mod, User")]
     public class AutoCompleteHelperController : BaseController
     {
         private readonly ApplicationDbContext _applicationDbContext;
@@ -27,30 +26,37 @@ namespace DreamCar.Web.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AutoCompleteBrand(string prefix)
+        public async Task<JsonResult> AutoComplete(string brand, string model, string prefix)
         {
-            var brands = await _applicationDbContext.Cars
+            List<string> results = null;
+
+            if (string.IsNullOrEmpty(brand))
+                results = await _applicationDbContext.Cars
                                     .Where(car => car.Brand.StartsWith(prefix))
                                     .Select(car => car.Brand)
                                     .Distinct()
                                     .ToListAsync();
-            return Json(brands);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AutoCompleteModel(string brand, string prefixModel)
-        {
-            var models = await _applicationDbContext.Cars
+            else if (string.IsNullOrEmpty(model))
+                results = await _applicationDbContext.Cars
                                     .Where(
                                         car => car.Brand.ToLower() == brand.ToLower() &&
-                                        car.Model.StartsWith(prefixModel)
+                                        car.Model.StartsWith(prefix)
                                      )
                                     .Select(car => car.Model)
                                     .Distinct()
                                     .ToListAsync();
-            return Json(models);
+            else
+                results = await _applicationDbContext.Cars
+                                    .Where(
+                                        car => car.Brand.ToLower() == brand.ToLower() &&
+                                        car.Model.ToLower() == model.ToLower() &&
+                                        car.Generation.StartsWith(prefix)
+                                     )
+                                    .Select(car => car.Generation)
+                                    .Distinct()
+                                    .ToListAsync();
+
+            return Json(results);
         }
     }
 }

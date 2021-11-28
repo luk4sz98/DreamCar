@@ -327,5 +327,65 @@ namespace DreamCar.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
+
+        [Route("Adverts")]
+        public IActionResult GetAdverts(
+            int? page,
+            FilterVm filter = null,
+            string sortOrder = null)
+        {
+            IQueryable<Advert> adverts = FilterCollection(_advertService.GetAdverts(), filter);
+
+            if (filter is not null)
+                TempData["filter"] = filter;
+
+            adverts = sortOrder switch
+            {
+                "price_desc" => adverts.OrderByDescending(ad => ad.Price),
+                "price" => adverts.OrderBy(ad => ad.Price),
+                "mileage_desc" => adverts.OrderByDescending(ad => ad.Car.Mileage),
+                "mileage" => adverts.OrderBy(ad => ad.Car.Mileage),
+                "power_desc" => adverts.OrderByDescending(ad => ad.Car.Power),
+                "power" => adverts.OrderBy(ad => ad.Car.Power),
+                "productionYear_desc" => adverts.OrderByDescending(ad => ad.Car.ProductionYear),
+                "productionYear" => adverts.OrderBy(ad => ad.Car.ProductionYear),
+                _ => adverts.OrderBy(ad => ad.CreatedAt),
+            };
+
+            var pageSize = 20;
+            page ??= 1;
+            ViewBag.page = page;
+
+            int start = (int)(page - 1) * pageSize;
+            
+            //Aktualny numer strony
+            ViewBag.pageCurrent = page;
+            int totalPages = adverts.Count();
+
+            //Ilość wszystkich stron do wyświetlenia
+            ViewBag.totalNumsize = (totalPages / (float)pageSize);
+            ViewBag.numSize = (int)Math.Ceiling(ViewBag.totalNumsize);
+
+            adverts = adverts.Skip(start).Take(pageSize);
+
+            var mappedList = Mapper.Map<IEnumerable<UserAdvertVm>>(adverts);
+
+            return View("Adverts", mappedList);
+        }
+
+        private static IQueryable<Advert> FilterCollection(IQueryable<Advert> collection, FilterVm filter)
+        {
+            if (!string.IsNullOrEmpty(filter.Brand))
+                collection = collection.Where(ad => ad.Car.Brand.ToLower() == filter.Brand.ToLower());
+            if (!string.IsNullOrEmpty(filter.Model))
+                collection = collection.Where(ad => ad.Car.Model.ToLower() == filter.Model.ToLower());
+            if (!string.IsNullOrEmpty(filter.Generation))
+                collection = collection.Where(ad => ad.Car.Generation.ToLower() == filter.Generation.ToLower());
+            if (filter.Fuel.HasValue)
+                collection = collection.Where(ad => ad.Car.Fuel == filter.Fuel);
+            if (filter.Body.HasValue)
+                collection = collection.Where(ad => ad.Car.Body == filter.Body);
+            return collection;
+        }
     }
 }

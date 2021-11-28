@@ -370,4 +370,5 @@ web.config
 # images
 *.png
 *.jpg
-*.svg
+/DreamCar/wwwroot/assets/css/fonts/lc_lightbox.svg
+/DreamCar/wwwroot/assets/img/car.svg

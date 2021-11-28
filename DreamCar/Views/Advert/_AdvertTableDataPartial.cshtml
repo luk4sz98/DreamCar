@@ -28,12 +28,15 @@
                 }
                 else
                 {
-                    <span>Brak zdjęć</span>
+                    <div class="d-flex justify-content-center align-items-center flex-column">
+                        <i class="icon-camera" style="font-size: 60px; color:lightseagreen;"></i>
+                        <span>Brak zdjęć</span>
+                    </div>
                 }
             </td>
             <td class="align-middle col-4 col-sm-4 col-md-2">
                 <a data-bs-toggle="tooltip" data-bs-placement="top" title="Naciśnij by przejść do ogłoszenia" data-bs-animation="true" class="advertLink"
-                   asp-action="GetAdvert" asp-controller="Advert" asp-route-advertId="@advert.Id" 
+                   asp-action="GetAdvert" asp-controller="Advert" asp-route-advertId="@advert.Id"
                    style="text-decoration:none;color:inherit !important;">
                     @advert.Title
                 </a>

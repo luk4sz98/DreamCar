@@ -293,6 +293,26 @@ namespace DreamCar.Services.Services
             }
         }
 
+        public IQueryable<Advert> GetAdverts(Expression<Func<Advert, bool>> filterExpressions = null)
+        {
+            try
+            {
+                IQueryable<Advert> adverts = null;
+                if (filterExpressions is null)
+                    adverts = DbContext.Adverts
+                        .Where(ad => !ad.IsActive);
+                else
+                    adverts = DbContext.Adverts
+                        .Where(filterExpressions);
+                return adverts;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return Queryable.DefaultIfEmpty(DbContext.Adverts);
+            }
+        }
+
         private void UpdateAdvert(Advert advertToUpdate, Advert updatedAdvert)
         {
             try
