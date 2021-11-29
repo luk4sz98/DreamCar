@@ -2,7 +2,7 @@ body {
     height: 100vh;
 }
 
-footer { 
+footer {
     min-height: 50px;
 }
 
@@ -17,16 +17,16 @@ footer {
 }
 
 #brand {
-  background: url("../../assets/img/default.svg");
-  border-style: none;
-  font-size: 40px;
-  width: 125px;
-  height: 125px;
+    background: url("../../assets/img/default.svg");
+    border-style: none;
+    font-size: 40px;
+    width: 125px;
+    height: 125px;
 }
 
-#brand:hover {
-  opacity: 0.5;
-}
+    #brand:hover {
+        opacity: 0.5;
+    }
 
 #registrationButton {
     border-radius: 2rem;
@@ -37,12 +37,12 @@ footer {
 }
 
 @media (max-width: 765px) {
-  .nav-item a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-  }
+    .nav-item a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
 }
 
 .buttons-pdf, .buttons-print, .buttons-csv, .buttons-copy, .buttons-excel {
@@ -56,10 +56,14 @@ footer {
     font-size: 30px;
 }
 
-@media (max-width: 576px) {
-  #registrationButton {
-    margin-left: 0px;
-  }
+.menu {
+    position: -webkit-sticky !important; /* Safari */
+    position: sticky !important;
+    z-index: 1000 !important;
+    top: 0 !important;
+    background-color: #fff;
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+    opacity: 0.95;
 }
 
 #registrationButton:hover {
@@ -68,28 +72,21 @@ footer {
 }
 
 #loginButton:hover {
-  color: rgba(0,0,0,0.25);
+    color: rgba(0,0,0,0.25);
 }
 
 .fa.fa-search {
-  margin-left: 5px;
-  color: var(--bs-gray-dark);
-  font-size: 20px;
+    margin-left: 5px;
+    color: var(--bs-gray-dark);
+    font-size: 20px;
 }
 
 #search:hover {
-  color: var(--bs-secondary);
+    color: var(--bs-secondary);
 }
 
 .fa.fa-search:hover {
-  color: var(--bs-secondary);
-}
-
-@media (max-width: 576px) {
-  .col-sm-6.col-md-4.col-lg-3.item {
-    overflow: hidden;
-    border-radius: 1rem;
-  }
+    color: var(--bs-secondary);
 }
 
 @media (max-width: 768px) {
@@ -101,57 +98,68 @@ footer {
 }
 
 @media (max-width: 576px) {
-  .col-sm-6.col-md-4.col-lg-3.item img {
-    transition: all 0.75s ease;
-  }
-}
+    .col-sm-6.col-md-4.col-lg-3.item:hover img {
+        transform: scale(1.1);
+    }
 
-@media (max-width: 576px) {
-  .col-sm-6.col-md-4.col-lg-3.item:hover img {
-    transform: scale(1.1);
-  }
+    .col-sm-6.col-md-4.col-lg-3.item img {
+        transition: all 0.75s ease;
+    }
+
+    .col-sm-6.col-md-4.col-lg-3.item {
+        overflow: hidden;
+        border-radius: 1rem;
+    }
+
+    .offcanvas {
+        width: 100%;
+    }
+
+    #registrationButton {
+        margin-left: 0px;
+    }
 }
 
 #smileEmoji {
-  margin-left: 5px;
-  line-height: 20px;
-  font-size: 20px;
+    margin-left: 5px;
+    line-height: 20px;
+    font-size: 20px;
 }
 
 #scroll-to-top {
-  display: none;
-  position: fixed;
-  bottom: 50px;
-  right: 20px;
-  z-index: 1;
-  opacity: 0.8;
+    display: none;
+    position: fixed;
+    bottom: 50px;
+    right: 20px;
+    z-index: 1;
+    opacity: 0.8;
 }
 
-#scroll-to-top:hover {
-  opacity: 1;
-}
+    #scroll-to-top:hover {
+        opacity: 1;
+    }
 
 #logInFormButton:hover {
-  opacity: 0.75;
+    opacity: 0.75;
 }
 
 #search {
-  color: rgba(0,0,0,1);
+    color: rgba(0,0,0,1);
 }
 
 #loginButton {
-  font-size: 18px;
-  color: rgba(0,0,0,1);
+    font-size: 18px;
+    color: rgba(0,0,0,1);
 }
 
 .icon-menu {
     font-size: 30px;
 }
 
-.icon-menu:hover {
-    opacity:1;
-    color: black;
-}
+    .icon-menu:hover {
+        opacity: 1;
+        color: black;
+    }
 
 
 #menuButton {
@@ -165,9 +173,9 @@ footer {
     font-size: 18px;
 }
 
-#menuButton:hover {
-   color: var(--bs-secondary);
-}
+    #menuButton:hover {
+        color: var(--bs-secondary);
+    }
 
 #addAdvertButton {
     border: none;
@@ -182,16 +190,16 @@ footer {
     opacity: 1;
 }
 
-#addAdvertButton .icon-plus {
-    margin-top: 20px;
-    line-height: 25px;
-    margin-left: 5px;
-    font-size: 18px;
-}
+    #addAdvertButton .icon-plus {
+        margin-top: 20px;
+        line-height: 25px;
+        margin-left: 5px;
+        font-size: 18px;
+    }
 
-#addAdvertButton:hover {
-    opacity: 0.9;
-}
+    #addAdvertButton:hover {
+        opacity: 0.9;
+    }
 
 .footer-icon {
     margin-left: 5px;
@@ -202,7 +210,7 @@ footer {
     position: absolute;
     top: 120px;
     right: 60px;
-    z-index: 10;
+    z-index: 10000;
     opacity: 0.92;
 }
 

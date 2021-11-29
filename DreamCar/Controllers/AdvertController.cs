@@ -35,8 +35,12 @@ namespace DreamCar.Web.Controllers
             "Ukraina", "Węgry", "Wielka Brytania", "Włochy",
             "Inny"
         });
-
         private readonly SelectList _months = new(CultureInfo.GetCultureInfo("pl-Pl").DateTimeFormat.MonthNames);
+        private readonly SelectList _prices = new(new int[] { 
+            1000, 2000, 5000, 10000, 20000, 30000, 50000, 100000, 150000,
+            200000, 300000, 500000, 1000000
+        });
+        private readonly IEnumerable<SelectListItem> _years = new SelectList(Enumerable.Range(1900, (DateTime.Now.Year - 1900) + 1)).Reverse();
 
         public AdvertController(
             ILogger logger,
@@ -63,9 +67,7 @@ namespace DreamCar.Web.Controllers
                 ViewBag.ErrorList = errors;
             }
 
-            ViewBag.YearsSelectList = new SelectList(
-                Enumerable.Range(1900, (DateTime.Now.Year - 1900) + 1)).Reverse();
-
+            ViewBag.YearsSelectList = _years;
             ViewBag.EquipmentList = await _equipmentService.GetEquipmentsAsync();
             ViewBag.SeatsNumber = new SelectList(Enumerable.Range(1, 9));
             ViewBag.Countries = _countries;
@@ -370,6 +372,9 @@ namespace DreamCar.Web.Controllers
 
             var mappedList = Mapper.Map<IEnumerable<UserAdvertVm>>(adverts);
 
+            ViewBag.Prices = _prices;
+            ViewBag.Years = _years;
+
             return View("Adverts", mappedList);
         }
 
@@ -385,6 +390,18 @@ namespace DreamCar.Web.Controllers
                 collection = collection.Where(ad => ad.Car.Fuel == filter.Fuel);
             if (filter.Body.HasValue)
                 collection = collection.Where(ad => ad.Car.Body == filter.Body);
+            if (filter.MinPrice.HasValue)
+                collection = collection.Where(ad => ad.Price >= filter.MinPrice);
+            if (filter.MaxPrice.HasValue)
+                collection = collection.Where(ad => ad.Price <= filter.MaxPrice); 
+            if (filter.MinProductionYear.HasValue)
+                collection = collection.Where(ad => ad.Car.ProductionYear >= filter.MinProductionYear); 
+            if (filter.MaxProductionYear.HasValue)
+                collection = collection.Where(ad => ad.Car.ProductionYear <= filter.MaxProductionYear);
+            if (filter.MinMileage.HasValue)
+                collection = collection.Where(ad => ad.Car.Mileage >= filter.MinMileage);
+            if (filter.MaxMileage.HasValue)
+                collection = collection.Where(ad => ad.Car.Mileage <= filter.MaxMileage);
             return collection;
         }
     }

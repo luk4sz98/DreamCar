@@ -24,6 +24,48 @@
         </div>
     </div>
     <div class="row">
+        <div class="form-floating col-12 col-md-6 mb-3">
+            <select asp-for="MinPrice" id="minPrice" asp-items="ViewBag.Prices" class="form-select shadow-none" style="border-radius: 1rem;">
+                <option value="" disabled selected>-</option>
+            </select>
+            <label id="minPriceLabel" class="form-label ms-3" for="minPrice">Minimalna cena</label>
+        </div>
+        <div class="form-floating col-12 col-md-6 mb-3">
+            <select id="maxPrice" asp-for="MaxPrice" asp-items="ViewBag.Prices" class="form-select shadow-none" style="border-radius: 1rem;">
+                <option value="" disabled selected>-</option>
+            </select>
+            <label id="maxPriceLabel" class="form-label ms-3" for="maxPrice">Maksymalna cena</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-floating col-12 col-md-6 mb-3">
+            <select asp-for="MinProductionYear" id="minYear" asp-items="ViewBag.Years" class="form-select shadow-none" style="border-radius: 1rem;">
+                <option value="" disabled selected>-</option>
+            </select>
+            <label id="minYearLabel" class="form-label ms-3" for="minYear">Minimalny rok produkcji</label>
+        </div>
+        <div class="form-floating col-12 col-md-6 mb-3">
+            <select id="maxYear" asp-for="MaxProductionYear" asp-items="ViewBag.Years" class="form-select shadow-none" style="border-radius: 1rem;">
+                <option value="" disabled selected>-</option>
+            </select>
+            <label id="maxYearLabel" class="form-label ms-3" for="maxYear">Maksymalny rok produkcji</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-floating col-12 col-md-6 mb-3">
+            <select asp-for="MinMileage" id="minMileage" asp-items="ViewBag.Prices" class="form-select shadow-none" style="border-radius: 1rem;">
+                <option value="" disabled selected>-</option>
+            </select>
+            <label id="minMileageLabel" class="form-label ms-3" for="minMileage">Minimalny przebieg</label>
+        </div>
+        <div class="form-floating col-12 col-md-6 mb-3">
+            <select id="maxMileage" asp-for="MaxMileage" asp-items="ViewBag.Prices" class="form-select shadow-none" style="border-radius: 1rem;">
+                <option value="" disabled selected>-</option>
+            </select>
+            <label id="maxMileageLabel" class="form-label ms-3" for="maxYear">Maksymalny przebieg</label>
+        </div>
+    </div>
+    <div class="row">
         <div class="form-group col-12 col-md-6 mb-3">
             <select asp-for="Body" id="bodyTypeList" asp-items="Html.GetEnumSelectList<BodyType>()" class="form-select shadow-none" style="border-radius: 1rem;">
                 <option value="" disabled selected>Typ nadwozia</option>

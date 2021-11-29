@@ -20,7 +20,7 @@
 
     @@media screen and (min-width: 568px) {
         #filterSectionLG {
-            top: 0;
+            top: 29%;
         }
     }
 
@@ -35,6 +35,10 @@
         border-radius: 1rem;
         z-index: 1;
     }
+
+    .container-fluid {
+        min-height: fit-content;
+    }
 </style>
 
 @{
@@ -42,46 +46,49 @@
     var userId = UserManager.GetUserId(User);
 }
 
-<div class="container-fluid">
+<div class="container-fluid py-5">
     <form id="filterForm" asp-action="GetAdverts" asp-controller="Advert" method="get">
         <div class="row p-3 px-lg-5">
             <div id="adverts" class="col-12 col-lg-8 pe-lg-5" data-aos="fade-left" data-aos-duration="800" data-aos-delay="800" data-aos-once="true">
-                <div class="col-12 d-flex justify-content-end align-items-end">
-                    <div class="dropdown mb-3">
-                        <button style="background-color: lightseagreen !important; border-radius: 1rem; border-color: lightseagreen !important; font-size: 20px;"
-                                class="btn btn-primary shadow-none dropdown-toggle"
-                                type="button" id="sortButton" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                            Sortuj wg
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="sortButton" style="background-color:#fff !important; z-index: 1000;">
-                            <li>
-                                <button name="sortOrder" class="btn dropdown-item" value="mileage" type="submit">Najkrótszy przebieg</button>
-                            </li>
-                            <li>
-                                <button name="sortOrder" class="btn dropdown-item" value="mileage_desc" type="submit">Największy przebieg</button>
-                            </li>
-                            <li>
-                                <button name="sortOrder" class="btn dropdown-item" value="price" type="submit">Najtańsze</button>
-                            </li>
-                            <li>
-                                <button name="sortOrder" class="btn dropdown-item" value="price_desc" type="submit">Najdroższe</button>
-                            </li>
-                            <li>
-                                <button name="sortOrder" class="btn dropdown-item" value="productionYear" type="submit">Najmłodsze</button>
-                            </li>
-                            <li>
-                                <button name="sortOrder" class="btn dropdown-item" value="productionYear_desc" type="submit">Najstarsze</button>
-                            </li>
-                            <li>
-                                <button name="sortOrder" class="btn dropdown-item" value="power_desc" type="submit">Największa moc</button>
-                            </li>
-                            <li>
-                                <button name="sortOrder" class="btn dropdown-item" value="power" type="submit">Najmniejsza moc</button>
-                            </li>
-                        </ul>
+                @if (Model.Count() > 1)
+                {
+                    <div class="col-12 d-flex justify-content-end align-items-end">
+                        <div class="dropdown mb-3">
+                            <button style="background-color: lightseagreen !important; border-radius: 1rem; border-color: lightseagreen !important; font-size: 20px;"
+                                    class="btn btn-primary shadow-none dropdown-toggle"
+                                    type="button" id="sortButton" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                Sortuj wg
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="sortButton" style="background-color:#fff !important; z-index: 1000;">
+                                <li>
+                                    <button name="sortOrder" class="btn dropdown-item" value="mileage" type="submit">Najkrótszy przebieg</button>
+                                </li>
+                                <li>
+                                    <button name="sortOrder" class="btn dropdown-item" value="mileage_desc" type="submit">Największy przebieg</button>
+                                </li>
+                                <li>
+                                    <button name="sortOrder" class="btn dropdown-item" value="price" type="submit">Najtańsze</button>
+                                </li>
+                                <li>
+                                    <button name="sortOrder" class="btn dropdown-item" value="price_desc" type="submit">Najdroższe</button>
+                                </li>
+                                <li>
+                                    <button name="sortOrder" class="btn dropdown-item" value="productionYear_desc" type="submit">Najmłodsze</button>
+                                </li>
+                                <li>
+                                    <button name="sortOrder" class="btn dropdown-item" value="productionYear" type="submit">Najstarsze</button>
+                                </li>
+                                <li>
+                                    <button name="sortOrder" class="btn dropdown-item" value="power_desc" type="submit">Największa moc</button>
+                                </li>
+                                <li>
+                                    <button name="sortOrder" class="btn dropdown-item" value="power" type="submit">Najmniejsza moc</button>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
+                }
                 @if (Model.Any())
                 {
                     @foreach (var advert in Model)
@@ -277,6 +284,17 @@
             if ($(window).width() < 576) {
                 $(".collapse").removeClass('show');
                 $("#collapseButton").attr('aria-expanded', 'false')
+            }
+        })
+
+        $("select").click(function () {
+            let firstSelect = $(this).parent().parent().children('div').first().children('select')
+            let secondSelect = $(this).parent().parent().children('div').last().children('select')
+            let min = parseInt(firstSelect.children('option').filter(':selected').val())
+            let max = parseInt(secondSelect.children('option').filter(':selected').val())
+
+            if (min > max) {
+                firstSelect.prop('selectedIndex', 0)
             }
         })
 

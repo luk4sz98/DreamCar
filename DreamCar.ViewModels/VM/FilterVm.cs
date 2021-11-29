@@ -23,13 +23,7 @@ namespace DreamCar.ViewModels.VM
         public int? MinProductionYear { get; set; }
         public int? MaxProductionYear { get; set; }
         public FuelType? Fuel { get; set; }
-
-        [RegularExpression(@"^[0-9]+$", ErrorMessage = "To pole może zawierac wyłącznie cyfry")]
-        [StringLength(7, ErrorMessage = "Maksymalna ilość cyfr to {1}")]
         public int? MinMileage { get; set; }
-
-        [RegularExpression(@"^[0-9]+$", ErrorMessage = "To pole może zawierac wyłącznie cyfry")]
-        [StringLength(7, ErrorMessage = "Maksymalna ilość cyfr to {1}")]
         public int? MaxMileage { get; set; }
     }
 }
