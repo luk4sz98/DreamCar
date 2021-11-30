@@ -10,8 +10,8 @@
     var isFollowed = (bool)ViewBag.IsFollowed;
     var isSignedIn = SignManager.IsSignedIn(User);
     var userId = UserManager.GetUserId(User);
-    var fuel = Model.Car.FuelType.GetAttribute<DisplayAttribute>().Name;
-    var body = Model.Car.BodyType.GetAttribute<DisplayAttribute>().Name;
+    var fuel = Model.Car.Fuel.GetAttribute<DisplayAttribute>().Name;
+    var body = Model.Car.Body.GetAttribute<DisplayAttribute>().Name;
 }
 
 <div class="userInfo justify-content-start">

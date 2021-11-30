@@ -23,7 +23,7 @@ namespace DreamCar.ViewModels.VM
         [RegularExpression(@"^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$", ErrorMessage = "Miesiąc może zawierac wyłącznie litery")]
         public string MonthGuaranteePeriod { get; set; }
         public string YearGuaranteePeriod { get; set; }
-        public DriveType DriveType { get; set; }
+        public DriveType Drive { get; set; }
         
         [RegularExpression(@"^[0-9]+$", ErrorMessage = "To pole może zawierać jedynie cyfry")]
         [StringLength(6, ErrorMessage = "To pole może zawierać co najmniej {2} oraz maksymalnie {1} cyfr", MinimumLength = 4)]
@@ -60,7 +60,7 @@ namespace DreamCar.ViewModels.VM
         public string Model { get; set; }
 
         [Required(ErrorMessage = "Musisz wybrać rodzaj paliwa")]
-        public FuelType FuelType { get; set; }
+        public FuelType Fuel { get; set; }
 
         [Required(ErrorMessage = "Musisz podać moc samochodu")]
         [StringLength(4, ErrorMessage = "Moc silnika musi zawierać co najmniej {2} oraz maksymalnie {1} cyfry", MinimumLength = 2)]
@@ -90,7 +90,7 @@ namespace DreamCar.ViewModels.VM
         public string Generation { get; set; }
 
         [Required(ErrorMessage = "Musisz wybrać segment samochodu")]
-        public BodyType BodyType { get; set; }
+        public BodyType Body { get; set; }
 
         [Required(ErrorMessage = "Musisz podać kolor samochodu")]
         [StringLength(30, ErrorMessage = "Kolor samochodu musi zawierać co najmniej {2} oraz maksymalnie {1} liter", MinimumLength = 3)]

@@ -10,10 +10,10 @@
 
 @{
     var userId = UserManager.GetUserId(User);
-    var fuel = Model.Car.FuelType.GetAttribute<DisplayAttribute>().Name;
-    var body = Model.Car.BodyType.GetAttribute<DisplayAttribute>().Name;
+    var fuel = Model.Car.Fuel.GetAttribute<DisplayAttribute>().Name;
+    var body = Model.Car.Body.GetAttribute<DisplayAttribute>().Name;
     var gearbox = Model.Car.Gearbox.GetAttribute<DisplayAttribute>().Name;
-    var drive = Model.Car.DriveType.GetAttribute<DisplayAttribute>().Name;
+    var drive = Model.Car.Drive.GetAttribute<DisplayAttribute>().Name;
     var colorType = Model.Car.ColorType.GetAttribute<DisplayAttribute>().Name;
 }
 

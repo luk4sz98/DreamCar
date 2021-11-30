@@ -28,11 +28,11 @@
                     <span asp-validation-for="Model" class="text-danger"></span>
                 </div>
                 <div class="form-floating col-12 col-md-6 col-lg-4 mb-3">
-                    <select disabled id="fuelTypeList" required asp-for="FuelType" asp-items="Html.GetEnumSelectList<FuelType>()" class="form-select" style="border-radius: 1rem;">
+                    <select disabled id="fuelTypeList" required asp-for="Fuel" asp-items="Html.GetEnumSelectList<FuelType>()" class="form-select" style="border-radius: 1rem;">
                         <option value="" disabled selected>Wybierz typ paliwa</option>
                     </select>
                     <label for="fuelTypeList" class="form-label">Rodzaj paliwa <sup><icon class="fas fa-star"></icon></sup></label>
-                    <span asp-validation-for="FuelType" class="text-danger"></span>
+                    <span asp-validation-for="Fuel" class="text-danger"></span>
                 </div>
                 <div class="form-floating col-12 col-md-6 col-lg-4 mb-3">
                     <input disabled id="power" required asp-for="Power" placeholder="Numer VIN" class="form-control" style="border-radius: 1rem;" />
@@ -73,11 +73,11 @@
                     <span asp-validation-for="Generation" class="text-danger"></span>
                 </div>
                 <div class="form-floating col-12 col-md-6 col-lg-12 mb-3">
-                    <select id="bodyTypeList" required asp-for="BodyType" asp-items="Html.GetEnumSelectList<BodyType>()" class="form-select" style="border-radius: 1rem;">
+                    <select id="bodyTypeList" required asp-for="Body" asp-items="Html.GetEnumSelectList<BodyType>()" class="form-select" style="border-radius: 1rem;">
                         <option value="" disabled selected>Wybierz typ nadwozia pojazdu</option>
                     </select>
                     <label for="bodyTypeList" class="form-label">Rodzaj nadwozia <sup><icon class="fas fa-star"></icon></sup></label>
-                    <span asp-validation-for="BodyType" class="text-danger"></span>
+                    <span asp-validation-for="Body" class="text-danger"></span>
                 </div>
                 <div class="form-floating col-12 col-md-6 col-lg-4 mb-3">
                     <input id="color" required asp-for="Color" placeholder="Kolor" class="form-control" style="border-radius: 1rem;" />
