@@ -44,7 +44,7 @@ namespace DreamCar.Services.Services
             try
             {
                 // If Id has value, it means, it is edit operation
-                if (advertVm.Advert.AdvertId.HasValue || advertVm.Advert.AdvertId != Guid.Empty)
+                if (advertVm.Advert.AdvertId.HasValue)
                 {
                     var advertToUpdate = await DbContext.Adverts.FirstOrDefaultAsync(ad => ad.Id == advertVm.Advert.AdvertId);
                     UpdateAdvert(advertToUpdate, Mapper.Map<Advert>(advertVm.Advert));

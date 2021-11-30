@@ -79,14 +79,14 @@ namespace DreamCar.ViewModels.VM
         [Required(ErrorMessage = "Musisz wybrać typ skrzyni biegów")]
         public GearboxType Gearbox { get; set; }
 
-        [Required(ErrorMessage = "Musisz podać wersje auta, wpisz 'Brak' gdy nie wiesz jaka to wersja")]
-        [StringLength(20, ErrorMessage = "Wersja samochodu nie może być dłuższa niż {1} oraz krótsza niż {2}", MinimumLength = 3)]
-        [RegularExpression(@"^[A-Za-z0-9()\s{0,1}]+$", ErrorMessage = "To pole nie może zawierać znaków specjalnych")]
+        [Required(ErrorMessage = "Musisz podać wersje auta, wpisz '-' gdy nie wiesz jaka to wersja")]
+        [StringLength(20, ErrorMessage = "Wersja samochodu nie może być dłuższa niż {1} oraz krótsza niż {2}", MinimumLength = 1)]
+        [RegularExpression(@"^[A-Za-z0-9()\s{0,1}\.-]+$", ErrorMessage = "To pole nie może zawierać znaków specjalnych")]
         public string Version { get; set; }
 
-        [Required(ErrorMessage = "Musisz podać generacje auta, wpisz 'Brak' gdy nie wiesz jaka to generacja")]
+        [Required(ErrorMessage = "Musisz podać generacje auta, wpisz '-' gdy nie wiesz jaka to generacja")]
         [StringLength(20, ErrorMessage = "Generacja samochodu nie może być dłuższa niż {1} oraz krótsza niż {2}", MinimumLength = 1)]
-        [RegularExpression(@"^[A-Za-z0-9-{0,1}]+$", ErrorMessage = "To pole nie może zawierać znaków specjalnych")]
+        [RegularExpression(@"^[A-Za-z0-9-{0,1}\.-]+$", ErrorMessage = "To pole nie może zawierać znaków specjalnych")]
         public string Generation { get; set; }
 
         [Required(ErrorMessage = "Musisz wybrać segment samochodu")]
