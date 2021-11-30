@@ -42,7 +42,7 @@
     </div>
 </div>
 
-<div class="container mt-3 gap-0">
+<div class="container mt-5 pt-2 gap-0">
     <div class="row">
         <div class="col-lg-8 d-flex flex-column">
             <partial name="_SellerAdvertPartial" />
@@ -53,7 +53,7 @@
         </div>
     </div>
 </div>
-
+<span id="advertLocation" class="d-none" style="pointer-events: none; cursor: none;">@Model.Localization</span>
 @section Scripts {
     <script src='/assets/js/lc_lightbox.lite.min.js' type='text/javascript'></script>
     <script src='/assets/js/alloy_finger.min.js' type='text/javascript'></script>
@@ -70,7 +70,7 @@
                 zoom: 10,
                 mapTypeId: "terrain",
             });
-            var address = "@Model.Localization";
+            var address = $("#advertLocation").html();
             geocoder = new google.maps.Geocoder();
             geocoder.geocode({ 'address': address }, function (results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
