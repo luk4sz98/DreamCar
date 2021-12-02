@@ -209,6 +209,21 @@
             }))
             $("#carImages").html(result)
         })
+
+        $("#voivodeship").children('option').click(function () {
+            if ($(this).filter(':selected').val() != "") {
+                $("#localization").removeAttr('disabled')
+            }
+        })
+
+        $("#localization").on('focusout, change', function () {
+            let previous = $(this).val().toString()
+            let voivodeship = $("#voivodeship").children('option').filter(':selected').val().toString()
+            if (!previous.includes(voivodeship)) {
+                $(this).val(previous + ", " + voivodeship)
+            }
+        })
+
     </script>
     <script src="~/assets/js/autoCompleteInputFields.js"></script>
     <script src="~/assets/js/disabledElements.js"></script>

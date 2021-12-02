@@ -177,20 +177,18 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-6 d-flex flex-column align-items-end">
-                                            <div class="d-flex justify-content-start">
-                                                <h2 style="color:lightseagreen;">@advert.Price<span style="font-size:15px;">@advert.Currency</span></h2>
-                                                @{
-                                                    if (advert.ToNegotiate)
-                                                    {
-                                                        <span class="text-secondary">Do negocjacji</span>
-                                                    }
-                                                    if (advert.VAT)
-                                                    {
-                                                        <span class="text-secondary">Faktura VAT</span>
-                                                    }
+                                        <div class="col-12 col-md-6 d-flex flex-column justify-content-start align-items-end">
+                                            <h2 style="color:lightseagreen;">@advert.Price<span style="font-size:15px;">@advert.Currency</span></h2>
+                                            @{
+                                                if (advert.ToNegotiate)
+                                                {
+                                                    <span class="text-secondary">Do negocjacji</span>
                                                 }
-                                            </div>
+                                                if (advert.VAT)
+                                                {
+                                                    <span class="text-secondary">Faktura VAT</span>
+                                                }
+                                            }
                                         </div>
                                     </div>
                                 </div>

@@ -77,6 +77,14 @@
             </select>
         </div>
     </div>
+    <div class="row">
+        <div class="form-floating col-12 mb-3">
+            <select id="voivodeship" asp-for="Voivodeship" asp-items="ViewBag.Voivodeships" class="form-select shadow-none" style="border-radius: 1rem;">
+                <option value="" disabled selected>-</option>
+            </select>
+            <label id="voivodeshipLabel" class="form-label ms-3" for="maxYear">Lokalizacja</label>
+        </div>
+    </div>
     <div class="col-12 pb-3 d-flex justify-content-between align-items-center mt-3 mt-lg-0">
         @if (TempData["filter"] is not null)
         {

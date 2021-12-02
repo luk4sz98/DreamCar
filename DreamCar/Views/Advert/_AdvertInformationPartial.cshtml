@@ -65,27 +65,33 @@
                 <h5 class="text-center">
                     Dane kontaktowe
                 </h5>
-                <div class="form-floating col-12 col-lg-4 mb-2">
+                <div class="form-floating col-12 col-lg-3 mb-3">
+                    <select required id="voivodeship" asp-for="Voivodeship" asp-items="@ViewBag.Voivodeships" class="form-select" data-bs-toggle="tooltip" data-bs-placement="top" title="Wybierz województwo" data-bs-animation="true" style="border-radius: 1rem;">
+                        <option value="" disabled selected>-</option>
+                    </select>
+                    <label for="voivodeship" class="form-label labelInput">Województwo <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
+                    <span asp-validation-for="Voivodeship" class="text-danger"></span>
+                </div>
+                <div class="form-floating col-12 col-lg-3 mb-2">
                     @{
                         if (String.IsNullOrEmpty(ViewBag.User.Address))
                         {
-                            <input data-bs-toggle="tooltip" data-bs-placement="left" title="Wprowadź miasto lub kod pocztowy, bez obaw, będzie to przybliżona lokalizacja." data-bs-animation="true" required id="localization" asp-for="Localization" placeholder="city" class="form-control" style="border-radius: 1rem;" />
+                            <input disabled data-bs-toggle="tooltip" data-bs-placement="top" title="Wprowadź miasto lub kod pocztowy, bez obaw, będzie to przybliżona lokalizacja." data-bs-animation="true" required id="localization" asp-for="City" placeholder="city" class="form-control" style="border-radius: 1rem;" />
                         }
                         else
                         {
-                            <input value="@ViewBag.User.Address" data-bs-toggle="tooltip" data-bs-placement="left" title="Wprowadź miasto lub kod pocztowy, bez obaw, będzie to przybliżona lokalizacja." data-bs-animation="true" required id="localization" asp-for="Localization" placeholder="city" class="form-control" style="border-radius: 1rem;" />
+                            <input value="@ViewBag.User.Address" data-bs-toggle="tooltip" data-bs-placement="left" title="Wprowadź miasto lub kod pocztowy, bez obaw, będzie to przybliżona lokalizacja." data-bs-animation="true" required id="localization" asp-for="City" placeholder="city" class="form-control" style="border-radius: 1rem;" />
                         }
                         <label class="form-label" for="localization">Lokalizacja <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
-                        <span class="text-danger" asp-validation-for="Localization"></span>
+                        <span class="text-danger" asp-validation-for="City"></span>
                     }
                 </div>
-
-                <div class="form-floating col-12 col-lg-4 mb-2">
+                <div class="form-floating col-12 col-lg-3 mb-2">
                     <input value="@ViewBag.User.Email" data-bs-toggle="tooltip" data-bs-placement="top" title="Podaj adres email, pod którym będą się mogli z Tobą skontaktować użytkownicy." data-bs-animation="true" required id="email" asp-for="Email" placeholder="email" class="form-control" style="border-radius: 1rem;" />
                     <label class="form-label" for="email">Email <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
                     <span class="text-danger" asp-validation-for="Email"></span>
                 </div>
-                <div class="form-floating col-12 col-lg-4 mb-2">
+                <div class="form-floating col-12 col-lg-3 mb-2">
                     @{
                         if (String.IsNullOrEmpty(ViewBag.User.PhoneNumber))
                         {

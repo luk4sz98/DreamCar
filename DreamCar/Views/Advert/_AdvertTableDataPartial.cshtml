@@ -68,7 +68,7 @@
                         }
                         else
                         {
-                            if (/*(DateTime.Now - advert.CreatedAt).TotalHours > 24*/true)
+                            if ((DateTime.Now - advert.CreatedAt).TotalHours > 24)
                             {
                                 <li>
                                     <a class="dropdown-item" asp-action="AddOrEdit" asp-controller="Advert" asp-route-advertId="@advert.Id">Edytuj</a>

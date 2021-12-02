@@ -18,6 +18,7 @@ namespace DreamCar.ViewModels.VM
         [StringLength(20, ErrorMessage = "Generacja samochodu nie może być dłuższa niż {1} oraz krótsza niż {2}", MinimumLength = 1)]
         [RegularExpression(@"^[A-Za-z0-9-{0,1}]+$", ErrorMessage = "To pole nie może zawierać znaków specjalnych")]
         public string Generation { get; set; }
+        public string Voivodeship { get; set; }
         public decimal? MinPrice { get; set; }
         public decimal? MaxPrice { get; set; }
         public int? MinProductionYear { get; set; }

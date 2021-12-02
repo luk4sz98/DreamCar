@@ -26,7 +26,7 @@ namespace DreamCar.ViewModels.VM
         [StringLength(50, ErrorMessage = "Miasto musi składać się co najmniej z {2} i maksymalnie {1} znaków.", MinimumLength = 3)]
         [DataType(DataType.Text)]
         [RegularExpression(@"^[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9-{0,1},\s]+$", ErrorMessage = "Miasto może zawierać wyłącznie litery lub cyfry jako kod pocztowy")]
-        public string Localization { get; set; }
+        public string City { get; set; }
 
         [Required(ErrorMessage = "Musisz podać adres email")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Niepoprawny adres email")]
@@ -37,6 +37,9 @@ namespace DreamCar.ViewModels.VM
         [RegularExpression(@"^\([0-9]{2}\)\s[0-9]{3}-[0-9]{3}-[0-9]{3}$", ErrorMessage = "Podaj prawidłowy numer")]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "Musisz podać województwo")]
+        public string Voivodeship { get; set; }
         public Currency Currency { get; set; }
         public bool VAT { get; set; }
         public bool Brutto { get; set; }

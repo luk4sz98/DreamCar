@@ -41,6 +41,10 @@ namespace DreamCar.Web.Controllers
             200000, 300000, 500000, 1000000
         });
         private readonly IEnumerable<SelectListItem> _years = new SelectList(Enumerable.Range(1900, (DateTime.Now.Year - 1900) + 1)).Reverse();
+        private readonly SelectList _voivodeships = new(new string[] {
+            "Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Łódzkie", "Małopolskie", "Mazowieckie", "Opolskie", "Podkarpackie", "Podlaskie",
+            "Pomorskie", "Śląskie", "Świętokrzyskie", "Warmińsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"
+        });
 
         public AdvertController(
             ILogger logger,
@@ -75,6 +79,7 @@ namespace DreamCar.Web.Controllers
             ViewBag.Days = new SelectList(Enumerable.Range(1, 31));
             ViewBag.Years = new SelectList(Enumerable.Range(DateTime.Now.Year, (DateTime.Now.Year + 10) - DateTime.Now.Year));
             ViewBag.User = await UserManager.GetUserAsync(User);
+            ViewBag.Voivodeships = _voivodeships;
 
             if (advertId == null) return View();
 
@@ -97,7 +102,7 @@ namespace DreamCar.Web.Controllers
                     errors.Add(error.ErrorMessage);
                 }
                 TempData["AdvertAdded"] = false;
-                return RedirectToAction("AddNewAdvert", errors);
+                return RedirectToAction("AddOrEdit", errors);
             }
 
             var addAdvertVm = new AddOrEditAdvertVm { Car = car, Equipments = equipments, ImagesUploaded = imagesUploaded, Advert = advert };
@@ -374,34 +379,37 @@ namespace DreamCar.Web.Controllers
 
             ViewBag.Prices = _prices;
             ViewBag.Years = _years;
+            ViewBag.Voivodeships = _voivodeships;
 
             return View("Adverts", mappedList);
         }
 
-        private static IQueryable<Advert> FilterCollection(IQueryable<Advert> collection, FilterVm filter)
+        private IQueryable<Advert> FilterCollection(IQueryable<Advert> collection, FilterVm filter)
         {
             if (!string.IsNullOrEmpty(filter.Brand))
-                collection = collection.Where(ad => ad.Car.Brand.ToLower() == filter.Brand.ToLower());
+                collection = _advertService.GetAdverts(ad => ad.Car.Brand.ToLower() == filter.Brand.ToLower());
             if (!string.IsNullOrEmpty(filter.Model))
-                collection = collection.Where(ad => ad.Car.Model.ToLower() == filter.Model.ToLower());
+                collection = _advertService.GetAdverts(ad => ad.Car.Model.ToLower() == filter.Model.ToLower());
             if (!string.IsNullOrEmpty(filter.Generation))
-                collection = collection.Where(ad => ad.Car.Generation.ToLower() == filter.Generation.ToLower());
+                collection = _advertService.GetAdverts(ad => ad.Car.Generation.ToLower() == filter.Generation.ToLower());
+            if (!string.IsNullOrEmpty(filter.Voivodeship))
+                collection = _advertService.GetAdverts(ad => ad.Localization.Contains(filter.Voivodeship));
             if (filter.Fuel.HasValue)
-                collection = collection.Where(ad => ad.Car.Fuel == filter.Fuel);
+                collection = _advertService.GetAdverts(ad => ad.Car.Fuel == filter.Fuel);
             if (filter.Body.HasValue)
-                collection = collection.Where(ad => ad.Car.Body == filter.Body);
+                collection = _advertService.GetAdverts(ad => ad.Car.Body == filter.Body);
             if (filter.MinPrice.HasValue)
-                collection = collection.Where(ad => ad.Price >= filter.MinPrice);
+                collection = _advertService.GetAdverts(ad => ad.Price >= filter.MinPrice);
             if (filter.MaxPrice.HasValue)
-                collection = collection.Where(ad => ad.Price <= filter.MaxPrice); 
+                collection = _advertService.GetAdverts(ad => ad.Price <= filter.MaxPrice); 
             if (filter.MinProductionYear.HasValue)
-                collection = collection.Where(ad => ad.Car.ProductionYear >= filter.MinProductionYear); 
+                collection = _advertService.GetAdverts(ad => ad.Car.ProductionYear >= filter.MinProductionYear); 
             if (filter.MaxProductionYear.HasValue)
-                collection = collection.Where(ad => ad.Car.ProductionYear <= filter.MaxProductionYear);
+                collection = _advertService.GetAdverts(ad => ad.Car.ProductionYear <= filter.MaxProductionYear);
             if (filter.MinMileage.HasValue)
-                collection = collection.Where(ad => ad.Car.Mileage >= filter.MinMileage);
+                collection = _advertService.GetAdverts(ad => ad.Car.Mileage >= filter.MinMileage);
             if (filter.MaxMileage.HasValue)
-                collection = collection.Where(ad => ad.Car.Mileage <= filter.MaxMileage);
+                collection = _advertService.GetAdverts(ad => ad.Car.Mileage <= filter.MaxMileage);
             return collection;
         }
     }
