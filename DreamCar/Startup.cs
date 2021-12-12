@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
+using System;
 
 namespace DreamCar
 {
@@ -55,6 +56,7 @@ namespace DreamCar
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<ICookiesService, CookiesService>();
+            services.AddScoped<ISessionService, SessionService>();
             services.Configure<AppSettingsService>(Configuration.GetSection(AppSettingsService.SectionName));
             services.AddOptions();
             services.AddScoped<IReCaptchaService, ReCaptchaService>();
@@ -69,6 +71,11 @@ namespace DreamCar
                 var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
                 var factory = x.GetRequiredService<IUrlHelperFactory>();
                 return factory.GetUrlHelper(actionContext);
+            });
+            services.AddDistributedMemoryCache();
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(15);
+                options.Cookie.HttpOnly = true;
             });
             services.AddMvc();
         }
@@ -94,6 +101,8 @@ namespace DreamCar
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

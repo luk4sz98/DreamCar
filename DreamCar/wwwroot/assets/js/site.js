@@ -17,3 +17,7 @@ function setActiveClass() {
         }
     }
 }
+
+function GetAdvert(advertId) {
+    window.location.href = '/Advert?advertId=' + advertId;
+}

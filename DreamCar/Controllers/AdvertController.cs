@@ -21,6 +21,7 @@ namespace DreamCar.Web.Controllers
         private readonly IEquipmentService _equipmentService;
         private readonly IAdvertService _advertService;
         private readonly ICookiesService _cookiesService;
+        private readonly ISessionService _sessionService;
         private readonly SignInManager<User> _signInManager;
 
         private readonly SelectList _countries = new(new string[] {
@@ -36,7 +37,7 @@ namespace DreamCar.Web.Controllers
             "Inny"
         });
         private readonly SelectList _months = new(CultureInfo.GetCultureInfo("pl-Pl").DateTimeFormat.MonthNames);
-        private readonly SelectList _prices = new(new int[] { 
+        private readonly SelectList _prices = new(new int[] {
             1000, 2000, 5000, 10000, 20000, 30000, 50000, 100000, 150000,
             200000, 300000, 500000, 1000000
         });
@@ -53,12 +54,14 @@ namespace DreamCar.Web.Controllers
             UserManager<User> userManager,
             IAdvertService advertService,
             ICookiesService cookiesService,
+            ISessionService sessionService,
             SignInManager<User> signInManager
         ) : base(logger, mapper, userManager)
         {
             _equipmentService = equipmentService;
             _advertService = advertService;
             _cookiesService = cookiesService;
+            _sessionService = sessionService;
             _signInManager = signInManager;
         }
 
@@ -265,7 +268,7 @@ namespace DreamCar.Web.Controllers
 
                 followAdverts += ";" + advertId.ToString();
                 _cookiesService.Set("follow", followAdverts);
-                
+
                 return HttpStatusCode.OK;
             }
             catch (Exception ex)
@@ -314,16 +317,17 @@ namespace DreamCar.Web.Controllers
                     return View("FollowAdverts", followAdverts);
                 }
 
-                var followAdvertsId = _cookiesService.Get("follow") is null 
-                    ?  Enumerable.Empty<Guid>() :
+                var followAdvertsId = _cookiesService.Get("follow") is null
+                    ? Enumerable.Empty<Guid>() :
                     _cookiesService.Get("follow")
                         .Split(';')
-                        .Where(id => !string.IsNullOrEmpty(id) &&
-                                        !string.Equals(id, ";"))
+                        .Where(id =>
+                            !string.IsNullOrEmpty(id) &&
+                            !string.Equals(id, ";"))
                         .Select(id => Guid.Parse(id));
 
 
-                followAdverts = await _advertService.GetFollowAdvertsAsync(followAdvertsId, null);              
+                followAdverts = await _advertService.GetFollowAdvertsAsync(followAdvertsId, null);
 
                 return View("FollowAdverts", followAdverts);
             }
@@ -364,7 +368,7 @@ namespace DreamCar.Web.Controllers
             ViewBag.page = page;
 
             int start = (int)(page - 1) * pageSize;
-            
+
             //Aktualny numer strony
             ViewBag.pageCurrent = page;
             int totalPages = adverts.Count();
@@ -384,6 +388,72 @@ namespace DreamCar.Web.Controllers
             return View("Adverts", mappedList);
         }
 
+        [HttpPost]
+        public HttpStatusCode AddAdvertToCompare(Guid advertId)
+        {
+            try
+            {
+
+                var compareIds = _sessionService.Get("compareIds");
+                if (string.IsNullOrEmpty(compareIds))
+                    _sessionService.Set("compareIds", advertId.ToString());
+                else
+                {
+                    var compareIdsTable = compareIds.Split(";");
+                    if (compareIdsTable.Length >= 5)
+                        throw new InvalidOperationException("Próba dodania do porównania większej ilości ogłoszeń niż 5");
+
+                    if (!compareIdsTable.Contains(advertId.ToString()))
+                    {
+                        compareIds += ";" + advertId.ToString();
+                        _sessionService.Set("compareIds", compareIds);
+                    }
+                    else return HttpStatusCode.BadRequest;
+                }
+
+                return HttpStatusCode.OK;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return HttpStatusCode.BadRequest;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return HttpStatusCode.InternalServerError;
+            }
+        }
+
+        [HttpGet]
+        [Route("Adverts/Compare")]
+        public async Task<IActionResult> CompareAdverts()
+        {
+            try
+            {
+                IEnumerable<UserAdvertVm> compareAdverts;
+
+                var compareIds = _sessionService.Get("compareIds") is null
+                    ? Enumerable.Empty<Guid>() :
+                    _sessionService.Get("compareIds")
+                        .Split(';')
+                        .Where(id =>
+                            !string.IsNullOrEmpty(id) &&
+                            !string.Equals(id, ";"))
+                        .Select(id => Guid.Parse(id));
+
+                compareAdverts = await _advertService.GetUserAdvertsAsync(ad => compareIds.Contains(ad.Id));
+
+                return View("CompareAdverts", compareAdverts);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                TempData["GetAdvertError"] = "Coś poszło nie tak, spróbuj ponownie";
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
         private IQueryable<Advert> FilterCollection(IQueryable<Advert> collection, FilterVm filter)
         {
             if (!string.IsNullOrEmpty(filter.Brand))
@@ -401,9 +471,9 @@ namespace DreamCar.Web.Controllers
             if (filter.MinPrice.HasValue)
                 collection = _advertService.GetAdverts(ad => ad.Price >= filter.MinPrice);
             if (filter.MaxPrice.HasValue)
-                collection = _advertService.GetAdverts(ad => ad.Price <= filter.MaxPrice); 
+                collection = _advertService.GetAdverts(ad => ad.Price <= filter.MaxPrice);
             if (filter.MinProductionYear.HasValue)
-                collection = _advertService.GetAdverts(ad => ad.Car.ProductionYear >= filter.MinProductionYear); 
+                collection = _advertService.GetAdverts(ad => ad.Car.ProductionYear >= filter.MinProductionYear);
             if (filter.MaxProductionYear.HasValue)
                 collection = _advertService.GetAdverts(ad => ad.Car.ProductionYear <= filter.MaxProductionYear);
             if (filter.MinMileage.HasValue)

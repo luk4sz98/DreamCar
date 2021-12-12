@@ -1,0 +1,177 @@
+﻿@using System.Globalization
+@model IEnumerable<UserAdvertVm>
+
+<link rel="stylesheet" href="/assets/css/table.css">
+
+<style>
+    .dt-buttons {
+        pointer-events: none;
+        display: none;
+        cursor: default;
+    }
+
+    #compareAdvertsTable_length, #compareAdvertsTable_filter {
+        pointer-events: none;
+        display: none;
+        cursor: default;
+    }
+
+    tr {
+        cursor: pointer;
+    }
+
+        tr:hover {
+            cursor: pointer;
+        }
+
+    td {
+        font-size: 23px;
+        font-weight: 500;
+    }
+
+    @@media screen and (max-width: 576px) {
+        td {
+            font-size: 15px;
+        }
+    }
+</style>
+
+@{
+    <div class="container mt-md-5">
+        <div class="row mt-3">
+            <div class="tableAdverts mx-auto table-responsive mb-3">
+                <table id="compareAdvertsTable" class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th class="d-none" style="pointer-events: none; cursor: none;"></th>
+                            <th></th>
+                            <th class="d-none d-lg-table-cell" data-bs-toggle="tooltip" data-bs-placement="left" title="Sortuj malejąco/rosnąco wg tytułu" data-bs-animation="true" scope="col"><span>Tytuł</span></th>
+                            <th data-bs-toggle="tooltip" data-bs-placement="left" title="Sortuj malejąco/rosnąco wg roku produkcji" data-bs-animation="true" scope="col"><span>Rocznik</span></th>
+                            <th class="d-none d-md-table-cell" data-bs-toggle="tooltip" data-bs-placement="left" title="Sortuj malejąco/rosnąco wg pojemności" data-bs-animation="true" scope="col"><span>Pojemność</span></th>
+                            <th data-bs-toggle="tooltip" data-bs-placement="left" title="Sortuj malejąco/rosnąco wg mocy" data-bs-animation="true" scope="col"><span>Moc</span></th>
+                            <th class="d-none d-lg-table-cell" data-bs-toggle="tooltip" data-bs-placement="top" title="Sortuj malejąco/rosnąco wg przebiegu" data-bs-animation="true" scope="col"><span>Przebieg</span></th>
+                            <th data-bs-toggle="tooltip" data-bs-placement="right" title="Sortuj malejąco/rosnąco wg daty ceny" data-bs-animation="true" scope="col"><span>Cena</span></th>
+                        </tr>
+                    </thead>
+                    <tbody class="compareAdvertsTableData">
+                        @if (Model.Any())
+                        {
+                            var minPrice = Model.Min(ad => ad.Price);
+                            var maxPower = Model.Max(ad => int.Parse(ad.Car.Power));
+                            var maxProductionYear = Model.Max(ad => ad.Car.ProductionYear);
+                            var maxEngine = Model.Max(ad => int.Parse(ad.Car.EngineCapacity));
+                            var minMileage = Model.Min(ad => int.Parse(ad.Car.Mileage));
+                            @foreach (var advert in Model)
+                            {
+                                <tr onclick="GetAdvert('@advert.Id')">
+                                    <td class="d-none" style="pointer-events: none; cursor:none;">
+                                        @advert.Id;
+                                    </td>
+                                    <td class="col-4 col-md-2 align-middle">
+                                        @if (advert.Images.Count() != 0)
+                                        {
+                                            <a data-bs-toggle="tooltip" data-bs-placement="top" title="Naciśnij by przejść do ogłoszenia" data-bs-animation="true" class="advertLink"
+                                               asp-action="GetAdvert" asp-controller="Advert" asp-route-advertId="@advert.Id"
+                                               style="text-decoration:none;color:inherit !important; font-size:28px; font-weight:500;">
+                                                <div id="carouselCarImages @advert.Id" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                                                    <div class="carousel-inner">
+                                                        <div class="carousel-item active">
+                                                            <img src="~/advertImages/Advert @advert.Id/@advert.Images.ElementAt(0).Name" class="img-fluid w-100 d-block" style="border-radius:0.5rem;" />
+                                                        </div>
+                                                        @for (int i = 1; i < advert.Images.Count(); i++)
+                                                        {
+                                                            <div class="carousel-item">
+                                                                <img src="~/advertImages/Advert @advert.Id/@advert.Images.ElementAt(i).Name" class="img-fluid w-100 d-block" style="border-radius:0.5rem;" />
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span>Brak zdjęć</span>
+                                        }
+                                    </td>
+                                    <td class="align-middle d-none d-lg-table-cell col-2">
+                                        @advert.Title
+                                    </td>
+                                    @if (advert.Car.ProductionYear == maxProductionYear)
+                                    {
+                                        <td class="align-middle col-2 text-success">@advert.Car.ProductionYear</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="align-middle col-2 text-danger">@advert.Car.ProductionYear</td>
+                                    }
+                                    @if (int.Parse(advert.Car.EngineCapacity) == maxEngine)
+                                    {
+                                        <td class="align-middle d-none d-md-table-cell col-2 text-success">@advert.Car.EngineCapacity</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="align-middle d-none d-md-table-cell col-2 text-danger">@advert.Car.EngineCapacity</td>
+                                    }
+                                    @if (int.Parse(advert.Car.Power) == maxPower)
+                                    {
+                                        <td class="align-middle col-1 text-success">@advert.Car.Power</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="align-middle col-1 text-danger">@advert.Car.Power</td>
+                                    }
+                                    @if (int.Parse(advert.Car.Mileage) == minMileage)
+                                    {
+                                        <td class="align-middle d-none d-lg-table-cell col-2 text-success">@advert.Car.Mileage</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="align-middle d-none d-lg-table-cell col-2 text-danger">@advert.Car.Mileage</td>
+                                    }
+                                    @if (advert.Price == minPrice)
+                                    {
+                                        <td class="align-middle col-2 text-success">@advert.Price</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="align-middle col-2 text-danger">@advert.Price</td>
+                                    }
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $.fn.dataTable.moment('DD/MM/YYYY');
+            $("table").DataTable({
+                clientSide: true,
+                filter: false,
+                paging: false,
+                autoWidth: false,
+                columnDefs: [
+                    { targets: 1, orderable: false },
+                    { targets: 2, orderable: true },
+                    { targets: 3, orderable: true },
+                    { targets: 4, orderable: true },
+                    { targets: 5, orderable: true },
+                ],
+                language: {
+                    "emptyTable": "Brak ogłoszeń do porównania",
+                    "info": "Pozycje od _START_ do _END_ z _TOTAL_ łącznie",
+                    "infoEmpty": "Pozycji 0 z 0 dostępnych",
+                }
+
+            })
+            $(".dt-buttons, #compareAdvertsTable_length, #compareAdvertsTable_length").html('')
+
+
+        })
+    </script>
+}

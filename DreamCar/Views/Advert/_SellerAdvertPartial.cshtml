@@ -63,8 +63,15 @@ else
         <span>Brak zdjęć</span>
     </div>
 }
-<div class="col-12 d-flex justify-content-end ">
-    <span>@Model.CreatedAt.ToString("dddd, dd MMMM yyyy")</span>
+<div class="col-12 d-flex">
+    <div class="col">
+        <span id="compare" style="color: lightseagreen; cursor: pointer" onclick="AddAdvertToCompare('@Model.Id')">
+            Porównaj
+        </span>
+    </div>
+    <div class="col d-flex justify-content-end">
+        <span>@Model.CreatedAt.ToString("dddd, dd MMMM yyyy")</span>
+    </div>
 </div>
 <div class="col-12 section mt-5 mb-3">
     <div data-bs-toggle="tooltip" data-bs-placement="left" title="Naciśnij by rozwinąć">

@@ -10,6 +10,16 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 
+<div id="compareSuccess" class="alertMessage alert alert-success alert-dismissible" role="alert" style="display: none;">
+    Ogłoszenie zostało dodane do porównania.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<div id="compare401" class="alertMessage alert alert-warning alert-dismissible" role="alert" style="display: none;">
+    Przekroczono limit liczby ogłoszeń do porównania lub  wybrano już dodane ogłoszenie
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
 <div id="unfollowSuccess" class="alertMessage alert alert-success alert-dismissible" role="alert" style="display: none;">
     Ogłoszenie zostało usunięte z obserwowanych.
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -165,5 +175,22 @@
                 }
             }
         })
+
+        async function AddAdvertToCompare(advertId) {
+            const result = await $.post("/Advert/AddAdvertToCompare", $.param({
+                advertId: advertId
+            }))
+            if (result === 200) {
+                $("#compareSuccess").fadeIn(1000);
+                $("#compareSuccess").fadeOut(4500);
+            }
+            else if (result === 400) {
+                $("#compare401").fadeIn(1000);
+                $("#compare401").fadeOut(4500);
+            }
+            else {
+                $("#followError").fadeToggle(2000);
+            }
+        }
     </script>
 }
