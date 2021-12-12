@@ -42,7 +42,7 @@ namespace DreamCar.Web.Configuration.Profiles
 
             CreateMap<AdvertVm, Advert>()
                 .ForMember(dest => dest.Price, y => y.MapFrom(
-                    src => src.Brutto ? decimal.Multiply(Convert.ToDecimal(src.Price, CultureInfo.InvariantCulture), (decimal)1.23) :
+                    src => src.Brutto ? decimal.Multiply(Convert.ToDecimal(src.Price, CultureInfo.InvariantCulture), 1.23m) :
                     Convert.ToDecimal(src.Price, CultureInfo.InvariantCulture)))
                 .ForMember(dest => dest.Id, y => y.MapFrom(src => src.AdvertId))
                 .ForMember(dest => dest.Localization, y => y.MapFrom(src => src.City));
@@ -51,8 +51,8 @@ namespace DreamCar.Web.Configuration.Profiles
                 .ForMember(dest => dest.Voivodeship, y => y.MapFrom(src => src.Localization.Substring(src.Localization.LastIndexOf(',')+2)))
                 .ForMember(dest => dest.City, y => y.MapFrom(src => src.Localization))
                 .ForMember(dest => dest.Price, y => y.MapFrom(src => src.Brutto
-                    ? src.Price / (decimal)1.23 :
-                    Convert.ToDecimal(src.Price, CultureInfo.InvariantCulture)));
+                    ? decimal.Divide(src.Price, 1.23m) :
+                    src.Price));
 
             CreateMap<Image, ImageVm>()
                 .ForMember(dest => dest.Name, y => y.MapFrom(src => src.FileName));

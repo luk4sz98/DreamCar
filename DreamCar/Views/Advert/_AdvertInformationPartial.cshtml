@@ -30,7 +30,7 @@
                     @{
                         if (Model is not null && Model.Brutto)
                         {
-                            var price = decimal.Round(decimal.Multiply(Convert.ToDecimal(Model.Price), (decimal)0.77), 2, MidpointRounding.ToNegativeInfinity);
+                            var price = Model.Price + "00";
                             <input value="@price" required id="price" asp-for="Price" placeholder="Cena" class="form-control" style="border-radius: 1rem;" />
                         }
                         else
@@ -38,7 +38,6 @@
                             <input required id="price" asp-for="Price" placeholder="Cena" class="form-control" style="border-radius: 1rem;" />
                         }
                     }
-
                     <label class="form-label" for="price">Cena <sup><icon class="fas fa-star" style="margin: 0; text-indent: -3px; font-size: 6px; color: rgb(255,23,8);"></icon></sup></label>
                     <span class="text-danger" asp-validation-for="Price"></span>
                 </div>
