@@ -2,6 +2,7 @@
 @model RegisterModel
 
 @using DreamCar.Services.Services
+@using Microsoft.AspNetCore.Mvc.ModelBinding
 
 @{
     ViewData["Title"] = "Rejestracja";
@@ -20,6 +21,22 @@
             <div class="col d-flex justify-content-center align-content-center mb-2">
                 <h4>Wypełnij wszystkie pola</h4>
             </div>
+        </div>
+        <div class="row my-3">
+            @{
+                IEnumerable<ModelError> allErrors = ModelState?.Values
+                    .SelectMany(v => v.Errors)
+                    .ToList();
+                if (allErrors is not null && allErrors.Any())
+                {
+                    <ul class="list-group list-group-flush col-12">
+                        @foreach(var error in allErrors)
+                        {
+                            <li class="list-group-item text-danger">@error.ErrorMessage</li>
+                        }
+                    </ul>
+                }
+            }
         </div>
         <div class="row">
             <div class="form-floating mb-3 col-md-6">
