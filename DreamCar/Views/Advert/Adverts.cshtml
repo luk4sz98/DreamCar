@@ -2,7 +2,6 @@
 @using DreamCar.Model.DataModels
 @using System.ComponentModel.DataAnnotations
 @using DreamCar.Services.Services.Extensions
-@using DreamCar.ViewModels.VM
 @inject SignInManager<User> SignManager
 @inject UserManager<User> UserManager
 @model IEnumerable<UserAdvertVm>
@@ -27,6 +26,15 @@
     @@media screen and (max-width: 567px) {
         #filterSectionLG {
             bottom: 0;
+        }
+    }
+
+    @@media screen and (min-width: 900px) {
+        .advertRow {
+            max-height: 173px;
+        }
+        .advertRow img {
+            max-height: 173px;
         }
     }
 
@@ -155,7 +163,7 @@
                                             <div class="row">
                                                 <div class="col-12 d-flex justify-content-start align-items-center">
                                                     <h5 style="width:fit-content !important;">
-                                                        @advert.Car.Brand @advert.Car.Model @advert.Car.Power<span style="font-size:13px">km</span> @advert.Car.Generation @advert.Car.Version
+                                                        @advert.Car.Brand @advert.Car.Model @advert.Car.Power<span style="font-size:13px">km</span> @(advert.Car.Generation == "-" ? "" : advert.Car.Generation) @(advert.Car.Version == "-" ? "" : advert.Car.Version)
                                                     </h5>
                                                 </div>
                                             </div>
@@ -286,20 +294,20 @@
 
             if ($(window).width() < 576) {
                 $(".collapse").removeClass('show');
-                $("#collapseButton").attr('aria-expanded', 'false')
+                $("#collapseButton").attr('aria-expanded', 'false');
             }
-        })
+        });
 
         $("select").click(function () {
-            let firstSelect = $(this).parent().parent().children('div').first().children('select')
-            let secondSelect = $(this).parent().parent().children('div').last().children('select')
-            let min = parseInt(firstSelect.children('option').filter(':selected').val())
-            let max = parseInt(secondSelect.children('option').filter(':selected').val())
+            let firstSelect = $(this).parent().parent().children('div').first().children('select');
+            let secondSelect = $(this).parent().parent().children('div').last().children('select');
+            let min = parseInt(firstSelect.children('option').filter(':selected').val());
+            let max = parseInt(secondSelect.children('option').filter(':selected').val());
 
             if (min > max) {
-                firstSelect.prop('selectedIndex', 0)
+                firstSelect.prop('selectedIndex', 0);
             }
-        })
+        });
 
         $("#brandCar, #modelCar").on('keyup change', function () {
             if ($(this).valid() && $(this).val() != "") {

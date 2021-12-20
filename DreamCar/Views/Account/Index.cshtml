@@ -1,23 +1,23 @@
-﻿@using DreamCar.Services.Services
+﻿@using DreamCar.Services.Services.StaticClasses
 
 @{ ViewData["Title"] = "Konto"; }
 
 @{
-    if (TempData["SaveContactData"] == null ? false : (bool)TempData["SaveContactData"])
+    if (TempData["SaveContactData"] != null && (bool)TempData["SaveContactData"])
     {
         <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
             Dane zostały zapisane pomyślnie
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
-    if (TempData["ChangePassword"] == null ? false : (bool)TempData["ChangePassword"])
+    if (TempData["ChangePassword"] != null && (bool)TempData["ChangePassword"])
     {
         <div class="alertMessage alert alert-success alert-dismissible fade show" role="alert">
             Hasło zostało zmienione pomyślnie
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
-    if (TempData["ErrorChangePassword"] == null ? false : true)
+    if (TempData["ErrorChangePassword"] != null)
     {
         <div class="alertMessage alert alert-danger alert-dismissible fade show" role="alert">
             Coś poszło nie tak, upewnij się, że podałeś <strong>prawidłowe</strong> aktualne hasło.
@@ -25,7 +25,7 @@
         </div>
     }
 
-    if (TempData["EmailChanged"] == null ? false : true)
+    if (TempData["EmailChanged"] != null)
     {
         @if ((bool)TempData["EmailChanged"])
         {
@@ -42,7 +42,7 @@
             </div>
         }
     }
-    if (TempData["EmailChangedConfirm"] == null ? false : true)
+    if (TempData["EmailChangedConfirm"] != null)
     {
         @if ((bool)TempData["EmailChangedConfirm"])
         {
@@ -59,7 +59,7 @@
             </div>
         }
     }
-    if (TempData["DownloadPersonalData"] == null ? false : true)
+    if (TempData["DownloadPersonalData"] != null)
     {
         @if ((bool)TempData["DownloadPersonalData"])
         {
@@ -77,7 +77,7 @@
         }
     }
 
-    if (TempData["DeletedAccountFailedMessage"] == null ? false : true)
+    if (TempData["DeletedAccountFailedMessage"] != null)
     {
         <div class="alertMessage alert alert-danger alert-dismissible fade show" role="alert">
             Błąd: @TempData["DeletedAccountFailedMessage"]

@@ -49,11 +49,8 @@ namespace DreamCar.Web.Controllers
                 TempData["SaveContactData"] = true;
                 return RedirectToAction("Index");
             }
-            else
-            {
-                TempData["ErrorAlert"] = true;
-                return RedirectToAction("Index");
-            }
+            TempData["ErrorAlert"] = true;
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -74,18 +71,16 @@ namespace DreamCar.Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            var result = await _accountService.ChangePasswordAsync(changePasswordVm);
-            if (result.Item1)
+            var (result, error) = await _accountService.ChangePasswordAsync(changePasswordVm);
+            if (result)
             {
                 TempData["ChangePassword"] = true;
                 return RedirectToAction("Index");
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, result.Item2);
-                TempData["ErrorChangePassword"] = true;
-                return RedirectToAction("Index");
-            }
+
+            ModelState.AddModelError(string.Empty, error);
+            TempData["ErrorChangePassword"] = true;
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -94,19 +89,17 @@ namespace DreamCar.Web.Controllers
             if (!ModelState.IsValid)
                 return RedirectToAction("Index");
 
-            var result = await _accountService.ChangeEmailAsync(changeEmailVm);
-            if (result.Item1)
+            var (result, error) = await _accountService.ChangeEmailAsync(changeEmailVm);
+            if (result)
             {
                 TempData["EmailChanged"] = true;
                 return RedirectToAction("Index");
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, result.Item2);
-                TempData["EmailChanged"] = false;
-                TempData["ErrorMessage"] = result.Item2;
-                return RedirectToAction("Index");
-            }
+
+            ModelState.AddModelError(string.Empty, error);
+            TempData["EmailChanged"] = false;
+            TempData["ErrorMessage"] = error;
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -117,19 +110,17 @@ namespace DreamCar.Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            var result = await _accountService.ConfirmChangeEmailAsync(userId, email, code);
-            if (result.Item1)
+            var (result, error) = await _accountService.ConfirmChangeEmailAsync(userId, email, code);
+            if (result)
             {
                 TempData["EmailChangedConfirm"] = true;
                 return RedirectToAction("Index");
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, result.Item2);
-                TempData["EmailChangedConfirm"] = false;
-                TempData["ErrorMessage"] = result.Item2;
-                return RedirectToAction("Index");
-            }
+
+            ModelState.AddModelError(string.Empty, error);
+            TempData["EmailChangedConfirm"] = false;
+            TempData["ErrorMessage"] = error;
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -137,16 +128,13 @@ namespace DreamCar.Web.Controllers
         {
             if (!ModelState.IsValid)
                 return RedirectToAction("Index");
-            var result = await _accountService.GetPersonalDataAsync(personalDataVm);
+            var (result, error) = await _accountService.GetPersonalDataAsync(personalDataVm);
 
-            if (result.Item1 == null)
-            {
-                TempData["DownloadPersonalData"] = false;
-                TempData["ErrorDownloadPersonalData"] = result.Item2;
-                return RedirectToAction("Index");
-            }
+            if (result != null) return new ExportToCsvService(result, "PersonalData.csv");
+            TempData["DownloadPersonalData"] = false;
+            TempData["ErrorDownloadPersonalData"] = error;
+            return RedirectToAction("Index");
 
-            return new ExportToCsvService(result.Item1, "PersonalData.csv");
         }
 
         [HttpPost]
@@ -154,16 +142,16 @@ namespace DreamCar.Web.Controllers
         {
             if (!ModelState.IsValid)
                 return RedirectToAction("Index");
-            var result = await _accountService.DeleteAccountAsync(personalDataVm);
+            var (result, error) = await _accountService.DeleteAccountAsync(personalDataVm);
 
-            if (result.Item1)
+            if (result)
             {
                 TempData["DeletedAccountSuccess"] = true;
                 return Json(new { redirectToUrl = Url.Action("Index", "Home") });
             }
 
-            ModelState.AddModelError(string.Empty, result.Item2);
-            TempData["DeletedAccountFailedMessage"] = result.Item2;
+            ModelState.AddModelError(string.Empty, error);
+            TempData["DeletedAccountFailedMessage"] = error;
             return Json(new { redirectToUrl = Url.Action("Index", "Account") });
         }
     }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace DreamCar.ViewModels.VM
+﻿namespace DreamCar.ViewModels.VM
 {
     public class AddOrEditAdvertVm
     {

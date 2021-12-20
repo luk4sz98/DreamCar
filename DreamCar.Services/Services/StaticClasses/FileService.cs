@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace DreamCar.Services.Services
+namespace DreamCar.Services.Services.StaticClasses
 {
     public static class FileService
     {

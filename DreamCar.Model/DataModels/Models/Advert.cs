@@ -13,6 +13,8 @@ namespace DreamCar.Model.DataModels
         public string Title { get; set; }
         public string Localization { get; set; }
         public int Visited { get; set; }
+
+        [DataType(DataType.MultilineText)]
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ClosedAt { get; set; }

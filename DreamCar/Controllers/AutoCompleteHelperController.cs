@@ -28,7 +28,7 @@ namespace DreamCar.Web.Controllers
         [HttpPost]
         public async Task<JsonResult> AutoComplete(string brand, string model, string prefix)
         {
-            List<string> results = null;
+            List<string> results;
 
             if (string.IsNullOrEmpty(brand))
                 results = await _applicationDbContext.Cars

@@ -24,7 +24,7 @@ namespace DreamCar.Web.Controllers
         private readonly ISessionService _sessionService;
         private readonly SignInManager<User> _signInManager;
 
-        private readonly SelectList _countries = new(new string[] {
+        private readonly SelectList _countries = new(new[] {
             "Austria", "Belgia", "Białoruś", "Bułgaria",
             "Chorwacja", "Czechy", "Dania", "Estonia",
             "Finlandia", "Francja", "Grecja", "Hiszpania",
@@ -37,12 +37,12 @@ namespace DreamCar.Web.Controllers
             "Inny"
         });
         private readonly SelectList _months = new(CultureInfo.GetCultureInfo("pl-Pl").DateTimeFormat.MonthNames);
-        private readonly SelectList _prices = new(new int[] {
+        private readonly SelectList _prices = new(new[] {
             1000, 2000, 5000, 10000, 20000, 30000, 50000, 100000, 150000,
             200000, 300000, 500000, 1000000
         });
         private readonly IEnumerable<SelectListItem> _years = new SelectList(Enumerable.Range(1900, (DateTime.Now.Year - 1900) + 1)).Reverse();
-        private readonly SelectList _voivodeships = new(new string[] {
+        private readonly SelectList _voivodeships = new(new[] {
             "Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Łódzkie", "Małopolskie", "Mazowieckie", "Opolskie", "Podkarpackie", "Podlaskie",
             "Pomorskie", "Śląskie", "Świętokrzyskie", "Warmińsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"
         });
@@ -99,28 +99,24 @@ namespace DreamCar.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var errors = new List<string>();
-                foreach (var error in ModelState["Images"].Errors)
-                {
-                    errors.Add(error.ErrorMessage);
-                }
+                var errors = ModelState["Images"].Errors.Select(modelError => modelError.ErrorMessage).ToList();
                 TempData["AdvertAdded"] = false;
                 return RedirectToAction("AddOrEdit", errors);
             }
 
             var addAdvertVm = new AddOrEditAdvertVm { Car = car, Equipments = equipments, ImagesUploaded = imagesUploaded, Advert = advert };
 
-            var result = await _advertService.AddOrEditAdvertAsync(addAdvertVm);
+            var (result, error) = await _advertService.AddOrEditAdvertAsync(addAdvertVm);
 
-            if (result.Item1)
+            if (result)
             {
                 TempData["AdvertAdded"] = true;
                 return RedirectToAction("ActiveAdverts");
             }
 
-            ModelState.AddModelError(string.Empty, result.Item2);
+            ModelState.AddModelError(string.Empty, error);
             TempData["AdvertAdded"] = false;
-            return RedirectToAction("AddNewAdvert");
+            return RedirectToAction("AddOrEdit");
         }
 
         [HttpGet]
@@ -345,7 +341,7 @@ namespace DreamCar.Web.Controllers
             FilterVm filter = null,
             string sortOrder = null)
         {
-            IQueryable<Advert> adverts = FilterCollection(_advertService.GetAdverts(), filter);
+            var adverts = FilterCollection(_advertService.GetAdverts(), filter);
 
             if (filter is not null)
                 TempData["filter"] = filter;
@@ -363,15 +359,15 @@ namespace DreamCar.Web.Controllers
                 _ => adverts.OrderBy(ad => ad.CreatedAt),
             };
 
-            var pageSize = 20;
+            const int pageSize = 20;
             page ??= 1;
             ViewBag.page = page;
 
-            int start = (int)(page - 1) * pageSize;
+            var start = (int)(page - 1) * pageSize;
 
             //Aktualny numer strony
             ViewBag.pageCurrent = page;
-            int totalPages = adverts.Count();
+            var totalPages = adverts.Count();
 
             //Ilość wszystkich stron do wyświetlenia
             ViewBag.totalNumsize = (totalPages / (float)pageSize);
@@ -431,8 +427,6 @@ namespace DreamCar.Web.Controllers
         {
             try
             {
-                IEnumerable<UserAdvertVm> compareAdverts;
-
                 var compareIds = _sessionService.Get("compareIds") is null
                     ? Enumerable.Empty<Guid>() :
                     _sessionService.Get("compareIds")
@@ -442,7 +436,7 @@ namespace DreamCar.Web.Controllers
                             !string.Equals(id, ";"))
                         .Select(id => Guid.Parse(id));
 
-                compareAdverts = await _advertService.GetUserAdvertsAsync(ad => compareIds.Contains(ad.Id));
+                var compareAdverts = await _advertService.GetUserAdvertsAsync(ad => compareIds.Contains(ad.Id));
 
                 return View("CompareAdverts", compareAdverts);
             }

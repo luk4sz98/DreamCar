@@ -56,7 +56,7 @@ namespace DreamCar.ViewModels.VM
 
         [Required(ErrorMessage = "Model samochodu jest wymagany")]
         [RegularExpression(@"^[A-Za-z0-9\s{0,1}]+$", ErrorMessage = "Niepoprwany model samochodu")]
-        [StringLength(20, ErrorMessage = "Model samochodu musi zawierać co najmniej {2} oraz maksymalnie {1} znaków", MinimumLength = 3)]
+        [StringLength(20, ErrorMessage = "Model samochodu musi zawierać co najmniej {2} oraz maksymalnie {1} znaków", MinimumLength = 2)]
         public string Model { get; set; }
 
         [Required(ErrorMessage = "Musisz wybrać rodzaj paliwa")]
@@ -86,7 +86,7 @@ namespace DreamCar.ViewModels.VM
 
         [Required(ErrorMessage = "Musisz podać generacje auta, wpisz '-' gdy nie wiesz jaka to generacja")]
         [StringLength(20, ErrorMessage = "Generacja samochodu nie może być dłuższa niż {1} oraz krótsza niż {2}", MinimumLength = 1)]
-        [RegularExpression(@"^[A-Za-z0-9-{0,1}\.-]+$", ErrorMessage = "To pole nie może zawierać znaków specjalnych")]
+        [RegularExpression(@"^[A-Za-z0-9-{0,1} ()\.-]+$", ErrorMessage = "To pole nie może zawierać znaków specjalnych")]
         public string Generation { get; set; }
 
         [Required(ErrorMessage = "Musisz wybrać segment samochodu")]

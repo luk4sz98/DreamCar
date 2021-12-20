@@ -1,12 +1,12 @@
 ﻿@model AddOrEditAdvertVm
-@using DreamCar.Services.Services
+@using DreamCar.Services.Services.StaticClasses
 
 @{
     ViewData["Title"] = "Dodawanie ogłoszenia";
 }
 
 @{
-    if (ViewBag.ErrorList == null ? false : true)
+    if (ViewBag.ErrorList != null)
     {
         <div class="alertMessage alert alert-danger alert-dismissible fade show" role="alert">
             @foreach (var error in ViewBag.ErrorList)
@@ -16,7 +16,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
-    if (TempData["AdvertAdded"] == null ? false : true)
+    if (TempData["AdvertAdded"] != null)
     {
         <div class="alertMessage alert alert-danger alert-dismissible fade show" role="alert">
             Wystąpił błąd podczas dodawania ogłoszenia :( Spróbuj ponownie.
@@ -184,14 +184,14 @@
     <script>
         $(document).ready(function () {
             $('#price').mask("#,##0.00", { reverse: true });
-            $("#phoneNumber").mask('(99) 999-999-999')
-        })
+            $("#phoneNumber").mask('(99) 999-999-999');
+        });
         $("#showMoreButton").click(function () {
-            if ($("#showMoreButton").text() == 'Wyświetl pozostałe') {
-                $("#showMoreButton").html('Ukryj')
+            if ($("#showMoreButton").text() === 'Wyświetl pozostałe') {
+                $("#showMoreButton").html('Ukryj');
             }
             else {
-                $("#showMoreButton").html('Wyświetl pozostałe')
+                $("#showMoreButton").html('Wyświetl pozostałe');
             }
             $(".otherEqu").slideToggle(500);
             if ($(".otherEqu").is(":visible")) {
@@ -199,31 +199,30 @@
                     scrollTop: $(".otherEqu").offset().top
                 }, 'slow');
             }
-        })
+        });
 
         $('#carImages').on('click', 'img', async function () {
             const advertId = $("#advertId").val();
-            const imageName = $(this).attr('src').substr($(this).attr('src').lastIndexOf('/') + 1)
+            const imageName = $(this).attr('src').substr($(this).attr('src').lastIndexOf('/') + 1);
             const result = await $.get("/Image/DeleteImage", $.param({
                 advertId: advertId, imageName: imageName
-            }))
-            $("#carImages").html(result)
-        })
+            }));
+            $("#carImages").html(result);
+        });
 
         $("#voivodeship").children('option').click(function () {
             if ($(this).filter(':selected').val() != "") {
-                $("#localization").removeAttr('disabled')
+                $("#localization").removeAttr('disabled');
             }
-        })
+        });
 
         $("#localization").on('focusout, change', function () {
-            let previous = $(this).val().toString()
-            let voivodeship = $("#voivodeship").children('option').filter(':selected').val().toString()
+            let previous = $(this).val().toString();
+            let voivodeship = $("#voivodeship").children('option').filter(':selected').val().toString();
             if (!previous.includes(voivodeship)) {
-                $(this).val(previous + ", " + voivodeship)
+                $(this).val(previous + ", " + voivodeship);
             }
-        })
-
+        });
     </script>
     <script src="~/assets/js/autoCompleteInputFields.js"></script>
     <script src="~/assets/js/disabledElements.js"></script>

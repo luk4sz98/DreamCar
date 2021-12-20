@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace DreamCar.Services.Services
+namespace DreamCar.Services.Services.Identity
 {
     public class IdentityErrors : IdentityErrorDescriber
     {

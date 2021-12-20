@@ -1,6 +1,5 @@
 ﻿@model AdvertVm
 @using DreamCar.Model.DataModels.Enums
-@using System.Globalization;
 
 <section class="additionalEquipment">
     <div class="text-center">
@@ -73,7 +72,7 @@
                 </div>
                 <div class="form-floating col-12 col-lg-3 mb-2">
                     @{
-                        if (String.IsNullOrEmpty(ViewBag.User.Address))
+                        if (string.IsNullOrEmpty(ViewBag.User.Address))
                         {
                             <input disabled data-bs-toggle="tooltip" data-bs-placement="top" title="Wprowadź miasto lub kod pocztowy, bez obaw, będzie to przybliżona lokalizacja." data-bs-animation="true" required id="localization" asp-for="City" placeholder="city" class="form-control" style="border-radius: 1rem;" />
                         }
@@ -92,7 +91,7 @@
                 </div>
                 <div class="form-floating col-12 col-lg-3 mb-2">
                     @{
-                        if (String.IsNullOrEmpty(ViewBag.User.PhoneNumber))
+                        if (string.IsNullOrEmpty(ViewBag.User.PhoneNumber))
                         {
                             <input data-bs-toggle="tooltip" data-bs-placement="right" title="Jeśli dopuszczasz możliwość kontaktu poprzez nr telefonu, wprowadź go." data-bs-animation="true" id="phoneNumber" asp-for="PhoneNumber" placeholder="Nr telefonu" class="form-control" style="border-radius: 1rem;" />
                         }

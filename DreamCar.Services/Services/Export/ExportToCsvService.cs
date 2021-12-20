@@ -14,16 +14,16 @@ namespace DreamCar.Services.Services.Export
             FileDownloadName = fileDownloadName;
         }
 
-        public async override Task ExecuteResultAsync(ActionContext context)
+        public override async Task ExecuteResultAsync(ActionContext context)
         {
             var response = context.HttpContext.Response;
             context.HttpContext.Response.Headers.Add("Content-Disposition", new[] { "attachment; filename=" + FileDownloadName });
 
-            using var streamWriter = new StreamWriter(response.Body);
-            foreach (var row in _dataToCsvFile)
+            await using var streamWriter = new StreamWriter(response.Body);
+            foreach (var (key, value) in _dataToCsvFile)
             {
                 await streamWriter.WriteLineAsync(
-                    $"{row.Key}:\t{row.Value}"
+                    $"{key}:\t{value}"
                 );
                 await streamWriter.FlushAsync();
             }

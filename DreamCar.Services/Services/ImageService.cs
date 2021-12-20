@@ -44,8 +44,8 @@ namespace DreamCar.Services.Services
                                     Path.Combine(
                                             _hostEnvironment.WebRootPath, @"advertImages\\Advert " + advertId
                                         ));
-                    using var filestream = new FileStream(Path.Combine(path, filename), FileMode.Create);
-                    await image.CopyToAsync(filestream);
+                    await using var fileStream = new FileStream(Path.Combine(path, filename), FileMode.Create);
+                    await image.CopyToAsync(fileStream);
                     await DbContext.Images.AddAsync(
                         new Image
                         {

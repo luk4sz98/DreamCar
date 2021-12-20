@@ -29,7 +29,7 @@ namespace DreamCar.Services.Services
         /// <returns>string value</returns>  
         public string Get(string key)
         {
-            return _httpContext.HttpContext.Request.Cookies[key];
+            return _httpContext.HttpContext != null ? _httpContext.HttpContext.Request.Cookies[key] : string.Empty;
         }
 
         /// <summary>  
@@ -40,13 +40,12 @@ namespace DreamCar.Services.Services
         /// <param name="expireTime">expiration time</param>  
         public void Set(string key, string value, int? expireTime = null)
         {
-            CookieOptions option = new();
-            if (expireTime.HasValue)
-                option.Expires = DateTime.Now.AddMinutes(expireTime.Value);
-            else
-                option.Expires = DateTime.Now.AddDays(7);
+            CookieOptions option = new()
+            {
+                Expires = expireTime.HasValue ? DateTime.Now.AddMinutes(expireTime.Value) : DateTime.Now.AddDays(7)
+            };
 
-            _httpContext.HttpContext.Response.Cookies.Append(key, value, option);
+            _httpContext.HttpContext?.Response.Cookies.Append(key, value, option);
         }
 
         /// <summary>  
@@ -55,7 +54,7 @@ namespace DreamCar.Services.Services
         /// <param name="key">Key</param>  
         public void Remove(string key)
         {
-            _httpContext.HttpContext.Response.Cookies.Delete(key);
+            _httpContext.HttpContext?.Response.Cookies.Delete(key);
         }
     }
 }

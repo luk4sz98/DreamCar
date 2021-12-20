@@ -15,8 +15,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using DreamCar.ViewModels.VM;
-using Microsoft.Extensions.Options;
-using DreamCar.Services.Services;
+
+using DreamCar.Services.Services.StaticClasses;
 using Microsoft.AspNetCore.Hosting;
 
 namespace DreamCar.Web.Areas.Identity.Pages.Account
@@ -117,11 +117,11 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = user.Id, code, returnUrl },
-                        protocol: Request.Scheme);
+                        null,
+                        new { area = "Identity", userId = user.Id, code, returnUrl },
+                        Request.Scheme);
 
-                    var emailBody = FileService.ReadFile(pathToFile: _hostingEnviroment.WebRootPath + @"\assets\templates\emailConfirmationTemplate.html");
+                    var emailBody = FileService.ReadFile(_hostingEnviroment.WebRootPath + @"\assets\templates\emailConfirmationTemplate.html");
                     emailBody = emailBody.Replace("{{ConfirmationLink}}", HtmlEncoder.Default.Encode(callbackUrl));
 
                     var emailVm = new EmailVm()
@@ -139,11 +139,8 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl });
                     }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)
                 {

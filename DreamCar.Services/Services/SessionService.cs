@@ -24,17 +24,19 @@ namespace DreamCar.Services.Services
 
         public string Get(string key)
         {
-            return _httpContext.HttpContext.Session.GetString(key);
+            return _httpContext.HttpContext != null 
+                ? _httpContext.HttpContext.Session.GetString(key) 
+                : string.Empty;
         }
 
         public void Remove(string key)
         {
-            _httpContext.HttpContext.Session.Remove(key);
+            _httpContext.HttpContext?.Session.Remove(key);
         }
 
         public void Set(string key, string value)
         {
-            _httpContext.HttpContext.Session.SetString(key, value);
+            _httpContext.HttpContext?.Session.SetString(key, value);
         }
     }
 }

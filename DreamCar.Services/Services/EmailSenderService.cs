@@ -30,7 +30,7 @@ namespace DreamCar.Services.Services
             try
             {
                 if (email == null)
-                    throw new ArgumentNullException($"{email} can not be null");
+                    throw new ArgumentNullException($"Email can not be null");
 
                 var msg = new SendGridMessage()
                 {

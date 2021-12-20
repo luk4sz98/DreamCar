@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using DreamCar.Services.Interfaces;
 using DreamCar.ViewModels.VM;
-using DreamCar.Services.Services;
+using DreamCar.Services.Services.StaticClasses;
 using Microsoft.AspNetCore.Hosting;
 
 namespace DreamCar.Web.Areas.Identity.Pages.Account
@@ -57,12 +57,12 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 var callbackUrl = Url.Page(
                     "/Account/ResetPassword",
-                    pageHandler: null,
-                    values: new { area = "Identity", code },
-                    protocol: Request.Scheme);
+                    null,
+                    new { area = "Identity", code },
+                    Request.Scheme);
 
 
-                var emailBody = FileService.ReadFile(pathToFile: _hostingEnviroment.WebRootPath + @"\assets\templates\emailPasswordResetTemplate.html");
+                var emailBody = FileService.ReadFile(_hostingEnviroment.WebRootPath + @"\assets\templates\emailPasswordResetTemplate.html");
                 emailBody = emailBody.Replace("{{ResetLink}}", HtmlEncoder.Default.Encode(callbackUrl));
 
                 var emailVm = new EmailVm()
@@ -79,11 +79,8 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
                 TempData["ResetPassword"] = true;
                 return RedirectToPage("/Index");
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Coś poszło nie tak, spróbuj ponownie");
-                return Page();
-            }
+            ModelState.AddModelError(string.Empty, "Coś poszło nie tak, spróbuj ponownie");
+            return Page();
         }
     }
 }

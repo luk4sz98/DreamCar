@@ -36,12 +36,10 @@ namespace DreamCar.Web.Controllers
         [Route("Contact")]
         public IActionResult SendRequest()
         {
-            if(_signInManager.IsSignedIn(User)) {
-                var user = UserManager.GetUserAsync(User).Result;
-                ViewBag.Email = user.Email;
-                ViewBag.User = $"{user.FirstName} {user.LastName}";
-                return View();
-            }
+            if (!_signInManager.IsSignedIn(User)) return View();
+            var user = UserManager.GetUserAsync(User).Result;
+            ViewBag.Email = user.Email;
+            ViewBag.User = $"{user.FirstName} {user.LastName}";
             return View();
         }
 

@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using DreamCar.Services.Services.StaticClasses;
 
 namespace DreamCar.Services.Services
 {
@@ -24,7 +25,7 @@ namespace DreamCar.Services.Services
     {
         private readonly SignInManager<User> _signInManager;
         private readonly IUrlHelper _url;
-        private readonly IWebHostEnvironment _hostingEnviroment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IEmailSenderService _emailSender;
         private readonly IHttpContextAccessor _httpContext;
         public AccountService(
@@ -41,7 +42,7 @@ namespace DreamCar.Services.Services
         {
             _signInManager = signInManager;
             _url = url;
-            _hostingEnviroment = hostEnvironment;
+            _hostingEnvironment = hostEnvironment;
             _emailSender = emailSender;
             _httpContext = httpContextAccessor;
         }
@@ -97,13 +98,13 @@ namespace DreamCar.Services.Services
         {
             try
             {
-                var userEnity = await DbContext.Users.FirstOrDefaultAsync(user => user.Id == contactDetailsVm.UserId);
+                var userEntity = await DbContext.Users.FirstOrDefaultAsync(user => user.Id == contactDetailsVm.UserId);
                 
-                if (userEnity == null)
+                if (userEntity == null)
                     throw new ArgumentNullException($"Nie ma użytkownika z tym id - {contactDetailsVm.UserId}");
 
-                userEnity.Address = contactDetailsVm.Address;
-                userEnity.PhoneNumber = contactDetailsVm.PhoneNumber;
+                userEntity.Address = contactDetailsVm.Address;
+                userEntity.PhoneNumber = contactDetailsVm.PhoneNumber;
            
                 await DbContext.SaveChangesAsync();
                 return true;
@@ -132,12 +133,12 @@ namespace DreamCar.Services.Services
                 var code = await UserManager.GenerateChangeEmailTokenAsync(user, changeEmailVm.NewEmail);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 var callbackUrl = _url.Action(
-                    action: "ConfirmEmailChange",
-                    controller: "Account",
-                    values: new { userId = user.Id, email = changeEmailVm.NewEmail, code = code },
-                    protocol: _httpContext.HttpContext.Request.Scheme);
+                    "ConfirmEmailChange",
+                    "Account",
+                    new { userId = user.Id, email = changeEmailVm.NewEmail, code = code },
+                    _httpContext.HttpContext?.Request.Scheme);
                 
-                var emailBody = FileService.ReadFile(pathToFile: _hostingEnviroment.WebRootPath + @"\assets\templates\emailChangeConfirmationTemplate.html");
+                var emailBody = FileService.ReadFile(pathToFile: _hostingEnvironment.WebRootPath + @"\assets\templates\emailChangeConfirmationTemplate.html");
                 emailBody = emailBody.Replace("{{ConfirmationLink}}", HtmlEncoder.Default.Encode(callbackUrl));
                 
                 var emailVm = new EmailVm()
@@ -198,17 +199,15 @@ namespace DreamCar.Services.Services
                 if (!await UserManager.CheckPasswordAsync(user, downloadDeletePersonalDataVm.Password))
                     return (null, "Niepoprawne hasło, spróbuj ponownie");
 
-                var personalData = new Dictionary<string, string>();
                 var personalDataProps = typeof(User).GetProperties().Where(
                                 prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
 
-                foreach (var p in personalDataProps)
-                {
-                    personalData.Add(
-                        p.GetCustomAttributes(typeof(DisplayAttribute), true).Cast<DisplayAttribute>().Single().Name,
-                        p.GetValue(user)?.ToString() ?? "null"
-                    );
-                }
+                var personalData = 
+                    personalDataProps
+                        .ToDictionary(p => p.GetCustomAttributes(typeof(DisplayAttribute), true)
+                                .Cast<DisplayAttribute>()
+                                .Single().Name, p => p.GetValue(user)
+                                ?.ToString() ?? "null");
 
                 var logins = await UserManager.GetLoginsAsync(user);
                 foreach (var l in logins)

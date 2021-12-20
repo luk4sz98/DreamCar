@@ -1,8 +1,8 @@
-﻿@using DreamCar.Services.Services
+﻿@using DreamCar.Services.Services.StaticClasses
 @model UserAdvertVm
 
-<link rel='stylesheet' href='/assets/css/lc_lightbox.min.css' />
-<link rel='stylesheet' href='/assets/css/minimal.css' />
+<link rel="stylesheet" href="/assets/css/lc_lightbox.min.css" />
+<link rel="stylesheet" href="/assets/css/minimal.css" />
 <link rel="stylesheet" href="~/assets/css/userAdvert.css" />
 
 <div id="followSuccess" class="alertMessage alert alert-success alert-dismissible" role="alert" style="display: none;">
@@ -71,8 +71,8 @@
         function reCaptchaCallbackAdvert() {
             var response = grecaptcha.getResponse();
             if (response.length !== 0) {
-                $("#vin").html('@Model.Car.VIN')
-                $("#reCaptcha").hide(500)
+                $("#vin").html('@Model.Car.VIN');
+                $("#reCaptcha").hide(500);
             }
         }
         function initMap() {
@@ -97,9 +97,9 @@
                     });
                 }
                 else {
-                    console.log('error')
+                    console.log('error');
                 }
-            })
+            });
         }
     </script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
@@ -126,19 +126,19 @@
             download: true,
             touchswipe: true,
             mousewheel: false
-        }
+        };
         $(document).ready(function () {
-            lc_lightbox('#gallery a', options)
+            lc_lightbox('#gallery a', options);
         });
 
         $("#phone").on('click', function () {
             if ($("#text").text() === "Wyświetl telefon") {
-                $("#text").html('@Model.User.PhoneNumber')
+                $("#text").html('@Model.User.PhoneNumber');
             }
             else {
-                $("#text").html('Wyświetl telefon')
+                $("#text").html('Wyświetl telefon');
             }
-        })
+        });
 
         $("#follow").click(this, async function () {
             const advertId = "@Model.Id";
@@ -147,13 +147,13 @@
             if ($("#followIcon").hasClass("far")) {
                 const result = await $.post("/Advert/FollowAdvert", $.param({
                     advertId: advertId
-                }))
+                }));
                 if (result === 200) {
-                    $("#followIcon").removeClass('far fa-star')
-                    $("#followIcon").addClass('fas fa-star')
+                    $("#followIcon").removeClass('far fa-star');
+                    $("#followIcon").addClass('fas fa-star');
                     $("#followSuccess").fadeIn(1000);
                     $("#followSuccess").fadeOut(3500);
-                    $("#follow").html("Usuń z obserwowanych <i id='followIcon' class='fas fa-star'></i>")
+                    $("#follow").html("Usuń z obserwowanych <i id='followIcon' class='fas fa-star'></i>");
                 }
                 else {
                     $("#followError").fadeToggle(2000);
@@ -162,24 +162,24 @@
             else {
                 const result = await $.post("/Advert/UnfollowAdvert", $.param({
                     advertId: advertId
-                }))
+                }));
                 if (result === 200) {
-                    $("#followIcon").removeClass('fas fa-star')
-                    $("#followIcon").addClass('far fa-star')
+                    $("#followIcon").removeClass('fas fa-star');
+                    $("#followIcon").addClass('far fa-star');
                     $("#unfollowSuccess").fadeIn(1000);
                     $("#unfollowSuccess").fadeOut(3500);
-                    $("#follow").html("Obserwuj <i id='followIcon' class='far fa-star'></i>")
+                    $("#follow").html("Obserwuj <i id='followIcon' class='far fa-star'></i>");
                 }
                 else {
                     $("#followError").fadeToggle(2000);
                 }
             }
-        })
+        });
 
         async function AddAdvertToCompare(advertId) {
             const result = await $.post("/Advert/AddAdvertToCompare", $.param({
                 advertId: advertId
-            }))
+            }));
             if (result === 200) {
                 $("#compareSuccess").fadeIn(1000);
                 $("#compareSuccess").fadeOut(4500);

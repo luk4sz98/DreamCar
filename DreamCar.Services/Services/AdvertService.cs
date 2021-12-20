@@ -58,7 +58,8 @@ namespace DreamCar.Services.Services
                     var advertEntity = Mapper.Map<Advert>(advertVm.Advert);
 
                     advertEntity.CreatedAt = DateTime.Now;
-                    advertEntity.User = await UserManager.GetUserAsync(_httpContext.HttpContext.User);
+                    if (_httpContext.HttpContext != null)
+                        advertEntity.User = await UserManager.GetUserAsync(_httpContext.HttpContext.User);
                     advertEntity.Car = await _carService.AddNewCarAsync(advertVm.Car, advertVm.Equipments.Checked)
                                        ?? throw new InvalidOperationException("Wystąpił problem z dodaniem pojazdu");
 
@@ -171,10 +172,9 @@ namespace DreamCar.Services.Services
         {
             try
             {
-                AddOrEditAdvertVm addOrEditAdvert;
                 var advert = await DbContext.Adverts.FirstOrDefaultAsync(ad => ad.Id == advertId);
 
-                addOrEditAdvert = new AddOrEditAdvertVm {
+                var addOrEditAdvert = new AddOrEditAdvertVm {
                     Advert = Mapper.Map<AdvertVm>(advert),
                     Car = Mapper.Map<CarVm>(advert.Car),
                     Equipments = new CheckedEquVm { Checked = advert.Car.CarEquipment.Select(ad => ad.EquipmentId) },
@@ -236,8 +236,7 @@ namespace DreamCar.Services.Services
             try
             {
                 var followed = await DbContext.FollowAdverts.FirstOrDefaultAsync(followed => followed.AdvertId == advertId && followed.UserId == userId);
-                if (followed is null) return false;
-                return true;
+                return followed is not null;
             }
             catch (Exception ex)
             {
@@ -266,9 +265,9 @@ namespace DreamCar.Services.Services
         {
             try
             {
-                List<Advert> followedAdverts = null;
+                List<Advert> followedAdverts;
                 //for logged users
-                if (userId.HasValue && userId is not null)
+                if (userId.HasValue)
                 {
                     var followedIds = await DbContext.FollowAdverts
                         .Where(fl => fl.UserId == userId)
@@ -297,19 +296,13 @@ namespace DreamCar.Services.Services
         {
             try
             {
-                IQueryable<Advert> adverts = null;
-                if (filterExpressions is null)
-                    adverts = DbContext.Adverts
-                        .Where(ad => !ad.IsActive);
-                else
-                    adverts = DbContext.Adverts
-                        .Where(filterExpressions);
+                var adverts = DbContext.Adverts.Where(filterExpressions ?? (ad => !ad.IsActive));
                 return adverts;
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, ex.Message);
-                return Queryable.DefaultIfEmpty(DbContext.Adverts);
+                return DbContext.Adverts.DefaultIfEmpty();
             }
         }
 

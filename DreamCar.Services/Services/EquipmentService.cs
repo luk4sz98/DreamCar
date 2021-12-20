@@ -28,19 +28,19 @@ namespace DreamCar.Services.Services
         {
             try
             {
-                IEnumerable<Equipment> equipments = null;
-                if (equIds is not null && equIds.Any()) {
+                IEnumerable<Equipment> equipments;
+                var enumerable = (equIds ?? Enumerable.Empty<int>()).ToList();
+                
+                if (enumerable.Any()) {
                     equipments = await DbContext.Equipment
-                        .Where(equ => equIds.Contains(equ.Id))
+                        .Where(equ => enumerable.Contains(equ.Id))
                         .ToListAsync();
+                    return Mapper.Map<IEnumerable<EquipmentVm>>(equipments);
                 }
-                else
-                {
-                   equipments = await DbContext.Equipment.ToListAsync();
-                }
-                               
+
+                equipments = await DbContext.Equipment.ToListAsync();
                 return Mapper.Map<IEnumerable<EquipmentVm>>(equipments);
-             }
+            }
             catch (Exception ex)
             {
                 Logger.LogError(ex, ex.Message);

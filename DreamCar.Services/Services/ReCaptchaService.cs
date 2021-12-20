@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using DreamCar.Services.Services.StaticClasses;
 
 namespace DreamCar.Services.Services
 {

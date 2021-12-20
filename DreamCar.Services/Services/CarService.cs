@@ -39,10 +39,7 @@ namespace DreamCar.Services.Services
 
                 if (carEqu is not null)
                 {
-                    foreach (var equId in carEqu)
-                    {
-                        carEquipments.Add(new CarEquipment { Car = carEntity, EquipmentId = equId });
-                    }
+                    carEquipments.AddRange(carEqu.Select(equId => new CarEquipment {Car = carEntity, EquipmentId = equId}));
                 }
               
                 await DbContext.CarEquipments.AddRangeAsync(carEquipments);
@@ -92,16 +89,13 @@ namespace DreamCar.Services.Services
                 carToUpdate.Body = carUpdated.Body;
                 carToUpdate.Drive = carUpdated.Drive;
                 #endregion
-                var equ = DbContext.CarEquipments.Where(carEqu => carEqu.CarId == carToUpdate.Id);
+                var equ = DbContext.CarEquipments.Where(carEquipment => carEquipment.CarId == carToUpdate.Id);
                 DbContext.CarEquipments.RemoveRange(equ);
                 var carEquipments = new List<CarEquipment>();
 
                 if (carEqu is not null)
                 {
-                    foreach (var equId in carEqu)
-                    {
-                        carEquipments.Add(new CarEquipment { CarId = carToUpdate.Id, EquipmentId = equId });
-                    }
+                    carEquipments.AddRange(carEqu.Select(equId => new CarEquipment {CarId = carToUpdate.Id, EquipmentId = equId}));
                 }
                 await DbContext.CarEquipments.AddRangeAsync(carEquipments);
             }
