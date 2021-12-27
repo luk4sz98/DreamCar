@@ -97,7 +97,7 @@ namespace DreamCar.DAL.EF
             builder.Entity<Message>()
                 .HasOne(mg => mg.User)
                 .WithMany(cl => cl.Messages)
-                .HasForeignKey(mg => mg.UserId)
+                .HasForeignKey(mg => mg.SenderId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

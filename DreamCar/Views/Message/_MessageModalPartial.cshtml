@@ -1,0 +1,47 @@
+﻿@model AdvertThreadMessageVm
+
+<!-- Message Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form id="messageForm" asp-action="CreateNewThread" asp-controller="Message" method="post" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Wysyłanie wiadomości do użytkownika</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label id="subjectLabel" class="form-label" for="subject">Temat <sup><icon class="fas fa-star input-star"></icon></sup></label>
+                                <input asp-for="Subject" id="subject" required placeholder="Temat" class="form-control shadow-none" />
+                                <span asp-validation-for="Subject" class="text-danger"></span>
+                            </div>
+                            <div class="col-12 mb-2">
+                                <label class="form-label" for="message">Wiadomość <sup><icon class="fas fa-star input-star"></icon></sup></label>
+                                <textarea asp-for="Message" required maxlength="4096" id="message" rows="10" placeholder="Treść wiadomości.." class="form-control" style="min-height: 140px; height: 140px; resize: vertical;"></textarea>
+                                <span asp-validation-for="Message" class="text-danger"></span>
+                            </div>
+                            <div class="col-12 d-none" style="pointer-events: none !important; cursor: none !important">
+                                <input asp-for="AdvertId" id="advertId" />
+                            </div>
+                            <div class="col-12 d-none" style="pointer-events: none !important; cursor: none !important">
+                                <input asp-for="SenderId" id="senderId" />
+                            </div>
+                            <div class="col-12 d-none" style="pointer-events: none !important; cursor: none !important">
+                                <input asp-for="RecipientId" id="recipientId" />
+                            </div>
+                            <div class="col-12 d-none" style="pointer-events: none !important; cursor: none !important">
+                                <input asp-for="CreatedAt"  id="createdAt" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button style="font-size: 15px;" type="button" class="btn btn-outline-danger shadow-none col-2" data-bs-dismiss="modal">Anuluj</button>
+                    <button style="font-size: 15px;" type="submit" class="btn btn-outline-primary shadow-none col-2">Wyślij</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -24,6 +24,19 @@
                     Obserwuj <i id="followIcon" class="far fa-star"></i>
                 </button>
             }
+            else if (isFollowed)
+            {
+                <button data-bs-toggle="tooltip" data-bs-placement="right" title="Naciśnij by usunąć ogłoszenie z obserwowanych" id="follow" type="button" class="btn shadow-none" style="font-size: 20px; color: lightseagreen;">
+                    Usuń z obserwowanych <i id="followIcon" class="fas fa-star"></i>
+                </button>
+
+            }
+            else
+            {
+                <button id="follow" type="button" class="btn shadow-none" style="font-size: 20px; color: lightseagreen;">
+                    Obserwuj <i id="followIcon" class="far fa-star"></i>
+                </button>
+            }
         }
         else
         {
@@ -74,31 +87,12 @@
         </div>
         <div class="col-12 mt-3 d-flex justify-content-center" style="font-size: 20px;">
             @{
-
-                if (isSignedIn)
-                {
-                    if (userId == Model.User.Id.ToString())
-                    {
-                        <button disabled class="btn btn-danger w-100 d-flex justify-content-center align-items-center shadow-none">
-                            <i style="font-size: 21px;" class="far fa-envelope"></i>
-                            <span style="font-size: 21px;" class="ms-2">Kontakt ze sprzedającym</span>
-                        </button>
-                    }
-                    else
-                    {
-                        <button class="btn btn-danger w-100 d-flex justify-content-center align-items-center shadow-none">
-                            <i style="font-size: 21px;" class="far fa-envelope"></i>
-                            <span style="font-size: 21px;" class="ms-2">Kontakt ze sprzedającym</span>
-                        </button>
-                    }
-                }
-                else
-                {
-                    <button data-bs-toggle="modal" data-bs-target="#loginRequiredModal" class="btn btn-danger w-100 d-flex justify-content-center align-items-center shadow-none">
-                        <i style="font-size: 21px;" class="far fa-envelope"></i>
-                        <span style="font-size: 21px;" class="ms-2">Kontakt ze sprzedającym</span>
-                    </button>
-                }
+                <button @(userId == Model.User.Id.ToString() ? "disabled" : "") data-bs-toggle="modal"
+                    @(isSignedIn ? "data-bs-target=#messageModal" : "data-bs-target=#loginRequiredModal") data-bs-target="#messageModal"
+                    class="btn btn-danger w-100 d-flex justify-content-center align-items-center shadow-none">
+                    <i style="font-size: 21px;" class="far fa-envelope"></i>
+                    <span style="font-size: 21px;" class="ms-2">Kontakt ze sprzedającym</span>
+                </button>
             }
         </div>
         <div class="col-12 mt-3 d-flex justify-content-center">

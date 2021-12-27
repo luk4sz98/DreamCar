@@ -59,6 +59,7 @@ namespace DreamCar
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<ICookiesService, CookiesService>();
             services.AddScoped<ISessionService, SessionService>();
+            services.AddScoped<IMessageService, MessageService>();
             services.Configure<AppSettingsService>(Configuration.GetSection(AppSettingsService.SectionName));
             services.AddOptions();
             services.AddScoped<IReCaptchaService, ReCaptchaService>();

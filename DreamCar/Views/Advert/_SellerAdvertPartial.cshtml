@@ -112,13 +112,13 @@ else
                 <span>Moc<strong><span class="ms-2">@Model.Car.Power KM</span></strong></span>
             </div>
             <div class="col-6 col-md-4 col-lg-3  mb-2">
-                <span>Skrzynia biegów<strong><span class="ms-2">@gearbox</span></strong></span>
+                <span>Skrzynia <strong><span class="ms-2">@gearbox</span></strong></span>
             </div>
             <div class="col-6 col-md-4 col-lg-3  mb-2">
                 <span>Napęd<strong><span class="ms-2">@drive</span></strong></span>
             </div>
             <div class="col-6 col-md-4 col-lg-3  mb-2">
-                <span>Filtr cząstek stałych<strong><span class="ms-2">@(Model.Car.DPF ? "Tak" : "Nie")</span></strong></span>
+                <span>DPF<strong><span class="ms-2">@(Model.Car.DPF ? "Tak" : "Nie")</span></strong></span>
             </div>
             <div class="col-6 col-md-4 col-lg-3  mb-2">
                 <span>Typ nadowzia<strong><span class="ms-2">@body</span></strong></span>
@@ -136,7 +136,7 @@ else
                 <span>Kolor<strong><span class="ms-2">@Model.Car.Color</span></strong></span>
             </div>
             <div class="col-6 col-md-4 col-lg-3  mb-2">
-                <span>Rodzaj koloru<strong><span class="ms-2">@colorType</span></strong></span>
+                <span>Typ<strong><span class="ms-2">@colorType</span></strong></span>
             </div>
             <div class="col-6 col-md-4 col-lg-3  col-lg-3  mb-2">
                 <span>Faktura VAT<strong><span class="ms-2">@(Model.VAT ? "Tak" : "Nie")</span></strong></span>

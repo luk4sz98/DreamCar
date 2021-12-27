@@ -9,7 +9,8 @@ namespace DreamCar.Model.DataModels
         [Key]
         public int Id { get; set; }
         public string Subject { get; set; }
-
+        public DateTime CreatedAt { get; set; }
+        public int CreatedBy { get; set; }
         public Guid AdvertId { get; set; }
         public virtual Advert Advert { get; set; }
         public virtual IEnumerable<Message> Messages { get; set; }

@@ -8,6 +8,6 @@
     };
     let autocomplete = new google.maps.places.Autocomplete(input, restrictOptions);
     google.maps.event.addListener(autocomplete, 'place_changed', function () {
-        $("#localization").val()
+        $("#localization").trigger("click")
     });
 }

@@ -8,7 +8,8 @@ namespace DreamCar.Model.DataModels
         [Key]
         public int Id { get; set; }
         public int AdvertThreadId { get; set; }
-        public int UserId { get; set; }
+        public int SenderId { get; set; }
+        public int RecipientId { get; set; }
         public string Content { get; set; }
         public DateTime PostDate { get; set; }
         public virtual AdvertThread AdvertThread { get; set; }

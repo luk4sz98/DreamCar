@@ -65,6 +65,17 @@ namespace DreamCar.Web.Configuration.Profiles
                 .ForMember(dest => dest.User, y => y.MapFrom(src => src.User));
 
             CreateMap<Car, Car>();
+
+            CreateMap<AdvertThreadMessageVm, AdvertThread>()
+                .ForMember(dest => dest.AdvertId, y => y.MapFrom(src => src.AdvertId))
+                .ForMember(dest => dest.Subject, y => y.MapFrom(src => src.Subject))
+                .ForMember(dest => dest.CreatedAt, y => y.MapFrom(src => src.CreatedAt))
+                .ForMember(dest => dest.CreatedBy, y => y.MapFrom(src => src.SenderId));
+            CreateMap<AdvertThreadMessageVm, Message>()
+                .ForMember(dest => dest.Content, y => y.MapFrom(src => src.Message))
+                .ForMember(dest => dest.PostDate, y => y.MapFrom(src => src.CreatedAt))
+                .ForMember(dest => dest.RecipientId, y => y.MapFrom(src => src.RecipientId))
+                .ForMember(dest => dest.SenderId, y => y.MapFrom(src => src.SenderId));
         }
     }
 }
