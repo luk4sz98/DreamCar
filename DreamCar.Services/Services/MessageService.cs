@@ -28,7 +28,10 @@ namespace DreamCar.Services.Services
                     .Where(
                         at =>
                         at.CreatedBy == advertThreadMessage.SenderId &&
-                        at.AdvertId == advertThreadMessage.AdvertId);
+                        at.AdvertId == advertThreadMessage.AdvertId &&
+                        at.Subject == advertThreadMessage.Subject)
+                    .AsEnumerable();
+                advertThreads = advertThreads.Where(at => (DateTime.Now - at.CreatedAt).TotalDays < 14);
                 if (advertThreads.Any())
                     return HttpStatusCode.BadRequest;
 

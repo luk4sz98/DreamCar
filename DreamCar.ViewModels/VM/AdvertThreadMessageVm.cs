@@ -9,7 +9,6 @@ namespace DreamCar.ViewModels.VM
         public Guid AdvertId { get; set; }
 
         [Required(ErrorMessage = "Temat jest wymagany")]
-        [StringLength(30, ErrorMessage = "Temat nie może być dłuższy niż {1} oraz musi zawierać co najmniej {2} znaków", MinimumLength = 5)]
         public string Subject { get; set; }
 
         [Required(ErrorMessage = "Wiadomość jest wymagana")]

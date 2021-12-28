@@ -14,7 +14,13 @@
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label id="subjectLabel" class="form-label" for="subject">Temat <sup><icon class="fas fa-star input-star"></icon></sup></label>
-                                <input asp-for="Subject" id="subject" required placeholder="Temat" class="form-control shadow-none" />
+                                <select asp-for="Subject" class="form-select shadow-none" style="border-radius: 1rem;">
+                                    <option value="" disabled selected>Wybierz temat</option>
+                                    <option>Złożenie oferty</option>
+                                    <option>Umówienie się na obejrzenie pojazdu</option>
+                                    <option>Potrzebuję więcej informacji</option>
+                                    <option>Inne</option>
+                                </select>
                                 <span asp-validation-for="Subject" class="text-danger"></span>
                             </div>
                             <div class="col-12 mb-2">
