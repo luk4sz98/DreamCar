@@ -40,10 +40,39 @@ namespace DreamCar.Web.Controllers
                     return RedirectToAction("GetAdvert", "Advert", new {advertId = threadMessage.AdvertId});
                 case HttpStatusCode.OK:
                     //TODO Create a view for messages
-                    return RedirectToAction("GetAdverts", "Advert");
+                    TempData["MessageSentSuccessfully"] = true;
+                    return RedirectToAction("GetSellingAdvertThreads");
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin, Mod, User")]
+        [Route("Adverts/Threads/Selling")]
+        public async Task<IActionResult> GetSellingAdvertThreads()
+        {
+            var userId = (await UserManager.GetUserAsync(User)).Id;
+            var advertThreads = await _messageService.GetAdvertThreads(
+                at => 
+                    at.Advert.UserId == userId &&
+                    at.CreatedById != userId &&
+                    !at.Advert.IsActive);
+            return View("AdvertThreadsSelling", advertThreads);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin, Mod, User")]
+        [Route("Adverts/Threads/Buying")]
+        public async Task<IActionResult> GetBuyingAdvertThreads()
+        {
+            var userId = (await UserManager.GetUserAsync(User)).Id;
+            var advertThreads = await _messageService.GetAdvertThreads(
+                at =>
+                    at.Advert.UserId != userId &&
+                    at.CreatedById == userId &&
+                    !at.Advert.IsActive);
+            return View("AdvertThreadsBuying", advertThreads);
         }
     }
 }

@@ -70,12 +70,24 @@ namespace DreamCar.Web.Configuration.Profiles
                 .ForMember(dest => dest.AdvertId, y => y.MapFrom(src => src.AdvertId))
                 .ForMember(dest => dest.Subject, y => y.MapFrom(src => src.Subject))
                 .ForMember(dest => dest.CreatedAt, y => y.MapFrom(src => src.CreatedAt))
-                .ForMember(dest => dest.CreatedBy, y => y.MapFrom(src => src.SenderId));
+                .ForMember(dest => dest.CreatedById, y => y.MapFrom(src => src.SenderId));
             CreateMap<AdvertThreadMessageVm, Message>()
                 .ForMember(dest => dest.Content, y => y.MapFrom(src => src.Message))
                 .ForMember(dest => dest.PostDate, y => y.MapFrom(src => src.CreatedAt))
                 .ForMember(dest => dest.RecipientId, y => y.MapFrom(src => src.RecipientId))
                 .ForMember(dest => dest.SenderId, y => y.MapFrom(src => src.SenderId));
+            CreateMap<Message, MessageVm>();
+            CreateMap<AdvertThread, AdvertThreadVm>()
+                .ForMember(dest => dest.Subject, y => y.MapFrom(src => src.Subject))
+                .ForMember(dest => dest.CreatedAt, y => y.MapFrom(src => src.CreatedAt))
+                .ForMember(dest => dest.CreatedById, y => y.MapFrom(src => src.CreatedById))
+                .ForMember(dest => dest.AdvertId, y => y.MapFrom(src => src.AdvertId))
+                .ForMember(dest => dest.Title, y => y.MapFrom(src => src.Advert.Title))
+                .ForMember(dest => dest.Messages, y => y.MapFrom(src => src.Messages))
+                .ForMember(dest => dest.UserId, y => y.MapFrom(src => src.Advert.UserId))
+                .ForMember(dest => dest.Price, y => y.MapFrom(src => src.Advert.Price))
+                .ForMember(dest => dest.Currency, y => y.MapFrom(src => src.Advert.Currency))
+                .ForMember(dest => dest.Images, y => y.MapFrom(src => src.Advert.Images));
         }
     }
 }

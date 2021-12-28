@@ -14,8 +14,14 @@ namespace DreamCar.DAL.Migrations
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
-            migrationBuilder.AddColumn<int>(
+            migrationBuilder.AddColumn<string>(
                 name: "CreatedBy",
+                table: "AdvertThreads",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "CreatedById",
                 table: "AdvertThreads",
                 type: "int",
                 nullable: false,
@@ -30,6 +36,10 @@ namespace DreamCar.DAL.Migrations
 
             migrationBuilder.DropColumn(
                 name: "CreatedBy",
+                table: "AdvertThreads");
+
+            migrationBuilder.DropColumn(
+                name: "CreatedById",
                 table: "AdvertThreads");
         }
     }

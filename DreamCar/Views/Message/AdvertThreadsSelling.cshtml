@@ -1,0 +1,32 @@
+﻿@model IEnumerable<AdvertThreadVm>
+
+<link rel="stylesheet" href="~/assets/css/advertThread.css" />
+
+@{
+    if (TempData["MessageSentSuccessfully"] is not null)
+    {
+        <div id="advertThreadError" class="alertMessage alert alert-success alert-dismissible" role="alert">
+            Wiadomość wysłana pomyślnie.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+}
+
+<div class="container py-5">
+    <div class="row">
+        @{
+            await Html.RenderPartialAsync("_NavbarPartial");
+        }
+    </div>
+    @{
+        await Html.RenderPartialAsync("_ThreadsDataPartial", Model);
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(".fa-plus").on("click", function() {
+            $(this).toggleClass('rotate');
+        });
+    </script>
+}

@@ -90,7 +90,10 @@ namespace DreamCar.DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CreatedBy")
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CreatedById")
                         .HasColumnType("int");
 
                     b.Property<string>("Subject")

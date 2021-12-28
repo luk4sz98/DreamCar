@@ -1,0 +1,86 @@
+﻿@model IEnumerable<AdvertThreadVm>
+@using System.Globalization
+@using Microsoft.AspNetCore.Identity
+@using DreamCar.Model.DataModels
+@inject UserManager<User> _userManager
+
+@{
+    var userId = (await _userManager.GetUserAsync(User)).Id;
+}
+
+<div class="row p-3 px-lg-5">
+    @if (Model.Any())
+    {
+        @foreach (var advertThread in Model)
+        {
+            <div class="row mb-4 advertRow inner">
+                <div class="col-6 col-lg-2 d-flex justify-content-start align-items-center">
+                    @if (advertThread.Images.Count() != 0)
+                    {
+                        <div id="carouselCarImages@(advertThread.AdvertId)" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <a asp-action="GetAdvert" asp-controller="Advert" asp-route-advertId="@advertThread.AdvertId" style="text-decoration: none; color: inherit;">
+                                        <img src="~/advertImages/Advert @advertThread.AdvertId/@advertThread.Images.ElementAt(0).Name" class="img-fluid" style="border-radius: 0.5rem;" />
+                                    </a>
+                                </div>
+                                @for (int i = 1; i < advertThread.Images.Count(); i++)
+                                {
+                                    <div class="carousel-item">
+                                        <a asp-action="GetAdvert" asp-controller="Advert" asp-route-advertId="@advertThread.AdvertId" style="text-decoration: none; color: inherit;">
+                                            <img src="~/advertImages/Advert @advertThread.AdvertId/@advertThread.Images.ElementAt(i).Name" class="img-fluid" style="border-radius: 0.5rem;" />
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <a asp-action="GetAdvert" asp-controller="Advert" asp-route-advertId="@advertThread.AdvertId" style="text-decoration: none; color: inherit;">
+                            <div class="d-flex justify-content-start justify-content-lg-center align-items-center flex-column">
+                                <i class="icon-camera" style="font-size: 50px; color: lightseagreen;"></i>
+                                <h4>Brak zdjęć</h4>
+                            </div>
+                        </a>
+                    }
+                </div>
+                <div class="col-6 col-lg-10 pt-2 d-flex justify-content-end align-items-center">
+                    <div class="col-12 flex-row">
+                        <div class="row" style="height: fit-content;">
+                            <div class="col-12 col-md-6 flex-column d-flex justify-content-center">
+                                <a asp-action="GetAdvert" asp-controller="Advert" asp-route-advertId="@advertThread.AdvertId" 
+                                   style="text-decoration: none; color: inherit;"
+                                   data-bs-toggle="tooltip" data-bs-placement="top" title="Naciśnij by przejśc do ogłoszenia" data-bs-animation="true">
+                                    <h4 class="title">@advertThread.Title</h4>
+                                </a>
+                                @{
+                                    if (advertThread.CreatedById != userId)
+                                    {
+                                        <div class="col-12 d-flex justify-content-start align-items-end">
+                                            Utworzony przez @advertThread.CreatedBy
+                                        </div>
+                                    }
+                                }
+                            </div>
+                            <div class="col-12 col-md-6 d-flex flex-column justify-content-start align-items-start align-items-lg-end">
+                                <h2 style="color: lightseagreen;">
+                                    @advertThread.Price<span style="font-size: 15px;"> @advertThread.Currency </span>
+                                </h2>
+                                <h6>Wątek utworzony: @advertThread.CreatedAt.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</h6>
+                                <a href="#" class="btn btn-outline-primary shadow-none mb-3 " style="border-radius: 1rem;">Przejdź</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12 d-flex justify-content-center align-items-center flex-column mt-lg-5 mb-3 mb-lg-0">
+            <img class="img-fluid" src="~/assets/img/envelope.svg" style="max-width: 100px; max-height: 100px;" />
+            <h3>Brak dostepnych wiadomości</h3>
+        </div>
+    }
+</div>

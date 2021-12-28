@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DreamCar.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211227193650_RefactorAdvertThreadTable")]
+    [Migration("20211228193404_RefactorAdvertThreadTable")]
     partial class RefactorAdvertThreadTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,7 +92,10 @@ namespace DreamCar.DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CreatedBy")
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CreatedById")
                         .HasColumnType("int");
 
                     b.Property<string>("Subject")

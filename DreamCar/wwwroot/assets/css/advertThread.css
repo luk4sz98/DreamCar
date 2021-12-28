@@ -1,0 +1,31 @@
+﻿.inner {
+    height: 140px;
+}
+
+.advertRow {
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    z-index: 1;
+}
+
+.animate-icon {
+    transition: 0.4s;
+}
+
+.rotate {
+    transform: rotate(45deg);
+}
+
+img {
+    max-height: 100px;
+}
+
+img:hover, .title:hover {
+    opacity: 0.8;
+}
+
+@media screen and (max-width: 576px) {
+    .inner {
+        height: fit-content;
+    }
+}
