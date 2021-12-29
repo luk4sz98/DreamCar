@@ -13,5 +13,7 @@ namespace DreamCar.Services.Interfaces
         Task<HttpStatusCode> CreateAdvertThread(AdvertThreadMessageVm advertThreadMessage);
 
         Task<IEnumerable<AdvertThreadVm>> GetAdvertThreads(Expression<Func<AdvertThread, bool>> filterExpressions);
+        Task<AdvertThreadVm> GetAdvertThread(int advertThreadId);
+        Task<IEnumerable<MessageVm>> SendMessage(MessageVm messageVm);
     }
 }

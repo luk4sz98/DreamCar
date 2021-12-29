@@ -1,0 +1,23 @@
+﻿@model MessageVm
+
+<form id="sendMessageForm" method="get" enctype="multipart/form-data">
+    <div class="col-12 mb-2">
+        <label class="form-label" for="message">Wiadomość <sup><icon class="fas fa-star input-star"></icon></sup></label>
+        <textarea asp-for="Content" required maxlength="4096" id="message" rows="10" placeholder="Treść wiadomości.." class="form-control shadow-none" style="min-height: 140px; height: 140px; resize: vertical;"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+    <div class="col-12 d-none" style="pointer-events: none !important; cursor: none !important">
+        <input asp-for="SenderId" id="senderId" />
+    </div>
+    <div class="col-12 d-none" style="pointer-events: none !important; cursor: none !important">
+        <input asp-for="RecipientId" id="recipientId" />
+    </div>
+    <div class="col-12 d-none" style="pointer-events: none !important; cursor: none !important">
+        <input asp-for="AdvertThreadId" id="advertThreadId" />
+    </div>
+    <div class="col-4 mx-auto mt-3 d-flex justify-content-center align-items-center">
+        <button id="sendMessageButton" type="button" class="btn btn-outline-primary w-50 shadow-none">
+            <span id="text" style="font-size: 18px;">Wyślij</span>
+        </button>
+    </div>
+</form>

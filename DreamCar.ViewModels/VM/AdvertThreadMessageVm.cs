@@ -13,7 +13,7 @@ namespace DreamCar.ViewModels.VM
 
         [Required(ErrorMessage = "Wiadomość jest wymagana")]
         [DataType(DataType.MultilineText)]
-        [StringLength(4096, ErrorMessage = "Wiadomość musi zawierać co najmniej {2} oraz maksymalnie {1} znaków", MinimumLength = 10)]
+        [StringLength(4096, ErrorMessage = "Wiadomość musi zawierać co najmniej {2} oraz maksymalnie {1} znaków", MinimumLength = 15)]
         public string Message { get; set; }
         public DateTime CreatedAt { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿@model CarVm
 @using DreamCar.Model.DataModels.Enums
+@using System.Globalization
 
 
 <section style="margin: 0 auto;">
@@ -107,7 +108,7 @@
                     <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
                 </div>
                 <div class="form-floating col-12 col-md-12 col-lg-4 mb-3">
-                    <input id="firstRegistration" asp-for="FirstRegistration" placeholder="12.12.2021" class="form-control" style="border-radius: 1rem;" />
+                    <input id="firstRegistration" asp-for="FirstRegistration" class="form-control" style="border-radius: 1rem;"/>
                     <label class="form-label" for="firstRegistration">Data pierwszej rejestracji</label>
                     <span asp-validation-for="FirstRegistration" class="text-danger"></span>
                 </div>

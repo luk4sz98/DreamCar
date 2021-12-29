@@ -76,5 +76,40 @@ namespace DreamCar.Services.Services
                 return Enumerable.Empty<AdvertThreadVm>();
             }
         }
+
+        public async Task<AdvertThreadVm> GetAdvertThread(int advertThreadId)
+        {
+            try
+            {
+                var advertThreadEntity = await DbContext.AdvertThreads.FirstOrDefaultAsync(at => at.Id == advertThreadId);
+                return Mapper.Map<AdvertThreadVm>(advertThreadEntity);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<MessageVm>> SendMessage(MessageVm messageVm)
+        {
+            try
+            {
+                var messageEntity = Mapper.Map<Message>(messageVm);
+                if (messageEntity is null) throw new ArgumentNullException(nameof(messageVm),"Not initialized message");
+
+                await DbContext.Messages.AddAsync(messageEntity);
+                await DbContext.SaveChangesAsync();
+
+                var advertThreadEntity =
+                    await DbContext.AdvertThreads.FirstOrDefaultAsync(at => at.Id == messageVm.AdvertThreadId);
+                return Mapper.Map<IEnumerable<MessageVm>>(advertThreadEntity.Messages);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                return Enumerable.Empty<MessageVm>();
+            }
+        }
     }
 }

@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using DreamCar.Model.DataModels
+@model AdvertThreadVm
+@inject UserManager<User> _userManager;
+
+<div class="userInfo justify-content-start">
+    <div class="row pt-2">
+        <a asp-action="GetAdvert" asp-controller="Advert" asp-route-advertId="@Model.AdvertId" style="text-decoration: none; color: inherit;">
+            <h2 style="margin: 0 !important;">@Model.Title</h2>
+        </a>
+    </div>
+    <div class="row mt-3">
+        <h2 id="price">@Model.Price <span id="currency">@Model.Currency</span></h2>
+    </div>
+    <div class="row mt-5">
+        <h4 style="font-weight: normal;">@ViewBag.User.FirstName</h4>
+        <div class="col-12">
+            <i class="fas fa-user"></i>
+            <span style="font-size: 20px;" class="ms-2">Zarejestrowany w @ViewBag.User.RegistrationDate.Year</span>
+        </div>
+        <div class="col-12 mt-3 d-flex justify-content-center">
+            <button id="phone" class="btn btn-outline-primary w-100 d-flex justify-content-center align-items-center shadow-none">
+                <i style="font-size: 21px;" class="fas fa-phone"></i>
+                <span id="text" style="font-size: 21px;" class="ms-2">Wyświetl telefon</span>
+            </button>
+        </div>
+    </div>
+</div>

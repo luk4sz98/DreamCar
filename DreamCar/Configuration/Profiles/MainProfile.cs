@@ -77,6 +77,7 @@ namespace DreamCar.Web.Configuration.Profiles
                 .ForMember(dest => dest.RecipientId, y => y.MapFrom(src => src.RecipientId))
                 .ForMember(dest => dest.SenderId, y => y.MapFrom(src => src.SenderId));
             CreateMap<Message, MessageVm>();
+            CreateMap<MessageVm, Message>();
             CreateMap<AdvertThread, AdvertThreadVm>()
                 .ForMember(dest => dest.Subject, y => y.MapFrom(src => src.Subject))
                 .ForMember(dest => dest.CreatedAt, y => y.MapFrom(src => src.CreatedAt))

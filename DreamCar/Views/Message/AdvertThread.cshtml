@@ -1,0 +1,77 @@
+﻿@model AdvertThreadVm
+
+<link rel="stylesheet" href="~/assets/css/advertThread.css" />
+<link rel="stylesheet" href="~/assets/css/userAdvert.css" />
+
+<style>
+    .message {
+        border-radius: 0.25rem;
+        padding: 10px;
+    }
+    .input-star {
+        margin: 0;
+        text-indent: -3px;
+        font-size: 6px;
+        color: rgb(255,23,8);
+    }
+</style>
+
+@{
+    ViewBag.CreatedById = Model.CreatedById;
+}
+
+<div class="container mt-5 pt-2">
+    <div class="row">
+        <div class="col-lg-8 advertRow" style="padding: 20px; height: fit-content !important;">
+            <div class="row">
+                <div id="messages" class="col-12" style="overflow-y: auto; overflow-x: hidden; max-height: 300px;">
+                    <partial name="_MessagesDataPartial" model="Model.Messages"/>
+                </div>
+            </div>
+            <div class="row">
+                <partial name="_MessageFormPartial" model="new MessageVm {AdvertThreadId = Model.Id, SenderId = ViewBag.User.Id, RecipientId = Model.CreatedById == ViewBag.User.Id ? Model.UserId : Model.CreatedById}"/>
+            </div>
+        </div>
+        <div class="col-lg-4 d-flex flex-column mb-5">
+            <partial name="_AdvertInfoPartial" />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        var messages = $("#messages");
+        $("#phone").on('click', function () {
+            if ($("#text").text() === "Wyświetl telefon") {
+                let phoneNumber = "@(string.IsNullOrEmpty(ViewBag.User.PhoneNumber)
+                                   ? string.IsNullOrEmpty(ViewBag.User.PhoneNumber)
+                                       ? "Brak numeru"
+                                       : ViewBag.User.PhoneNumber
+                                   : ViewBag.User.PhoneNumber )";
+                $("#text").html(phoneNumber);
+            }
+            else {
+                $("#text").html('Wyświetl telefon');
+            }
+        });
+        $(document).ready(function() {
+            messages.scrollTop(messages.prop("scrollHeight"));
+        });
+
+        $("#sendMessageButton").click(async function() {
+            let isValid = $("#sendMessageForm").valid();
+            if (isValid === false) return;
+            const result = await $.get("/Message/SendMessage",
+                $.param({
+                    senderId: $("#senderId").val(),
+                    recipientId: $("#recipientId").val(),
+                    advertThreadId: $("#advertThreadId").val(),
+                    message: $("#message").val()
+                }));
+            $("#message").val('')
+            $("#messages").html(result);
+            messages.scrollTop(messages.prop("scrollHeight"));
+        });
+    </script>
+}

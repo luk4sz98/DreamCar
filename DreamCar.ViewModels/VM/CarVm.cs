@@ -43,7 +43,7 @@ namespace DreamCar.ViewModels.VM
         public string RegistrationNumber { get; set; }
 
         [DataType(DataType.Date, ErrorMessage = "W formacie daty")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{DD/MM/YYYY}")]
+        [DisplayFormat(ApplyFormatInEditMode = true)]
         public DateTime? FirstRegistration{ get; set; }
 
         [Required(ErrorMessage = "Data produkcji samochodu jest wymagana")]

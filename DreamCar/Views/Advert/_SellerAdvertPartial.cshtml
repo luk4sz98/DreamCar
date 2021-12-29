@@ -2,6 +2,7 @@
 @using DreamCar.Model.DataModels
 @using DreamCar.Services.Services.Extensions
 @using System.ComponentModel.DataAnnotations
+@using System.Globalization
 @using DreamCar.Services.Services.StaticClasses
 
 @inject UserManager<User> UserManager
@@ -168,6 +169,9 @@ else
             </div>
             <div class="col-6 col-md-4 col-lg-3  mb-2">
                 <span>Numer rejestracyjny<strong><span class="ms-2">@(string.IsNullOrEmpty(Model.Car.RegistrationNumber) ? "-" : Model.Car.RegistrationNumber)</span></strong></span>
+            </div>
+            <div class="col-6 col-md-4 col-lg-3  mb-2">
+                <span>Pierwsza rejestracja<strong><span class="ms-2">@(Model.Car.FirstRegistration is null ? "-" : Model.Car.FirstRegistration?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture))</span></strong></span>
             </div>
             <div class="col-6 col-md-4 col-lg-3  mb-2">
                 <span>Zarejestrowany w Polsce<strong><span class="ms-2">@(Model.Car.RegisterdInPoland ? "Tak" : "Nie")</span></strong></span>

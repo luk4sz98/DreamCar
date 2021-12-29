@@ -58,9 +58,11 @@
                                     if (advertThread.CreatedById != userId)
                                     {
                                         <div class="col-12 d-flex justify-content-start align-items-end">
-                                            Utworzony przez @advertThread.CreatedBy
+                                            Autor: @advertThread.CreatedBy
                                         </div>
                                     }
+                                    var message = string.Concat(advertThread.Messages.First().Content[..20], "...");
+                                    <span class="text-wrap">Wiadomość: @message</span>
                                 }
                             </div>
                             <div class="col-12 col-md-6 d-flex flex-column justify-content-start align-items-start align-items-lg-end">
@@ -68,7 +70,7 @@
                                     @advertThread.Price<span style="font-size: 15px;"> @advertThread.Currency </span>
                                 </h2>
                                 <h6>Wątek utworzony: @advertThread.CreatedAt.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</h6>
-                                <a href="#" class="btn btn-outline-primary shadow-none mb-3 " style="border-radius: 1rem;">Przejdź</a>
+                                <a asp-action="GetAdvertThread" asp-route-id="@advertThread.Id" class="btn btn-outline-primary shadow-none mb-3 " style="border-radius: 1rem;">Przejdź</a>
                             </div>
                         </div>
                     </div>

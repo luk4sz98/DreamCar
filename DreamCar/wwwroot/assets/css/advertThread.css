@@ -1,5 +1,5 @@
 ﻿.inner {
-    height: 140px;
+    height: fit-content;
 }
 
 .advertRow {
@@ -20,12 +20,6 @@ img {
     max-height: 100px;
 }
 
-img:hover, .title:hover {
+img:hover, .title:hover, .header:hover {
     opacity: 0.8;
-}
-
-@media screen and (max-width: 576px) {
-    .inner {
-        height: fit-content;
-    }
 }

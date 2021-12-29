@@ -1,0 +1,16 @@
+﻿@using System.Globalization
+@model IEnumerable<MessageVm>
+
+@{
+    foreach (var message in Model)
+    {
+        <figure class="@(ViewBag.User.Id != message.SenderId ? "text-start" : "text-end") col-12 message">
+            <blockquote class="blockquote">
+                <p class="text-wrap">@message.Content</p>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+                <cite title="data wysłania">@message.PostDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)</cite>
+            </figcaption>
+        </figure>
+    }
+}
