@@ -40,7 +40,6 @@ namespace DreamCar.Web.Controllers
                     TempData["Error"] = true;
                     return RedirectToAction("GetAdvert", "Advert", new {advertId = threadMessage.AdvertId});
                 case HttpStatusCode.OK:
-                    //TODO Create a view for messages
                     TempData["MessageSentSuccessfully"] = true;
                     return RedirectToAction("GetSellingAdvertThreads");
                 default:

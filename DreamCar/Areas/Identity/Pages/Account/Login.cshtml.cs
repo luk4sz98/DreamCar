@@ -19,12 +19,15 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<User> signInManager, 
+            UserManager<User> userManager,
             ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -83,7 +86,9 @@ namespace DreamCar.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    var user = await _userManager.FindByEmailAsync(Input.Email);
+                    var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+                    return LocalRedirect(isAdmin ? "/adminDreamcar" : returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {

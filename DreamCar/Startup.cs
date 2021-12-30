@@ -14,9 +14,10 @@ using SendGrid;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-
 using Microsoft.AspNetCore.Mvc.Routing;
 using System;
+using System.Collections.Generic;
+using DotNetEd.CoreAdmin;
 using DreamCar.Services.Services.Identity;
 using DreamCar.Services.Services.StaticClasses;
 
@@ -81,6 +82,7 @@ namespace DreamCar
                 options.Cookie.HttpOnly = true;
             });
             services.AddMvc();
+            services.AddCoreAdmin("Admin");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -106,6 +108,7 @@ namespace DreamCar
             app.UseAuthorization();
 
             app.UseSession();
+            app.UseCoreAdminCustomUrl("adminDreamcar");
 
             app.UseEndpoints(endpoints =>
             {
