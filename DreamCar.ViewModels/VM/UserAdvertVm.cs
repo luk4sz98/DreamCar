@@ -13,6 +13,7 @@ namespace DreamCar.ViewModels.VM
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ClosedAt { get; set; }
+        public DateTime? CheckedAt { get; set; }
         public bool IsActive { get; set; }
         public decimal Price { get; set; }
         public Currency Currency { get; set; }

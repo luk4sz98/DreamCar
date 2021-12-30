@@ -1,7 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using DreamCar.Model.DataModels
-@inject SignInManager<User> SignInManager
-@inject UserManager<User> UserManager
+@inject SignInManager<User> _signInManager
+@inject UserManager<User> _userManager
+
+@{
+    var user = await _userManager.GetUserAsync(User);
+}
 
 <!-- Offcanvas menu -->
 <nav class="menu navbar navbar-light">
@@ -29,13 +33,19 @@
                 <i class="fa fa-search" style="font-size: 25px;margin-left: 8px;"></i>
             </a>
         </div>
-        @if (SignInManager.IsSignedIn(User))
+        @if (_signInManager.IsSignedIn(User))
         {
             <div class="mb-3">
                 <a class="btn btn-primary" id="addAdvertButton" asp-controller="Advert" asp-action="AddOrEdit">
                     Dodaj ogłoszenie
                 </a>
             </div>
+            @if (await _userManager.IsInRoleAsync(user, "Mod"))
+            {
+                <div class="mb-3">
+                    <a class="btn btn-primary d-block w-100" id="menuButton" asp-controller="Mod" asp-action="GetAdvertsToCheck">Oczekujące</a>
+                </div>
+            }
             <div class="mb-3">
                 <a class="btn btn-primary d-block w-100" id="menuButton" asp-controller="Advert" asp-action="ActiveAdverts">Ogłoszenia</a>
             </div>

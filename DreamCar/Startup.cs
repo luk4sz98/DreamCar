@@ -61,6 +61,7 @@ namespace DreamCar
             services.AddScoped<ICookiesService, CookiesService>();
             services.AddScoped<ISessionService, SessionService>();
             services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IModService, ModService>();
             services.Configure<AppSettingsService>(Configuration.GetSection(AppSettingsService.SectionName));
             services.AddOptions();
             services.AddScoped<IReCaptchaService, ReCaptchaService>();
@@ -108,7 +109,6 @@ namespace DreamCar
             app.UseAuthorization();
 
             app.UseSession();
-            app.UseCoreAdminCustomUrl("adminDreamcar");
 
             app.UseEndpoints(endpoints =>
             {
@@ -117,6 +117,7 @@ namespace DreamCar
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+            app.UseCoreAdminCustomUrl("adminDreamcar");
         }
     }
 }

@@ -10,6 +10,7 @@
 
 @{
     var sender = await _userManager.GetUserAsync(User);
+    var isMod = sender is not null && await _userManager.IsInRoleAsync(sender, "Mod"); 
 }
 
 <style>
@@ -81,6 +82,29 @@
     </div>
 </div>
 
+<!-- Reason not accepted modal -->
+<div class="modal fade" id="acceptedModal" tabindex="-1" aria-labelledby="acceptedModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Podaj powód braku akceptacji</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 mb-2">
+                    <label class="form-label" for="reason">Powód <sup><icon class="fas fa-star input-star"></icon></sup></label>
+                    <textarea required maxlength="200" id="reason" for="reason" rows="6" placeholder="Treść wiadomości.." class="form-control shadow-none" style="min-height: 140px; height: 140px; resize: vertical;"></textarea>
+                    <span id="errorMsg" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button style="font-size: 18px;" type="button" class="btn btn-secondary w-25 shadow-none" data-bs-dismiss="modal">Powrót</button>
+                <button id="manage" style="font-size: 18px;" type="button" class="btn btn-primary w-25 shadow-none">Wyślij</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container mt-5 pt-2 gap-0">
     <div class="row">
         <div class="col-lg-8 d-flex flex-column">
@@ -91,142 +115,172 @@
             <partial name="_SellerInfoPartial" />
         </div>
     </div>
+    @{
+        if (isMod && !Model.IsActive)
+        {
+            <div class="row">
+                <div class="col-12 col-md-2 mx-md-auto">
+                    <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                        Zarządzaj
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                        <li><a asp-action="CheckAdvert" asp-controller="Mod" asp-route-isGood="true" asp-route-advertId="@Model.Id" class="dropdown-item">Akceptuj</a></li>
+                        <li><a href="#" data-bs-toggle="modal" data-bs-target=#acceptedModal class="dropdown-item">Odrzuć</a></li>
+                    </ul>
+                </div>
+             </div>
+        }
+    }
 </div>
 <span id="advertLocation" class="d-none" style="pointer-events: none; cursor: none;">@Model.Localization</span>
 @section Scripts {
-<partial name="_ValidationScriptsPartial" />
-<script src='/assets/js/lc_lightbox.lite.min.js' type='text/javascript'></script>
-<script src='/assets/js/alloy_finger.min.js' type='text/javascript'></script>
-<script>
-    function reCaptchaCallbackAdvert() {
-        var response = grecaptcha.getResponse();
-        if (response.length !== 0) {
-            $("#vin").html('@Model.Car.VIN');
-            $("#reCaptcha").hide(500);
-        }
-    }
-    function initMap() {
-        const map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 10,
-            mapTypeId: "terrain",
+    <partial name="_ValidationScriptsPartial" />
+    <script src='/assets/js/lc_lightbox.lite.min.js' type='text/javascript'></script>
+    <script src='/assets/js/alloy_finger.min.js' type='text/javascript'></script>
+    <script>
+        $("#manage").click(async function() {
+            let reason = String($("#reason").val());
+            if (reason.length < 10) {
+                $("#errorMsg").text("Powód musi miec co najmniej 10 znaków");
+                return;
+            }
+            window.location.href = '@Url.Action("CheckAdvert", "Mod")?reason=' + reason + '&isGood=false&advertId=' + '@Model.Id'; 
+            //await $.get("/Mod/CheckAdvert",
+            //    $.param({
+            //        reason: reason,
+            //        isGood: "false",
+            //        advertId: "@Model.Id"
+            //    }));
         });
-        var address = $("#advertLocation").html();
-        geocoder = new google.maps.Geocoder();
-        geocoder.geocode({ 'address': address }, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                map.setCenter(results[0].geometry.location);
-                const cityCircle = new google.maps.Circle({
-                    strokeColor: "lightseagreen",
-                    strokeOpacity: 0.8,
-                    strokeWeight: 2,
-                    fillColor: "lightseagreen",
-                    fillOpacity: 0.35,
-                    map,
-                    center: results[0].geometry.location,
-                    radius: 8000,
-                });
+        function reCaptchaCallbackAdvert() {
+            var response = grecaptcha.getResponse();
+            if (response.length !== 0) {
+                $("#vin").html('@Model.Car.VIN');
+                $("#reCaptcha").hide(500);
+            }
+        }
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 10,
+                mapTypeId: "terrain",
+            });
+            var address = $("#advertLocation").html();
+            geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'address': address }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    map.setCenter(results[0].geometry.location);
+                    const cityCircle = new google.maps.Circle({
+                        strokeColor: "lightseagreen",
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        fillColor: "lightseagreen",
+                        fillOpacity: 0.35,
+                        map,
+                        center: results[0].geometry.location,
+                        radius: 8000,
+                    });
+                }
+                else {
+                    console.log('error');
+                }
+            });
+        }
+    </script>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=@AesOperationService.GetGoogleMapsApiKey()&language=pl&callback=initMap&v=weekly" async></script>
+    <script>
+        var options = {
+            slideshow: true,
+            gallery: true,
+            open_close_time: 500,
+            ol_time_diff: 100,
+            slideshow_time: 3000,
+            fading_time: 150,
+            animation_time: 300,
+            counter: true,
+            progressbar: true,
+            nav_btn_pos: "middle",
+            thumbs_nav: true,
+            tn_icons: true,
+            thumbs_h: 150,
+            thumbs_w: 150,
+            fullscreen: true,
+            fs_img_behavior: "fit",
+            fs_only: 800,
+            download: true,
+            touchswipe: true,
+            mousewheel: false
+        };
+        $(document).ready(function () {
+            lc_lightbox('#gallery a', options);
+        });
+
+        $("#phone").on('click', function () {
+            if ($("#text").text() === "Wyświetl telefon") {
+                let phoneNumber = "@(string.IsNullOrEmpty(Model.PhoneNumber)
+                                       ? string.IsNullOrEmpty(Model.User.PhoneNumber)
+                                           ? "Brak numeru"
+                                           : Model.User.PhoneNumber
+                                       : Model.PhoneNumber )";
+                $("#text").html(phoneNumber);
             }
             else {
-                console.log('error');
+                $("#text").html('Wyświetl telefon');
             }
         });
-    }
-</script>
 
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=@AesOperationService.GetGoogleMapsApiKey()&language=pl&callback=initMap&v=weekly" async></script>
-<script>
-    var options = {
-        slideshow: true,
-        gallery: true,
-        open_close_time: 500,
-        ol_time_diff: 100,
-        slideshow_time: 3000,
-        fading_time: 150,
-        animation_time: 300,
-        counter: true,
-        progressbar: true,
-        nav_btn_pos: "middle",
-        thumbs_nav: true,
-        tn_icons: true,
-        thumbs_h: 150,
-        thumbs_w: 150,
-        fullscreen: true,
-        fs_img_behavior: "fit",
-        fs_only: 800,
-        download: true,
-        touchswipe: true,
-        mousewheel: false
-    };
-    $(document).ready(function () {
-        lc_lightbox('#gallery a', options);
-    });
+        $("#follow").click(this, async function () {
+            const advertId = "@Model.Id";
 
-    $("#phone").on('click', function () {
-        if ($("#text").text() === "Wyświetl telefon") {
-            let phoneNumber = "@(string.IsNullOrEmpty(Model.PhoneNumber) 
-                                   ? string.IsNullOrEmpty(Model.User.PhoneNumber) 
-                                       ? "Brak numeru" 
-                                       : Model.User.PhoneNumber 
-                                   : Model.PhoneNumber )";
-            $("#text").html(phoneNumber);
-        }
-        else {
-            $("#text").html('Wyświetl telefon');
-        }
-    });
+            //it means it will be follow action
+            if ($("#followIcon").hasClass("far")) {
+                const result = await $.post("/Advert/FollowAdvert", $.param({
+                    advertId: advertId
+                }));
+                if (result === 200) {
+                    $("#followIcon").removeClass('far fa-star');
+                    $("#followIcon").addClass('fas fa-star');
+                    $("#followSuccess").fadeIn(1000);
+                    $("#followSuccess").fadeOut(3500);
+                    $("#follow").html("Usuń z obserwowanych <i id='followIcon' class='fas fa-star'></i>");
+                }
+                else {
+                    $("#followError").fadeToggle(2000);
+                }
+            } // it will be Unfollow action
+            else {
+                const result = await $.post("/Advert/UnfollowAdvert", $.param({
+                    advertId: advertId
+                }));
+                if (result === 200) {
+                    $("#followIcon").removeClass('fas fa-star');
+                    $("#followIcon").addClass('far fa-star');
+                    $("#unfollowSuccess").fadeIn(1000);
+                    $("#unfollowSuccess").fadeOut(3500);
+                    $("#follow").html("Obserwuj <i id='followIcon' class='far fa-star'></i>");
+                }
+                else {
+                    $("#followError").fadeToggle(2000);
+                }
+            }
+        });
 
-    $("#follow").click(this, async function () {
-        const advertId = "@Model.Id";
-
-        //it means it will be follow action
-        if ($("#followIcon").hasClass("far")) {
-            const result = await $.post("/Advert/FollowAdvert", $.param({
+        async function AddAdvertToCompare(advertId) {
+            const result = await $.post("/Advert/AddAdvertToCompare", $.param({
                 advertId: advertId
             }));
             if (result === 200) {
-                $("#followIcon").removeClass('far fa-star');
-                $("#followIcon").addClass('fas fa-star');
-                $("#followSuccess").fadeIn(1000);
-                $("#followSuccess").fadeOut(3500);
-                $("#follow").html("Usuń z obserwowanych <i id='followIcon' class='fas fa-star'></i>");
+                $("#compareSuccess").fadeIn(1000);
+                $("#compareSuccess").fadeOut(4500);
+            }
+            else if (result === 400) {
+                $("#compare401").fadeIn(1000);
+                $("#compare401").fadeOut(4500);
             }
             else {
                 $("#followError").fadeToggle(2000);
             }
-        } // it will be Unfollow action
-        else {
-            const result = await $.post("/Advert/UnfollowAdvert", $.param({
-                advertId: advertId
-            }));
-            if (result === 200) {
-                $("#followIcon").removeClass('fas fa-star');
-                $("#followIcon").addClass('far fa-star');
-                $("#unfollowSuccess").fadeIn(1000);
-                $("#unfollowSuccess").fadeOut(3500);
-                $("#follow").html("Obserwuj <i id='followIcon' class='far fa-star'></i>");
-            }
-            else {
-                $("#followError").fadeToggle(2000);
-            }
         }
-    });
-
-    async function AddAdvertToCompare(advertId) {
-        const result = await $.post("/Advert/AddAdvertToCompare", $.param({
-            advertId: advertId
-        }));
-        if (result === 200) {
-            $("#compareSuccess").fadeIn(1000);
-            $("#compareSuccess").fadeOut(4500);
-        }
-        else if (result === 400) {
-            $("#compare401").fadeIn(1000);
-            $("#compare401").fadeOut(4500);
-        }
-        else {
-            $("#followError").fadeToggle(2000);
-        }
-    }
-</script>
+    </script>
 }

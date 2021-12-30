@@ -296,7 +296,7 @@ namespace DreamCar.Services.Services
         {
             try
             {
-                var adverts = DbContext.Adverts.Where(filterExpressions ?? (ad => !ad.IsActive));
+                var adverts = DbContext.Adverts.Where(filterExpressions ?? (ad => ad.IsActive));
                 return adverts;
             }
             catch (Exception ex)
