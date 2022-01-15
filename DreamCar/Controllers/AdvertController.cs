@@ -361,7 +361,7 @@ namespace DreamCar.Web.Controllers
                 "power" => adverts.OrderBy(ad => ad.Car.Power),
                 "productionYear_desc" => adverts.OrderByDescending(ad => ad.Car.ProductionYear),
                 "productionYear" => adverts.OrderBy(ad => ad.Car.ProductionYear),
-                _ => adverts.OrderBy(ad => ad.CreatedAt),
+                _ => adverts.OrderByDescending(ad => ad.CreatedAt),
             };
 
             const int pageSize = 20;
