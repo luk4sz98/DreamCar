@@ -92,7 +92,7 @@ namespace DreamCar.DAL.EF
                 .HasOne(fa => fa.Advert)
                 .WithMany(ad => ad.FollowAdverts)
                 .HasForeignKey(fa => fa.AdvertId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Message>()
                 .HasOne(mg => mg.User)
