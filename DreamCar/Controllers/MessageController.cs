@@ -56,7 +56,7 @@ namespace DreamCar.Web.Controllers
                 at => 
                     at.Advert.UserId == userId &&
                     at.CreatedById != userId &&
-                    !at.Advert.IsActive);
+                    at.Advert.IsActive);
             return View("AdvertThreadsSelling", advertThreads);
         }
 
@@ -69,7 +69,7 @@ namespace DreamCar.Web.Controllers
                 at =>
                     at.Advert.UserId != userId &&
                     at.CreatedById == userId &&
-                    !at.Advert.IsActive);
+                    at.Advert.IsActive);
             return View("AdvertThreadsBuying", advertThreads);
         }
 

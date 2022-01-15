@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -341,7 +342,11 @@ namespace DreamCar.Web.Controllers
             FilterVm filter = null,
             string sortOrder = null)
         {
-            var adverts = FilterCollection(_advertService.GetAdverts(), filter);
+            IQueryable<Advert> adverts;
+            if (filter is null)
+                adverts = _advertService.GetAdverts();
+            else
+                adverts = FilterCollection(filter);
 
             if (filter is not null)
                 TempData["filter"] = filter;
@@ -448,33 +453,48 @@ namespace DreamCar.Web.Controllers
             }
         }
 
-        private IQueryable<Advert> FilterCollection(IQueryable<Advert> collection, FilterVm filter)
+        private IQueryable<Advert> FilterCollection(FilterVm filter)
         {
+            Expression<Func<Advert, bool>> filterExpressions = null;
             if (!string.IsNullOrEmpty(filter.Brand))
-                collection = _advertService.GetAdverts(ad => ad.Car.Brand.ToLower() == filter.Brand.ToLower());
+                filterExpressions = Combine(filterExpressions, ad => ad.Car.Brand.ToLower() == filter.Brand.ToLower());
             if (!string.IsNullOrEmpty(filter.Model))
-                collection = _advertService.GetAdverts(ad => ad.Car.Model.ToLower() == filter.Model.ToLower());
+                filterExpressions = Combine(filterExpressions, ad => ad.Car.Model.ToLower() == filter.Model.ToLower());
             if (!string.IsNullOrEmpty(filter.Generation))
-                collection = _advertService.GetAdverts(ad => ad.Car.Generation.ToLower() == filter.Generation.ToLower());
+                filterExpressions = Combine(filterExpressions, ad => ad.Car.Generation.ToLower() == filter.Generation.ToLower());
             if (!string.IsNullOrEmpty(filter.Voivodeship))
-                collection = _advertService.GetAdverts(ad => ad.Localization.Contains(filter.Voivodeship));
+                filterExpressions = Combine(filterExpressions, ad => ad.Localization.Contains(filter.Voivodeship));
             if (filter.Fuel.HasValue)
-                collection = _advertService.GetAdverts(ad => ad.Car.Fuel == filter.Fuel);
+                filterExpressions = Combine(filterExpressions, ad => ad.Car.Fuel == filter.Fuel);
             if (filter.Body.HasValue)
-                collection = _advertService.GetAdverts(ad => ad.Car.Body == filter.Body);
+                filterExpressions = Combine(filterExpressions, ad => ad.Car.Body == filter.Body);
             if (filter.MinPrice.HasValue)
-                collection = _advertService.GetAdverts(ad => ad.Price >= filter.MinPrice);
+                filterExpressions = Combine(filterExpressions, ad => ad.Price >= filter.MinPrice);
             if (filter.MaxPrice.HasValue)
-                collection = _advertService.GetAdverts(ad => ad.Price <= filter.MaxPrice);
+                filterExpressions = Combine(filterExpressions, ad => ad.Price <= filter.MaxPrice);
             if (filter.MinProductionYear.HasValue)
-                collection = _advertService.GetAdverts(ad => ad.Car.ProductionYear >= filter.MinProductionYear);
+                filterExpressions = Combine(filterExpressions, ad => ad.Car.ProductionYear >= filter.MinProductionYear);
             if (filter.MaxProductionYear.HasValue)
-                collection = _advertService.GetAdverts(ad => ad.Car.ProductionYear <= filter.MaxProductionYear);
+                filterExpressions = Combine(filterExpressions, ad => ad.Car.ProductionYear <= filter.MaxProductionYear);
             if (filter.MinMileage.HasValue)
-                collection = _advertService.GetAdverts(ad => ad.Car.Mileage >= filter.MinMileage);
+                filterExpressions = Combine(filterExpressions, ad => ad.Car.Mileage >= filter.MinMileage);
             if (filter.MaxMileage.HasValue)
-                collection = _advertService.GetAdverts(ad => ad.Car.Mileage <= filter.MaxMileage);
-            return collection;
+                filterExpressions = Combine(filterExpressions, ad => ad.Car.Mileage <= filter.MaxMileage);
+            filterExpressions = Combine(filterExpressions, ad => ad.IsActive);
+            return _advertService.GetAdverts(filterExpressions);
+        }
+
+        private static Expression<Func<Advert, bool>> Combine(Expression<Func<Advert, bool>> first,
+            Expression<Func<Advert, bool>> second)
+        {
+            if (first == null)
+                return second;
+            var param = Expression.Variable(typeof(Advert), "input");
+            var body = Expression.AndAlso(
+                        Expression.Invoke(first, param),
+                        Expression.Invoke(second, param)
+                    );
+            return Expression.Lambda<Func<Advert, bool>>(body, param);
         }
     }
 }
