@@ -77,13 +77,16 @@ namespace DreamCar.Web.Controllers
         [Route("Adverts/Thread")]
         public async Task<IActionResult> GetAdvertThread(int id)
         {
-            ViewBag.User = await UserManager.GetUserAsync(User);
+            ViewBag.User = await UserManager.GetUserAsync(User);           
             var advertThread = await _messageService.GetAdvertThread(id);
+            ViewBag.AdvertAuthor = await UserManager.FindByIdAsync(advertThread.UserId.ToString());
             return View("AdvertThread", advertThread);
         }
 
         [HttpGet]
-        public async Task<IActionResult> SendMessage(int senderId, int recipientId, int advertThreadId, string message)
+        public async Task<IActionResult> SendMessage(
+            int senderId, int recipientId,
+            int advertThreadId, string message)
         {
             var messageVm = new MessageVm
             {
